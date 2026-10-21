@@ -1,0 +1,33 @@
+% ---------------------------------------------------------------------
+%  Abstract -- WRITE THIS LAST
+% ---------------------------------------------------------------------
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\begin{plan}[Plan --- Abstract (write last, after Chapters 5--8 are final)]
+One page, about 300 words, no citations, no undefined symbols. Five moves:
+\begin{enumerate}
+  \item \textbf{Context} (2 sentences): VLMs used as automated judges in
+        retrieval and moderation; they inherit gender stereotypes.
+  \item \textbf{Problem} (2 sentences): safety-aligned models sanitise what
+        they \emph{say}, so self-report audits cannot separate debiasing from
+        evasion (algorithmic defensiveness).
+  \item \textbf{Method} (3 sentences): single forward pass, read the
+        next-token distribution before sampling; ASI administered through 5
+        prompt structures $\times$ 3 image conditions; SIGIR 2018 image-search
+        ratings with CALM scale reversal; Llama-3.2-90B-Vision and
+        Qwen2-VL-72B (Llama-3.2-11B for development); total measurements.
+  \item \textbf{Findings} (4--5 sentences, use the \emph{final} numbers from
+        Chapters 5--6): RR collapse under visual input (both models);
+        Llama-specific loss of captured mass with any image; the response-bias
+        confound in $\ASIint$ and the invariant alternative; the
+        person/non-person dissociation, stated with whatever
+        $\dm$ definition is finally adopted (see Decision D1 in
+        \cref{sec:s2-deviation}).
+  \item \textbf{Contribution} (1--2 sentences): a reproducible, human-anchored
+        logit-level audit protocol with built-in validity statistics.
+\end{enumerate}
+\end{plan}
+
+\textbf{[Abstract --- write last.]}
+\clearpage

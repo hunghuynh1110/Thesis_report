@@ -1,0 +1,40 @@
+% =====================================================================
+\chapter{Run Registry}\label{app:runs}
+% =====================================================================
+
+\begin{plan}[Appendix plan --- run registry]
+\pages{1--2 pages.} Every run, kept whether it worked or not
+(\texttt{results\_archive/README.md}). Only VALID runs are cited as results;
+FLAWED/INVALID runs are cited only as evidence for \cref{tab:faults}.
+\textbf{Two job IDs are missing from the repository} (Qwen production run and
+the 90B rerun) --- copy them from the Bunya logs, and add both runs to
+\texttt{results\_archive/}.
+\end{plan}
+
+\begin{table}[htbp]\centering\scriptsize
+\begin{tabularx}{\linewidth}{@{}lXll@{}}
+\toprule
+Job & Run & Status & Used in \\
+\midrule
+24165293, 24166505 & Gate 1 stimulus validation, 11B & VALID & \cref{fig:gate1} \\
+24230930 & Phase 1 smoke, 11B & SUPERSEDED & -- \\
+24256941 & Phase 1, 11B, lowercase tokens & FLAWED & \cref{tab:faults} \\
+27086002 & 90B 8-bit preflight & FAILED (int8 kernel) & \cref{tab:quant} \\
+27087751 & 11B 8-bit smoke & FAILED (int8 kernel) & \cref{tab:quant} \\
+27103376 & 11B 4-bit smoke & VALID & -- \\
+27103565 & quantisation and surface-form diagnostic, 11B & VALID & \cref{tab:quant,tab:faults} \\
+27104037 & Phase 1, 11B, pooled tokens & VALID & \cref{ch:study1} \\
+27105400 & Phase 2, 11B, cue in user turn & FLAWED & \cref{tab:faults} \\
+27105702 & Phase 2, 11B & VALID & \cref{ch:study2} \\
+27105190, 27105703 & Phase 1/2, 90B, 3 GPUs, zeroed copies & INVALID & \cref{app:fault} \\
+27113606 & fault reproduced on 11B across 3 GPUs & diagnostic & \cref{app:fault} \\
+27113674 & three-arm workaround validation & VALID & \cref{tab:app-fault} \\
+27113679, 27113680 & Phase 1/2, 90B, bf16, 3$\times$H100, workaround & VALID & \cref{ch:study1,ch:study2} \\
+27114730 & Phase 1, 90B, 4-bit, 1 GPU & VALID (cross-check) & \cref{tab:s1-replication} \\
+\textbf{[fill]} & Phase 1, 90B, rerun on repaired hardware & VALID & \cref{tab:s1-replication} \\
+\textbf{[fill]} & Phase 1/2, Qwen2-VL-72B, bf16 & VALID & \cref{ch:study1,ch:study2} \\
+\bottomrule
+\end{tabularx}
+\caption{All runs referred to in this thesis.}
+\label{tab:app-runs}
+\end{table}

@@ -1,0 +1,34 @@
+% =====================================================================
+\chapter{Conclusion and Future Work}\label{ch:conclusion}
+% =====================================================================
+
+\begin{plan}[Chapter plan --- Conclusion]
+\pages{2--3 pages.} No new results, no new citations except in future work.
+\end{plan}
+
+\section{Conclusion}\label{sec:conc-summary}
+\begin{plan}
+One paragraph per contribution of \cref{sec:intro-contrib}, each with its
+single strongest number. End with one sentence on what an auditor should do
+differently because of this work (report coverage; use style-invariant scores;
+test robustness to the stated scale).
+\end{plan}
+
+\section{Future work}\label{sec:conc-future}
+\begin{plan}
+\begin{itemize}
+  \item \textbf{Closed models (GPT-4o).} Top-$k$ log-probabilities give a lower
+        bound $\capm\ge\sum_{t\in\text{top-}k\,\cap\,(\Yset\cup\Nset)}p(t)$;
+        report the bound and restrict to rank-order agreement.
+  \item \textbf{Gendered referents} (woman / man / person) as a fourth factor
+        in Phase~1 --- addresses the main construct threat.
+  \item \textbf{Grid-level stimuli} in Phase~2 to match the human task.
+  \item \textbf{High-ASI baselines and the position index} $\lambda$
+        (\cref{eq:lambda}).
+  \item \textbf{Contemporary 2026 stream} for temporal drift (proposal).
+  \item \textbf{Attribution}: cross-attention or activation analysis of what
+        moves mass away from \{yes, no\} (cf.\ \cite{arditi2024refusal}).
+  \item \textbf{Forced-choice probes} that remove the yes-rate by
+        construction.
+\end{itemize}
+\end{plan}

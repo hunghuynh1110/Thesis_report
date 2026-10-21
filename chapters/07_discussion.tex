@@ -1,0 +1,119 @@
+% =====================================================================
+\chapter{Discussion}\label{ch:discussion}
+% =====================================================================
+
+\begin{plan}[Chapter plan --- Discussion]
+\pages{6 pages.} \textbf{Job:} interpret, not repeat. Answer the RQs, say what
+logit-level auditing shows that self-report cannot, state the methodological
+lessons, then a structured threats-to-validity section (one table). No new
+numbers here except ones already reported in Chapters 5--6.
+\citeplan{hofmann2024covert,bai2025explicitly,gao2025measuring,wang2024myanswer,hu2023prompting,messick1995validity,blodgett2020language,tjuatja2024response,dominguez2024questioning,arditi2024refusal}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Answering the research questions}\label{sec:disc-rq}
+\begin{plan}
+\begin{itemize}
+  \item \textbf{RQ1.} The proposal's intrinsic index is dominated by response
+        style; on a style-free measure both production models lean
+        anti-sexist, only Qwen significantly. The intrinsic ``attitude'' of a
+        model is therefore not a single number but a (style, separation,
+        coverage) triple.
+  \item \textbf{RQ2.} Descriptive, two models. Use the adopted $\dm$
+        definition: e.g.\ Qwen has the more discriminating intrinsic profile,
+        the smaller robustness collapse and (original order) ratings closer to
+        or above the low-ASI baseline; Llama has the opposite on all three.
+        Consistent, not a relationship.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{What logit-level auditing reveals}\label{sec:disc-logit}
+\begin{plan}
+\begin{itemize}
+  \item Defensiveness becomes a number: Llama's refusal to answer a yes/no
+        question about a grey square is a drop in $\capm$, not an unparseable
+        string. Relate to covert vs overt bias
+        \cite{hofmann2024covert,bai2025explicitly} and to refusal being
+        represented internally \cite{arditi2024refusal}.
+  \item The image changes \emph{how} the model uses the prompt (anchor
+        following), not only \emph{what} it answers --- a form of visual
+        dominance consistent with \cite{weng2024images}.
+  \item Counterpoint: first-token probabilities and generated answers can
+        disagree \cite{wang2024myanswer}; the claim is about the distribution,
+        not about what a deployed system would print. Probability measurements
+        are nevertheless the more faithful readout of model knowledge
+        \cite{hu2023prompting}.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Methodological lessons}\label{sec:disc-lessons}
+\begin{plan}
+\begin{itemize}
+  \item Report coverage ($\capm$) and output diversity with every audit: six
+        silent faults (\cref{tab:faults}) all produced plausible aggregates.
+  \item Psychometric instruments built for people assume a respondent whose
+        yes-rate is not a free parameter; a model violates this
+        \cite{tjuatja2024response,dominguez2024questioning}. Keying balance and
+        style-invariant scores are required, not optional.
+  \item A confound that looked like a control: model size and GPU count were
+        perfectly confounded across the run history, so ``it works on the
+        11B'' did not exonerate the code. General lesson for audits on shared
+        HPC.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Threats to validity}\label{sec:disc-threats}
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lXX@{}}
+\toprule
+Type & Threat & Mitigation / status \\
+\midrule
+Construct & The ASI is about attitudes towards women; the probe asks about an
+ungendered ``person''. 9 of 22 trait phrases have no gender reference; items
+20--21 implicitly refer to a man. & State explicitly; future work: gendered
+referents (woman / man / person) as a factor. \\
+Construct & Humans rated a 3$\times$3 \emph{grid}; the model rates single
+images. Gender skew is a property of the set, not of one image. & State;
+future work: present the grid as one composite image. \\
+Construct & Sign of $\dm$ relative to the SIGIR finding (D2). & Agree with
+supervisor; add high-ASI baseline (A10). \\
+Internal & Acquiescence / nay-saying drive $\ASIint$. & \cref{prop:shift};
+$\PS$ with exact test. \\
+Internal & Vision-condition $\pyes$ rests on low $\capm$ for Llama. & Report
+$\capm$ everywhere; $\capm$-filtered sensitivity (A8). \\
+Internal & Order-averaged $\dm$ contaminated by anchor insensitivity. &
+Original-order primary; null comparison (A1--A2). \\
+Internal & Quantisation shifts $\pyes$ by 0.07--0.11. & bf16 for all headline
+runs. \\
+Statistical & 22 items; 10 queries; text-only arm has 10 independent pairs. &
+Exact permutation test; query-level bootstrap. \\
+Statistical & Several metrics and variants reported. & Pre-declare primaries
+(D1, D3); label the rest as sensitivity. \\
+External & Two open-weight models, one dataset, English only, 2018 images,
+raters from three countries. & State; no claims beyond this sample. \\
+\bottomrule
+\end{tabularx}
+\caption{Threats to validity, organised following \cite{messick1995validity}.}
+\label{tab:threats}
+\end{table}
+\begin{plan}
+Write one paragraph per row group (construct, internal, statistical,
+external). The two construct threats in the first rows are the ones an
+examiner is most likely to raise --- address them directly. Use
+\cite{blodgett2020language} to frame what harm the measured construct relates
+to.
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Ethics and responsible disclosure}\label{sec:disc-ethics}
+\begin{plan}
+Half a page: secondary use of anonymised, publicly released SIGIR data (no
+new human participants, no HREC needed --- as in the proposal); the hardware
+fault was reported to UQ RCC with a minimal reproduction
+(\texttt{ai\_docs/rcc\_p2p\_bug\_report.md}); stimuli are programmatic;
+third-party images from the SIGIR grids are \emph{not} reproduced in the thesis
+(decision D5).
+\end{plan}

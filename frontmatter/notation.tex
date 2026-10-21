@@ -1,0 +1,42 @@
+% ---------------------------------------------------------------------
+%  Notation -- one table of every symbol used in Chapters 3-6
+% ---------------------------------------------------------------------
+\chapter*{Notation}
+\addcontentsline{toc}{chapter}{Notation}
+
+\begin{plan}[Plan --- Notation page]
+Keep this table in sync with \cref{ch:framework}. Every symbol in the thesis
+should appear here once; the macros are defined in \texttt{preamble.tex}.
+\end{plan}
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$m \in \mathcal{M}$ & model under audit \\
+$x$, $v$ & prompt text; image input ($v=\varnothing$ for text-only) \\
+$\vocab$, $|\vocab|$ & vocabulary and its size ($|\vocab| = 128{,}256$ for Llama-3.2) \\
+$\bm z \in \mathbb{R}^{|\vocab|}$ & next-token logits at the final position \\
+$p(t \mid x, v)$ & full-vocabulary softmax probability of token $t$ \\
+$\Yset$, $\Nset$ & surface forms of \emph{yes} and \emph{no} (\{yes, Yes, YES\}, \{no, No, NO\}) \\
+$\capm$ & captured mass: probability on the target tokens \\
+$\pyes$ & pooled conditional probability of \emph{yes} \\
+$i, t, c$ & ASI item ($1..22$), prompt structure ($1..5$), image condition ($1..3$) \\
+$p_i \in \{+1,-1\}$ & item polarity (keying) \\
+$s_t \in \{+1,-1\}$ & structure sign ($-1$ for linguistic inversion) \\
+$b_{i,t,c}$ & directional bias score \\
+$\ASIint$ & mean bias score over items, structures, conditions \\
+$\PS$ & polarity separation \\
+$\Dset$ & rating digits $\{1,\dots,7\}$ \\
+$\rexp$, $\rnorm$ & expected rating; rating mapped to the original scale orientation \\
+$\rlow$, $\rhigh$ & mean SIGIR 2018 rating of query $q$ by low-/high-ASI participants \\
+$\dm$ & extrinsic deviation of model $m$ from the low-ASI baseline \\
+$\RR$, $\dRR$ & robustness rate under scale reversal; vision minus text-only \\
+$\tau$ & robustness tolerance (default $0.5$ scale points) \\
+\bottomrule
+\end{tabularx}
+\caption{Notation used throughout the thesis.}
+\label{tab:notation}
+\end{table}
+\clearpage

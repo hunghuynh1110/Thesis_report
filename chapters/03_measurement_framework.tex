@@ -1,0 +1,302 @@
+% =====================================================================
+\chapter{Measurement Framework}\label{ch:framework}
+% =====================================================================
+
+\begin{plan}[Chapter plan --- Measurement framework]
+\pages{9 pages.} \textbf{Job:} define every quantity once, precisely, with the
+assumptions that make it valid. This is the mathematical core of the thesis.
+The definitions, equations and propositions below are \emph{planned final
+content}; write the connecting prose around them. Keep the numbering of the
+proposal's Eqs.~3.1--3.6 recognisable: the proposal's $P(\text{yes})$ is
+\cref{eq:binary}, $b_i$ is \cref{eq:bias}, $\ASIint$ is \cref{eq:asi},
+$\dm$ is \cref{eq:deltam}, $\RR$ is \cref{eq:rr}.
+\citeplan{holtzman2021surface,zhao2021calibrate,baumgartner2001response,weijters2013reversed,ye2025justice,ernst2004permutation,efron1993bootstrap,field2007bootstrapping,zhang2019rmsnorm}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Setting and notation}\label{sec:framework-setting}
+\begin{plan}
+Half a page. A measurement is one forward pass of model $m$ on prompt $x$ and
+image $v$; generation is never run. Everything is a function of the
+final-position distribution $p(\cdot\mid x,v)$ in \cref{eq:nexttoken}. Point
+to the notation table (\cref{tab:notation}).
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{The pooled binary probe and captured mass}\label{sec:framework-probe}
+\begin{definition}[Pooled masses, captured mass and $\pyes$]\label{def:pooled}
+With $\Yset=\{\text{yes},\text{Yes},\text{YES}\}$ and
+$\Nset=\{\text{no},\text{No},\text{NO}\}$,
+\begin{align}
+  \pi_{\Yset} &= \sum_{y\in\Yset} p(y\mid x,v), \qquad
+  \pi_{\Nset} = \sum_{n\in\Nset} p(n\mid x,v), \label{eq:pooled}\\
+  \capm &= \pi_{\Yset} + \pi_{\Nset}, \label{eq:capm}\\
+  \pyes &= \frac{\pi_{\Yset}}{\capm}, \qquad
+  \logit(\pyes) = \operatorname*{LSE}_{y\in\Yset} z_y - \operatorname*{LSE}_{n\in\Nset} z_n .
+  \label{eq:pyes}
+\end{align}
+\end{definition}
+
+\begin{remark}[The proposal's two-token softmax is a special case]
+With $\Yset=\{\text{yes}\}$ and $\Nset=\{\text{no}\}$, \cref{eq:pyes} reduces to
+\begin{equation}
+  \pyes = \frac{\exp(z_{\text{yes}})}{\exp(z_{\text{yes}})+\exp(z_{\text{no}})},
+  \label{eq:binary}
+\end{equation}
+the proposal's Eq.~3.1. The normalising constant of \cref{eq:nexttoken} cancels,
+so \cref{eq:binary} is the same whether the two tokens hold 99\% or 0.09\% of
+the distribution. That is why $\capm$ must be reported alongside every
+$\pyes$: it is the only quantity that says how much of the model's behaviour
+$\pyes$ describes.
+\end{remark}
+
+\begin{plan}
+\begin{itemize}
+  \item Justify pooling with surface-form competition \cite{holtzman2021surface}
+        and give the measured case: lowercase-only gave $\capm=0.09\%$ and
+        overstated $\pyes$ by about 0.17 on the 11B
+        (\cref{sec:design-faults}).
+  \item Interpretation of low $\capm$: mass has moved to other first tokens,
+        typically ``I'' (``I cannot determine\ldots''), measured at 41\% for
+        one 11B prompt (diagnostic job 27103565). $\capm$ is therefore both a
+        validity statistic and an outcome (\cref{sec:s1-quality}).
+  \item State the corollary: $\pyes$ values from conditions with very
+        different $\capm$ are conditioned on different fractions of behaviour
+        and are not directly comparable.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Item scores and the intrinsic index}\label{sec:framework-asi}
+\begin{definition}[Directional bias score and $\ASIint$]\label{def:asi}
+For item $i$ with keying $p_i\in\{+1,-1\}$, structure $t$ with sign
+$s_t=-1$ for linguistic inversion and $+1$ otherwise, and condition $c$,
+\begin{align}
+  b_{i,t,c} &= s_t\, p_i\, \pyes^{(i,t,c)}, \label{eq:bias}\\
+  \ASIint &= \frac{1}{|I|\,|T|\,|C|}\sum_{i=1}^{22}\sum_{t=1}^{5}\sum_{c=1}^{3} b_{i,t,c}.
+  \label{eq:asi}
+\end{align}
+\end{definition}
+
+\begin{plan}
+Explain $s_t$ (``would it be incorrect to say \ldots?'' reverses the meaning of
+\emph{yes}); mention that the proposal's Eq.~3.2 omitted $s_t$ and that the
+omission was a real bug in the first runner (smoke $\ASIint = 0.639$, fixed).
+Give the marginal versions used in Chapter~5 (by structure, condition,
+subscale) as one line: replace the triple sum by a sum over the subset.
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Response style, keying imbalance and polarity separation}
+\label{sec:framework-responsebias}
+
+\begin{proposition}[Response-style decomposition of $\ASIint$]\label{prop:shift}
+Let $\bar p$ be the mean of $\pyes$ over all $22\times5\times3$ cells and
+$e_{i,t,c}=\pyes^{(i,t,c)}-\bar p$. Then
+\begin{equation}
+  \ASIint = \underbrace{\Big(\tfrac{1}{|T|}\textstyle\sum_t s_t\Big)
+            \Big(\tfrac{1}{|I|}\textstyle\sum_i p_i\Big)}_{=\;\frac{3}{5}\cdot\frac{10}{22}\;=\;\frac{3}{11}}\,\bar p
+            \;+\; \underbrace{\frac{1}{|I||T||C|}\sum_{i,t,c} s_t\,p_i\,e_{i,t,c}}_{D}.
+  \label{eq:decomp}
+\end{equation}
+In particular a model that answers \emph{yes} with the same probability
+$\bar p$ to every prompt scores $\ASIint=\tfrac{3}{11}\bar p$, and a uniform
+shift $\pyes\mapsto\pyes+a$ changes $\ASIint$ by $\tfrac{3}{11}a$.
+\end{proposition}
+\begin{proof}
+Substitute $\pyes=\bar p+e$ into \cref{eq:asi}. The design is fully crossed, so
+the mean of $s_t p_i$ factorises into the mean of $s_t$ over structures
+($(4-1)/5$) times the mean of $p_i$ over items ($(16-6)/22$).
+\end{proof}
+
+\begin{plan}[Why this matters --- and numbers to quote]
+\begin{itemize}
+  \item The zero point of $\ASIint$ is not ``no attitude'': an indifferent
+        model ($\bar p=0.5$) scores $0.136$.
+  \item \newanalysis{(A9) apply \cref{eq:decomp} to every model. Preliminary
+        (from the ledger means): Llama-90B $\tfrac{3}{11}\cdot0.5851=0.160$
+        vs observed $0.153$, so $D\approx-0.007$; Qwen-72B
+        $0.068$ vs $0.008$, $D\approx-0.061$; Llama-11B $0.144$ vs $0.084$,
+        $D\approx-0.060$. Llama-90B's headline score is almost entirely its
+        yes-rate. Why run it: it turns the thesis-plan's verbal argument into
+        an exact identity.}
+  \item Link to the psychometric literature on acquiescence with unbalanced
+        keying \cite{baumgartner2001response,weijters2013reversed}.
+\end{itemize}
+\end{plan}
+
+\begin{definition}[Polarity separation]\label{def:ps}
+On the non-inversion rows ($t\neq$ inversion), where \emph{yes} always means
+agreement with the item as written,
+\begin{equation}
+  \PS = \overline{\pyes}\big|_{p_i=+1} \;-\; \overline{\pyes}\big|_{p_i=-1},
+  \qquad
+  \PS_{\logit} = \overline{\logit\pyes}\big|_{p_i=+1} - \overline{\logit\pyes}\big|_{p_i=-1}.
+  \label{eq:ps}
+\end{equation}
+$\PS>0$ means more agreement with sexist than with anti-sexist statements.
+\end{definition}
+
+\begin{proposition}[Invariance]\label{prop:invariance}
+$\PS$ is unchanged by a uniform shift $\pyes\mapsto\pyes+a$, and $\PS_{\logit}$
+is unchanged by a uniform log-odds offset $\logit\pyes\mapsto\logit\pyes+\beta$
+(a constant yes-token prior in the sense of \cite{zhao2021calibrate}).
+\end{proposition}
+\begin{proof}
+Both are differences of two means over the same rows; the constant cancels.
+\end{proof}
+
+\begin{plan}
+\begin{itemize}
+  \item \decision{(D3) the August draft used two different definitions
+        (all rows in its Table 5.1; non-inversion rows in its \S3.6 and
+        Table 5.4). Recommended: \cref{eq:ps} on non-inversion rows as the
+        primary metric, $\PS_{\logit}$ and the all-rows version as
+        sensitivity checks. With this choice Qwen/Llama is about
+        $0.188/0.097\approx1.9\times$, not the draft's $2.3\times$.}
+  \item Inversion rows are excluded from $\PS$ because agreement flips there;
+        optionally report a ``balanced-keyed'' version that scores inversion
+        rows as $1-\pyes$.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Exact permutation inference for polarity}\label{sec:framework-perm}
+\begin{plan}
+Planned final content: the test statistic and exact $p$-value below. Explain
+exchangeability: under $H_0$ the keying labels carry no information about the
+model's item-level agreement, so every assignment of the 6 reverse-keyed labels
+to the 22 items is equally likely \cite{ernst2004permutation}. The full null
+distribution has $\binom{22}{6}=74{,}613$ points, so the test is exact (no
+Monte Carlo error). This is the ``permutation test'' promised in proposal
+\S3.2.5.
+\end{plan}
+\begin{equation}
+  T(\bm\ell) = \frac{1}{16}\sum_{i:\ell_i=+1}\bar p_i - \frac{1}{6}\sum_{i:\ell_i=-1}\bar p_i,
+  \qquad
+  p = \frac{1}{\binom{22}{6}}\sum_{\bm\ell\in\Lambda}\ind{|T(\bm\ell)|\ge|T(\bm\ell_{\text{obs}})|},
+  \label{eq:perm}
+\end{equation}
+where $\bar p_i$ is item $i$'s mean $\pyes$ over the 12 non-inversion cells and
+$\Lambda$ is the set of all labellings with six reverse-keyed items.
+
+% ---------------------------------------------------------------------
+\section{Ratings on a seven-point scale}\label{sec:framework-ratings}
+\begin{align}
+  \capm_{\Dset} &= \sum_{d=1}^{7} p(d\mid x,v), \qquad
+  \rexp = \frac{1}{\capm_{\Dset}}\sum_{d=1}^{7} d\; p(d\mid x,v), \label{eq:rexp}\\
+  \rnorm &= \begin{cases} \rexp & \text{original order (7 = extremely objective)}\\
+                          8-\rexp & \text{reversed order (7 = extremely subjective)}\end{cases}
+  \label{eq:rnorm}
+\end{align}
+\begin{plan}
+Explain why the expectation rather than the argmax (continuous, uses the whole
+digit distribution; argmax is stored as a check). The digits are single tokens
+only without a leading space, which is why ``Rating:\,'' is prefilled with a
+trailing space in the assistant turn (\cref{sec:design-impl}).
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Extrinsic deviation from human baselines}\label{sec:framework-extrinsic}
+\begin{equation}
+  \dm = \frac{1}{|Q|\,k}\sum_{q\in Q}\sum_{j=1}^{k}\Big(\rnorm^{\,\text{orig}}_{m,q,j}-\rlow\Big),
+  \qquad |Q|=10,\; k=9.
+  \label{eq:deltam}
+\end{equation}
+
+\begin{proposition}[Anchor-insensitivity null]\label{prop:null}
+If a model ignores the stated anchors, so that $\rexp^{\,\text{rev}}=\rexp^{\,\text{orig}}$,
+then the order-averaged normalised rating is exactly 4 and the order-averaged
+deviation for query $q$ is $4-\rlow$. Averaged over the ten SIGIR queries this
+null equals $4-5.280=-1.280$.
+\end{proposition}
+\begin{proof}
+$\tfrac12\big(\rexp + (8-\rexp)\big)=4$ for every $\rexp$.
+\end{proof}
+
+\begin{equation}
+  \lambda_{m,q} = \frac{\bar{\rnorm}_{m,q}-\rlow}{\rhigh-\rlow}
+  \qquad (\lambda=0:\ \text{like low-ASI humans};\ \lambda=1:\ \text{like high-ASI humans})
+  \label{eq:lambda}
+\end{equation}
+
+\begin{plan}
+\begin{itemize}
+  \item \decision{(D1) which $\dm$. \cref{eq:deltam} uses original-order
+        ratings only, as in proposal Eq.~3.4 (one rating per image). The
+        pipeline currently averages both CALM orders, which mixes in the
+        anchor-insensitivity of \cref{prop:null}: Llama-90B's order-averaged
+        $-1.203$ is close to the null $-1.280$. Recommended: original order as
+        primary, order-averaged and null-adjusted ($\dm-\dm^{\text{null}}$) as
+        sensitivity.}
+  \item \decision{(D2) the sign. The proposal reads $\dm<0$ as ``greater
+        bias''. But in \cite{otterbacher2018sigir} \emph{more} sexist
+        participants were \emph{less} likely to rate biased grids as
+        non-objective, i.e.\ they rate them \emph{higher}. A model rating
+        below the low-ASI baseline is therefore more ``bias-perceiving'' than
+        the least sexist humans, not more sexist. Agree the interpretation
+        with your supervisor (a co-author of the SIGIR paper) before writing
+        \cref{ch:study2}.}
+  \item \cref{eq:lambda} places a model on the low--high ASI axis and is the
+        most direct operationalisation of RQ2. \newanalysis{(A10) needs the
+        high-ASI baselines $\rhigh$, which require the raw SIGIR CSV (released
+        publicly by the SIGIR authors). Guard against small denominators
+        $\rhigh-\rlow$.}
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Robustness under scale reversal (CALM)}\label{sec:framework-calm}
+\begin{align}
+  \RR_c(\tau) &= \frac{1}{|D_c|}\sum_{(q,j)\in D_c}
+                 \ind{\big|\rnorm^{\,\text{orig}}_{q,j,c}-\rnorm^{\,\text{rev}}_{q,j,c}\big|\le\tau},
+  \label{eq:rr}\\
+  \dRR(\tau) &= \RR_{\text{vision}}(\tau)-\RR_{\text{text}}(\tau). \label{eq:drr}
+\end{align}
+\begin{plan}
+\begin{itemize}
+  \item $\tau=0.5$ (both ratings round to the same scale point). Report
+        $\tau\in\{0.25,0.5,1\}$ as a sensitivity table.
+  \item \textbf{Consistency rate.} Proposal Eq.~3.6 compares against a
+        randomised option order. With only two orders a random order coincides
+        with one of them, so $\CR$ is not separately identifiable from $\RR$ in
+        this design --- say so explicitly rather than silently dropping it.
+  \item \textbf{Effective sample size.} With no image the input is fixed by
+        $(q,\text{order})$: the 90 text-only pairs are 10 distinct pairs
+        repeated 9 times, so $\RR_{\text{text}}$ is a mean of 10 indicators.
+        Inference therefore resamples \emph{queries}: the cluster bootstrap
+        \cite{field2007bootstrapping,efron1993bootstrap} draws $B=10{,}000$
+        resamples of the 10 queries and reports percentile intervals for
+        $\dRR$.
+  \item \textbf{Anchor following.} Define the slope $\beta_1$ of
+        $\rexp^{\,\text{rev}}$ on $\rexp^{\,\text{orig}}$ across pairs:
+        $\beta_1=-1$ means the model follows the reversed anchors,
+        $\beta_1=+1$ means it ignores them. This explains \emph{why} $\RR$
+        collapses (\cref{sec:s2-calm}).
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Validity statistics and degeneracy}\label{sec:framework-validity}
+\begin{proposition}[Zero hidden state gives the uniform distribution]\label{prop:uniform}
+With $\RMSNorm(\bm h)=\bm g\odot\bm h/\sqrt{\tfrac1d\lVert\bm h\rVert_2^2+\epsilon}$
+\cite{zhang2019rmsnorm} and a bias-free output projection, $\bm h_L=\bm 0$
+implies $\bm z=\bm 0$ and $p(t\mid x,v)=1/|\vocab|$ for every token. For
+Llama-3.2, $1/128{,}256=7.7969\times10^{-6}$ --- exactly the value observed in
+the invalid 90B runs.
+\end{proposition}
+\begin{proof}
+$\RMSNorm(\bm 0)=\bm 0$ because $\epsilon>0$; then $\bm z=W_{\text{out}}\bm 0=\bm 0$
+and \cref{eq:nexttoken} gives equal probabilities.
+\end{proof}
+
+\begin{plan}
+Three run-level checks, stated as rules: (i) logit standard deviation at a
+fixed self-test prompt must exceed $10^{-4}$; (ii) output diversity
+$u=|\{\text{distinct }\pyes\}|/n$ must be near 1 (the invalid 90B run: over
+330 prompts, $\pyes$ took 4 distinct values, was exactly 0.5 in 247 rows and
+NaN in 59; $\capm$ took 8 distinct non-missing values --- the August draft's
+``8 distinct values'' refers to $\capm$, so say which quantity you count);
+(iii) report mean and minimum $\capm$ per condition. Point to
+\cref{app:fault} for the full fault report.
+\end{plan}

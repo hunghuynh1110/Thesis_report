@@ -1,0 +1,97 @@
+{
+ "phase2": {
+  "llama90b": {
+   "delta_m_original_order": -0.4907,
+   "person_delta_original_order": -0.5822,
+   "control_delta_original_order": 0.3326,
+   "per_query_delta_original_order": {
+    "aggressive person": -0.867,
+    "anxious person": -1.293,
+    "bossy person": -0.32,
+    "calm person": 0.022,
+    "casual person": -0.03,
+    "hot air baloon": 0.333,
+    "interested person": -0.45,
+    "smart person": -1.749,
+    "warm person": -0.674,
+    "working person": 0.121
+   },
+   "raw_rating_by_condition_and_order": {
+    "text_only": {
+     "original": 2.748,
+     "reversed": 5.135
+    },
+    "vision": {
+     "original": 4.789,
+     "reversed": 4.636
+    }
+   },
+   "delta_rr": -0.8556,
+   "delta_rr_cluster_bootstrap_95ci": [
+    -0.978,
+    -0.656
+   ]
+  },
+  "qwen72b": {
+   "delta_m_original_order": 0.2165,
+   "person_delta_original_order": 0.1842,
+   "control_delta_original_order": 0.5066,
+   "per_query_delta_original_order": {
+    "aggressive person": 0.404,
+    "anxious person": 0.193,
+    "bossy person": 0.106,
+    "calm person": -0.079,
+    "casual person": 1.345,
+    "hot air baloon": 0.507,
+    "interested person": 0.306,
+    "smart person": -0.816,
+    "warm person": -0.472,
+    "working person": 0.671
+   },
+   "raw_rating_by_condition_and_order": {
+    "text_only": {
+     "original": 2.647,
+     "reversed": 5.2
+    },
+    "vision": {
+     "original": 5.496,
+     "reversed": 4.187
+    }
+   },
+   "delta_rr": -0.7444,
+   "delta_rr_cluster_bootstrap_95ci": [
+    -0.967,
+    -0.489
+   ]
+  }
+ },
+ "phase1": {
+  "llama11b": {
+   "polarity_separation_item_level": -0.1096,
+   "exact_permutation_p_two_sided": 0.3407,
+   "n_permutations": 74613,
+   "within_subscale_separation": {
+    "BS": -0.2999,
+    "HS": 0.0807
+   }
+  },
+  "llama90b": {
+   "polarity_separation_item_level": -0.0967,
+   "exact_permutation_p_two_sided": 0.1962,
+   "n_permutations": 74613,
+   "within_subscale_separation": {
+    "BS": -0.0809,
+    "HS": -0.1125
+   }
+  },
+  "qwen72b": {
+   "polarity_separation_item_level": -0.1878,
+   "exact_permutation_p_two_sided": 0.0104,
+   "n_permutations": 74613,
+   "within_subscale_separation": {
+    "BS": -0.2751,
+    "HS": -0.1006
+   }
+  }
+ }
+}

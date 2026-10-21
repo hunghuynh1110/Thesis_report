@@ -1,0 +1,116 @@
+% =====================================================================
+%  preamble.tex -- packages, layout, notation and planning helpers
+% =====================================================================
+
+% ---------- layout ----------------------------------------------------
+\usepackage[a4paper,margin=25mm,bindingoffset=0mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[english]{babel}
+\usepackage{csquotes}
+
+% ---------- maths -----------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\numberwithin{equation}{chapter}
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[chapter]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[chapter]
+
+% ---------- tables, figures, units -------------------------------------
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs,tabularx,multirow,array,makecell}
+\usepackage{siunitx}
+\sisetup{group-separator={,},group-minimum-digits=4}
+\usepackage{caption,subcaption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric}
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+
+% ---------- references --------------------------------------------------
+% IEEE numeric style (as in the project proposal). Overleaf runs biber
+% automatically; locally use `latexmk -pdf main.tex`.
+\usepackage[backend=biber,style=ieee,sorting=none,doi=true,url=false,isbn=false]{biblatex}
+\addbibresource{references.bib}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+\crefname{proposition}{Proposition}{Propositions}
+
+% =====================================================================
+%  Notation (use these macros everywhere so the maths stays consistent)
+% =====================================================================
+\newcommand{\vocab}{\mathcal{V}}                 % vocabulary
+\newcommand{\Yset}{\mathcal{Y}}                  % yes surface forms
+\newcommand{\Nset}{\mathcal{N}}                  % no surface forms
+\newcommand{\Dset}{\mathcal{D}}                  % rating digits 1..7
+\newcommand{\pyes}{p_{\mathrm{yes}}}             % pooled conditional P(yes)
+\newcommand{\capm}{\kappa}                       % captured mass
+\newcommand{\ASIint}{\mathrm{ASI}_{\mathrm{int}}}% ASI_intrinsic
+\newcommand{\PS}{\mathrm{PS}}                    % polarity separation
+\newcommand{\RR}{\mathrm{RR}}                    % robustness rate
+\newcommand{\CR}{\mathrm{CR}}                    % consistency rate
+\newcommand{\dRR}{\Delta\mathrm{RR}}             % RR_vision - RR_text
+\newcommand{\dm}{\delta_m}                       % extrinsic deviation
+\newcommand{\rlow}{\bar r_{\text{low},q}}        % low-ASI human baseline
+\newcommand{\rhigh}{\bar r_{\text{high},q}}      % high-ASI human baseline
+\newcommand{\rexp}{\hat r}                       % expected rating
+\newcommand{\rnorm}{\tilde r}                    % order-normalised rating
+\newcommand{\ind}[1]{\mathbb{1}\!\left[#1\right]}
+\newcommand{\E}{\mathbb{E}}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\RMSNorm}{RMSNorm}
+
+% =====================================================================
+%  Planning helpers -- delete this block (and every plan box) at the end
+% =====================================================================
+% \showplantrue  -> plan boxes and figure placeholders are visible
+% \showplanfalse -> they disappear (use this for the submitted PDF)
+\newif\ifshowplan
+\showplantrue
+
+\usepackage[most]{tcolorbox}
+\usepackage{environ}
+\definecolor{planblue}{HTML}{1F4E79}
+\definecolor{planfill}{HTML}{EEF4FA}
+\definecolor{flagred}{HTML}{9C2A00}
+
+\NewEnviron{plan}[1][Plan]{%
+  \ifshowplan
+  \begin{tcolorbox}[enhanced,breakable,colback=planfill,colframe=planblue,
+      boxrule=0.6pt,arc=1mm,left=2mm,right=2mm,top=1mm,bottom=1mm,
+      fonttitle=\bfseries\small,title={#1},fontupper=\small\singlespacing]
+  \BODY
+  \end{tcolorbox}
+  \fi}
+
+% Inline markers used inside plan boxes
+\newcommand{\citeplan}[1]{\textbf{Cite:} \cite{#1}}
+\newcommand{\pages}[1]{\textbf{Target length:} #1}
+\newcommand{\decision}[1]{\textcolor{flagred}{\textbf{Decision needed:} #1}}
+\newcommand{\newanalysis}[1]{\textcolor{flagred}{\textbf{New analysis:} #1}}
+\newcommand{\source}[1]{\textit{Source: #1}}
+
+% Placeholder for a figure that has not been produced yet. It keeps the
+% label, caption and List of Figures working, so cross-references compile.
+%   \plannedfigure{label}{caption}{what goes in it / data / script}
+\newcommand{\plannedfigure}[3]{%
+  \begin{figure}[htbp]\centering
+  \ifshowplan
+    \fbox{\parbox{0.92\linewidth}{\small\singlespacing
+      \textbf{Planned figure.} #3}}
+  \else
+    \fbox{\parbox{0.92\linewidth}{\centering\vspace{3cm}[figure]\vspace{3cm}}}
+  \fi
+  \caption{#2}\label{#1}
+  \end{figure}}

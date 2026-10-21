@@ -1,0 +1,34 @@
+% =====================================================================
+\chapter{Full Results Tables}\label{app:tables}
+% =====================================================================
+
+\begin{plan}[Appendix plan --- full tables]
+\pages{2 pages.} Per-query Phase~2 deviations. Original-order columns are
+\emph{prelim} (\texttt{scripts/report/preliminary\_diagnostics.py});
+order-averaged and null columns are from the ledger. Add the $\capm$-filtered
+sensitivity tables (A8) here once computed.
+\end{plan}
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+& & \multicolumn{2}{c}{Llama-90B} & \multicolumn{2}{c}{Qwen-72B} & Null \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Query & $\rlow$ & orig. & avg. & orig. & avg. & $4-\rlow$ \\
+\midrule
+aggressive person & 5.486 & $-0.867$ & $-1.686$ & $+0.404$ & $-0.789$ & $-1.487$ \\
+anxious person    & 5.453 & $-1.293$ & $-1.999$ & $+0.193$ & $-1.237$ & $-1.453$ \\
+bossy person      & 5.020 & $-0.320$ & $-0.997$ & $+0.106$ & $-0.726$ & $-1.020$ \\
+calm person       & 5.473 & $+0.022$ & $-0.986$ & $-0.079$ & $-1.210$ & $-1.473$ \\
+casual person     & 4.703 & $-0.030$ & $-0.813$ & $+1.345$ & $+0.126$ & $-0.703$ \\
+interested person & 4.804 & $-0.450$ & $-0.992$ & $+0.306$ & $-0.537$ & $-0.804$ \\
+smart person      & 5.257 & $-1.749$ & $-2.292$ & $-0.816$ & $-1.096$ & $-1.257$ \\
+warm person       & 4.899 & $-0.674$ & $-1.558$ & $-0.472$ & $-1.244$ & $-0.899$ \\
+working person    & 5.338 & $+0.121$ & $-0.675$ & $+0.671$ & $+0.074$ & $-1.338$ \\
+\midrule
+hot air baloon (control) & 6.365 & $+0.333$ & $-0.036$ & $+0.507$ & $+0.386$ & $-2.365$ \\
+\bottomrule
+\end{tabular}
+\caption{Per-query deviation from the low-ASI baseline (vision rows).}
+\label{tab:app-queries}
+\end{table}

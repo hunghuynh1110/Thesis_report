@@ -1,0 +1,197 @@
+% =====================================================================
+\chapter{Study 2: Downstream Judgements of Image Search Results}\label{ch:study2}
+% =====================================================================
+
+\begin{plan}[Chapter plan --- Study 2 (RQ2, Aim 4)]
+\pages{8 pages.} \textbf{Order of the argument:} (1) measurement quality;
+(2) CALM robustness --- the strongest result, replicated across architectures;
+(3) \emph{why} it collapses (anchor following); (4) deviation from the human
+baseline, with the definition and sign decisions D1--D2 settled first; (5) the
+person vs non-person dissociation; (6) link back to the SIGIR findings.
+\citeplan{otterbacher2018sigir,ye2025justice,zheng2023judging,wang2024fair,chen2024mllmjudge,zheng2024robust,field2007bootstrapping}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Aims and expectations}\label{sec:s2-aims}
+\begin{plan}
+RQ2 and Aim 4. Expectations: (E4) if the language model alone drives the
+judgement, adding the image should not change robustness ($\dRR\approx0$);
+(E5) a model that perceives bias like low-ASI humans has $\dm\approx0$; (E6) any
+deviation specific to images of people should be absent for the non-person
+control query.
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Measurement quality}\label{sec:s2-quality}
+\begin{plan}
+One paragraph and one line of numbers: digit mass $\capm_{\Dset}$ mean / minimum
+--- Llama-11B 0.994 / 0.955, Llama-90B 0.998 / 0.979, Qwen-72B 0.9995 / 0.999.
+The rating probe is answered almost completely, so the Phase~2 results are not
+a coverage artefact (contrast with \cref{tab:capm}).
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Robustness under scale reversal}\label{sec:s2-calm}
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+& \multicolumn{3}{c}{$\RR_{\text{vision}}(\tau)$ / $\RR_{\text{text}}(\tau)$} & $\dRR(0.5)$ & 95\% CI \emph{prelim} \\
+\cmidrule(lr){2-4}
+Model & $\tau=0.25$ & $\tau=0.5$ & $\tau=1$ & & \\
+\midrule
+Llama-90B & 0.000 / 0.90 & 0.044 / 0.90 & 0.300 / 1.00 & $-0.856$ & $[-0.98,-0.66]$ \\
+Qwen-72B  & 0.089 / 0.80 & 0.156 / 0.90 & 0.267 / 1.00 & $-0.744$ & $[-0.97,-0.49]$ \\
+Llama-11B (dev) & 0.022 / 0.00 & 0.022 / 0.00 & 0.078 / 0.00 & $+0.022$ & -- \\
+\bottomrule
+\end{tabular}
+\caption{Robustness rate under CALM scale reversal. Vision: 90 pairs; text-only:
+90 rows but 10 distinct pairs. Interval: cluster bootstrap over the 10 queries
+($B=10{,}000$).}
+\label{tab:s2-rr}
+\end{table}
+\plannedfigure{fig:s2-rr}{Robustness rate with and without the image, for each
+model, with query-level bootstrap intervals.}{Paired bars (text-only vs vision)
+per model, error bars from the cluster bootstrap. The headline figure of the
+chapter.}
+\begin{plan}
+\begin{itemize}
+  \item \newanalysis{(A4) cluster bootstrap and (A5) tolerance sensitivity.
+        Why: the text-only arm has only 10 independent pairs, so row-level
+        standard errors are wrong; and $\tau=0.5$ is a design choice --- the
+        conclusion should hold for any reasonable $\tau$. Preliminary: it does.}
+  \item Two architectures with different vision encoders and fusion methods
+        show the same collapse; the 11B fails reversal in \emph{both}
+        conditions, so it has no baseline to lose (report, do not hide).
+\end{itemize}
+\end{plan}
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& \multicolumn{2}{c}{Text only} & \multicolumn{2}{c}{Vision} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Model & original & reversed & original & reversed \\
+\midrule
+Llama-90B & 2.75 & 5.13 & 4.79 & 4.64 \\
+Qwen-72B  & 2.65 & 5.20 & 5.50 & 4.19 \\
+Llama-11B & 2.51 & 3.15 & 3.36 & 2.84 \\
+\bottomrule
+\end{tabular}
+\caption{Mean \emph{raw} expected rating $\rexp$ by condition and scale order.
+Following the reversed anchors moves a rating $r$ to about $8-r$; ignoring them
+leaves it unchanged.}
+\label{tab:s2-anchor}
+\end{table}
+\plannedfigure{fig:s2-anchor}{Anchor following: raw rating under the reversed
+scale against the raw rating under the original scale, for every pair.}{Scatter
+per model, colour = condition, reference lines $y=8-x$ (anchors followed) and
+$y=x$ (anchors ignored); annotate the fitted slope $\beta_1$
+(\cref{sec:framework-calm}). Text-only points lie near $y=8-x$; Llama's
+vision points lie near $y=x$.}
+\begin{plan}
+\newanalysis{(A3) anchor-following analysis. Why: $\dRR$ says \emph{that}
+robustness collapses; this says \emph{how} --- with an image present, Llama
+largely stops using the scale definition in the prompt (raw 4.79 vs 4.64),
+whereas without an image both models follow it (2.75 $\to$ 5.13). Qwen
+follows it partially. Connect to option-ID priors
+\cite{zheng2024robust} and position effects in judges
+\cite{zheng2023judging,wang2024fair,ye2025justice}.}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Deviation from the low-ASI human baseline}\label{sec:s2-deviation}
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+$\dm$ variant & Llama-90B & Qwen-72B & Llama-11B \\
+\midrule
+Original order only (\cref{eq:deltam}) \emph{prelim} & $-0.491$ & $+0.217$ & $-1.920$ \\
+Reversed order only & $-1.916$ & $-1.467$ & $-0.123$ \\
+Order-averaged (August draft) & $-1.203$ & $-0.625$ & $-1.022$ \\
+Anchor-insensitivity null (\cref{prop:null}) & $-1.280$ & $-1.280$ & $-1.280$ \\
+\bottomrule
+\end{tabular}
+\caption{Extrinsic deviation from the SIGIR 2018 low-ASI baseline under the
+candidate definitions (vision rows, 90 per order).}
+\label{tab:s2-deltam}
+\end{table}
+\begin{plan}
+\begin{itemize}
+  \item \decision{(D1) adopt one primary definition before writing. The
+        recommended primary is original order only (matches proposal Eq.~3.4
+        and the human task, which had one orientation). This reverses a draft
+        headline: in the original order Qwen rates \emph{above} the low-ASI
+        humans on average, and Llama only modestly below.}
+  \item \decision{(D2) interpret the sign using the SIGIR finding (sexist
+        raters see \emph{less} bias $\Rightarrow$ rate \emph{higher}); see
+        \cref{sec:framework-extrinsic}.}
+  \item \newanalysis{(A1) original-order $\dm$ and (A2) the null comparison.
+        Why: the order-averaged number is within 0.08 of the null for
+        Llama-90B, so it cannot be read as a judgement about the images.}
+  \item \newanalysis{(A10, optional) high-ASI baseline and position index
+        $\lambda$ (\cref{eq:lambda}) --- the most direct test of
+        ``does the model judge like a high- or low-ASI human?'' Needs the raw
+        SIGIR CSV.}
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{People versus the non-person control}\label{sec:s2-person}
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{3}{c}{Original order \emph{prelim}} & \multicolumn{3}{c}{Order-averaged} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Model & 9 person queries & control & gap & 9 person queries & control & gap \\
+\midrule
+Llama-90B & $-0.582$ & $+0.333$ & 0.915 & $-1.333$ & $-0.036$ & 1.297 \\
+Qwen-72B  & $+0.184$ & $+0.507$ & 0.322 & $-0.738$ & $+0.386$ & 1.124 \\
+Llama-11B & $-1.927$ & $-1.864$ & 0.063 & $-0.994$ & $-1.274$ & $-0.281$ \\
+\bottomrule
+\end{tabular}
+\caption{Mean deviation from the low-ASI baseline for the nine person queries
+and the ``hot air baloon'' control.}
+\label{tab:s2-person}
+\end{table}
+\plannedfigure{fig:s2-queries}{Per-query model rating against the low-ASI human
+baseline.}{Dumbbell plot: one row per query (control row highlighted), dots for
+the human baseline and each model's original-order mean, a faint marker for the
+order-averaged mean and a vertical band for the null value 4.0. Per-query values
+in \cref{tab:app-queries}.}
+\begin{plan}
+\begin{itemize}
+  \item The dissociation survives in both definitions and both models: person
+        queries sit below the control. A model that simply rated everything low
+        or misread the scale would depress the control too.
+  \item In the original order the gap shrinks for Qwen (0.32) --- say so; the
+        claim is weaker than the draft's 1.12.
+  \item With one control query this is descriptive; do not test it.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Relation to the SIGIR 2018 findings}\label{sec:s2-sigir}
+\begin{plan}
+\begin{itemize}
+  \item In \cite{otterbacher2018sigir} benevolent sexism predicted the
+        evaluation of the ``smart person'' (male-skewed) and ``warm person''
+        (female-skewed) grids. In the original order these are the two
+        lowest-rated person queries for both models (Llama $-1.75$, $-0.67$;
+        Qwen $-0.82$, $-0.47$, \emph{prelim}). Present this as a descriptive
+        alignment with the queries where human sexism mattered, interpreted
+        with the sign agreed in D2.
+  \item Caveat: grid-level human judgement vs image-level model judgement
+        (\cref{sec:disc-threats}).
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Summary for RQ2}\label{sec:s2-summary}
+\begin{plan}
+Half a page. (i) Visual input destroys scale-reversal robustness in both
+production models --- the most robust result of the thesis; (ii) the
+mechanism is that the stated scale anchors stop being used; (iii) relative to
+the low-ASI baseline the sign and size of $\dm$ depend on the definition, and
+only the person/non-person contrast is robust to it. Then the descriptive RQ2
+comparison with Chapter~5 (two models: no rank statistic).
+\end{plan}
