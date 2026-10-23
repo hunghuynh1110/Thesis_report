@@ -94,3 +94,38 @@ each DOI/proceedings link once and confirm the pages (the "to confirm" column).
 | raji2019actionable | AIES 2019 | MIT DSpace 1721.1/123456 | auditing practice |
 | dettmers2023qlora | NeurIPS 36 (2023) | NeurIPS 2023 oral 73855 | NF4 4-bit quantisation |
 | wolf2020transformers | EMNLP 2020 Demos, pp. 38–45 | aclanthology 2020.emnlp-demos.6 | software |
+
+## Second verification pass — 23 Oct 2026
+
+All 62 entries were searched again and matched to their publisher or
+proceedings record. Result against the requirements:
+
+| Requirement | Status |
+|---|---|
+| At least ~40 meaningful references | **49 planned** (core) + 13 reserve |
+| Mostly peer-reviewed | 46 of 49 core are peer-reviewed journals, conferences or a standard textbook |
+| Few arXiv-only | **3** (Llama 3 report, Qwen2-VL report, Constitutional AI); each has no peer-reviewed version and is cited only for what it uniquely documents |
+| No unpublished or non-scholarly sources | Semper Floreat (student magazine) dropped; only reserve `li2026scoring` is accepted-but-not-yet-in-proceedings |
+
+Changes made in this pass:
+
+* `hendricks2018women` (reserve): page range and chapter DOI removed — they
+  could not be re-confirmed; venue (ECCV 2018, Springer) is confirmed.
+* `zhao2021calibrate`: first author written as **Tony Z. Zhao**, the name on
+  the paper and arXiv (PMLR metadata says "Zihao Zhao" — same person).
+* `raji2019actionable` (reserve): DOI 10.1145/3306618.3314244 confirmed and added.
+* Confirmed in this pass (previously "to confirm"): InstructGPT proceedings
+  entry (NeurIPS 2022, hash b1efde53…); Zheng et al. 2023 is in the NeurIPS
+  Datasets & Benchmarks track; Yang et al. EACL 2026 pp. 1152–1170 and author
+  list; Arditi et al. full author list.
+
+Still worth a one-click check before submission (details not returned by any
+search, not errors):
+
+* `metaxa2021image` — title, venue and DOI 10.1145/3449100 confirmed; the five
+  authors are not shown in any search result. Open the DOI and check.
+* `alayrac2022flamingo`, `zhang2019rmsnorm`, `ouyang2022training` — pages are
+  deliberately left out of the bib entries because no search showed them.
+* `bai2025explicitly` — issue number not shown; the entry gives volume and
+  article number only.
+* `li2026scoring` (reserve) — DASFAA 2026 proceedings page not yet indexed.
