@@ -7,6 +7,61 @@
 % \end{plan}
 
 \section{Conclusion}\label{sec:conc-summary}
+
+This thesis set out to audit what vision language models carry about gender
+without asking them, by reading the distribution over the next token rather
+than the text decoded from it. Five models across two families, from 2B to
+90B parameters, were measured over three phases and 25,450 measurements, and
+anchored throughout to human ratings collected on the same stimuli.
+
+The protocol itself is the first contribution. Every measurement is one
+forward pass with pooled surface forms for the response options and an
+explicit account of where in the chat template the reading is taken, and
+generation is never run. Moving the rating cue into the assistant turn raised
+the share of probability on the seven digits from $0.0043$ to $0.994$, which
+is the difference between measuring the intended decision and measuring a
+different one.
+
+Captured mass, reported with every number, is the second. Six measurement
+faults were found during the project and none raised an error: a probe reading
+only lowercase tokens held $0.09\%$ of the distribution while returning a
+plausible mean, and a hardware fault that zeroed hidden states returned an
+expected rating of exactly $4.000$. An audit that does not report how much of
+the distribution it covers cannot tell a result from an artefact.
+
+The third contribution is that visual input collapses robustness to a stated
+rating scale. Llama-90B and Qwen-72B reproduce their own judgement on $0.900$
+of pairs with no image and on $0.044$ and $0.156$ with one, giving
+$\dRR=-0.856$ and $-0.744$ with bootstrap intervals that exclude zero. Two
+independently trained architectures fail the same way, and the three smaller
+models show that the collapse is specific to models robust enough to lose
+something.
+
+The fourth is that defensiveness belongs to a model family rather than to
+scale. Both Llama models move most of their probability off the yes and no
+tokens whenever an image is present, including a grey rectangle carrying no
+content, while all three Qwen models are unaffected from 2B to 72B. Llama-11B
+holds $0.140$ of its mass when shown a real face; Qwen-7B holds $0.998$.
+
+The fifth is a correction to how such an inventory should be scored. The
+aggregate index is dominated by how often a model says yes, because the
+inventory's sixteen to six keying converts assent into a positive score:
+almost all of Llama-90B's $+0.153$ is its assent rate, and filtering to the
+rows it actually answers takes it to $+0.015$. On a measure invariant to
+assent, every model leans the other way. The result that survives is from
+real faces, where the benevolent items are attributed more readily to
+photographs of women than of men in all five models, reaching $+0.054$ at
+$p<0.001$ on Qwen-72B, and where the combined score conceals the effect
+entirely.
+
+Three things follow for anyone auditing a model this way. Report coverage
+with every probability, because a ratio between two masses says nothing about
+how much behaviour it describes. Use scores invariant to response style, and
+test them against a null that permutes the instrument rather than assuming
+one. And check robustness to the stated scale before trusting any rating,
+since a model that stops applying an instruction it had been following is not
+measuring what it was asked to measure.
+
 % \begin{plan}
 % One paragraph per contribution of \cref{sec:intro-contrib}, each with its
 % single strongest number. End with one sentence on what an auditor should do
@@ -15,6 +70,41 @@
 % \end{plan}
 
 \section{Future work}\label{sec:conc-future}
+
+The construct threat of \cref{sec:disc-threats} has a direct remedy that this
+design could not reach. Adding the referent as a fourth Phase~1 factor, asking
+the same items about a woman, a man and a person, would separate what a model
+attributes to women from what it attributes to anyone, and would do so without
+the photographs that Phase~1B needs. Matching the human task in Phase~2 needs
+the opposite move, presenting the nine images as one composite so the model
+judges the set the participants judged.
+
+Two measurements would settle questions this thesis can only pose. The
+position index of \cref{eq:lambda} places a model between the low and high
+scoring human groups rather than measuring its distance from one of them, and
+needs only the raw participant responses that the 2018 authors released.
+Attribution inside the model would say what the behavioural contrasts here
+cannot: which components move probability away from the response set when an
+image appears, following the approach by which Arditi et al.
+\cite{arditi2024refusal} localised refusal to a single direction.
+
+Closed models remain outside the method, and a weaker version could reach
+them. Where an interface returns the top $k$ log probabilities, the pooled
+masses still give a lower bound,
+$\capm\ge\sum_{t\in\text{top-}k\cap(\Yset\cup\Nset)}p(t)$, which is
+enough to report coverage as a bound and to compare models by rank order even
+where the normalising sum is unavailable. That would bring GPT-4o and the
+other systems most used as judges within range of the same audit, at the cost
+of the exact quantities this thesis reports.
+
+Two extensions follow from the sampling rather than the method. A
+contemporary crawl of the same ten queries would measure how far image search
+has drifted in eight years, which the proposal intended and the budget did not
+permit. A probe in forced-choice form, where the model selects between two
+framings rather than assenting to one, would remove the yes-rate by
+construction instead of correcting for it afterwards, and would test whether
+the item-level pattern reported here survives a format that cannot be
+acquiesced to.
 % \begin{plan}
 % \begin{itemize}
 %   \item \textbf{Closed models (GPT-4o).} Top-$k$ log-probabilities give a lower
