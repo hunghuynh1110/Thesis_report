@@ -22,6 +22,14 @@ the image into the token stream that self-attention already reads
 (\cref{sec:bg-vlm}). A pattern that appears in both is therefore not a
 property of one way of joining the two modalities.
 
+Three models do not mean three runs. Phase~1 was executed five times and
+Phase~2 three times, because the 90B was measured again on a different node
+and once more in 4-bit precision on a single GPU. Neither extra run is a
+separate result: both test whether the execution path leaks into the
+measurement (\cref{sec:design-compute,sec:s1-replication}). \cref{app:runs}
+registers all seventeen runs of the project, including the superseded and
+invalid ones, since several are cited in \cref{tab:faults} as evidence.
+
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}@{}}
 \toprule
@@ -35,9 +43,10 @@ GPT-4o & \emph{not audited} & -- & -- & -- \\
 \end{tabularx}
 \caption{Models as run. Weights: 90B 166\,GB in 37 shards, 72B 136\,GB in 38
 shards. The reported 90B results come from the corrected 3$\times$H100 runs
-(jobs 27113679 and 27113680); the independent replication of
-\cref{sec:s1-replication} is a separate execution on a different node, and the
-4-bit check ran on one GPU.}
+(jobs 27113679 and 27113680). The two further 90B runs named in the last
+column, the replication on a different node and the 4-bit single GPU check,
+are execution-path controls reported in \cref{sec:s1-replication}, not
+additional models.}
 \label{tab:models}
 \end{table}
 

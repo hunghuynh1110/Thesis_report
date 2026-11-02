@@ -1,0 +1,18 @@
+% =====================================================================
+%  Clean build for circulation (supervisor, examiner, submission).
+%
+%  Identical to main.tex except that the planning scaffolding is switched
+%  off, so no blue plan boxes appear. The body is shared via body.tex, so
+%  this file can never fall behind the working copy.
+%
+%  Local:    latexmk -pdf supervisor.tex
+%  Overleaf: Menu -> Main document -> supervisor.tex, then Recompile.
+% =====================================================================
+\documentclass[12pt,a4paper,oneside]{report}
+\input{preamble}
+
+\showplanfalse   % <- the only difference from main.tex
+
+\begin{document}
+\input{body}
+\end{document}

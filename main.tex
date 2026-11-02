@@ -5,51 +5,14 @@
 %  Main file. Compile with pdfLaTeX + biber (Overleaf does this by default).
 %  Every chapter is a separate file so sections can be filled in one at a
 %  time. Blue "Plan" boxes describe what each section must contain; switch
-%  them off in preamble.tex (\showplanfalse) for the submitted version.
+%  them off by compiling supervisor.tex instead (see that file).
 % =====================================================================
 \documentclass[12pt,a4paper,oneside]{report}
 \input{preamble}
 
+% Working copy: plan boxes visible. preamble.tex sets \showplantrue.
+% For a clean PDF with no plan boxes, compile supervisor.tex instead.
+
 \begin{document}
-
-% ---------- front matter (roman page numbers) -------------------------
-\pagenumbering{roman}
-\input{frontmatter/titlepage}
-\input{frontmatter/letter}
-\input{frontmatter/declaration}
-\input{frontmatter/ai_statement}
-\input{frontmatter/acknowledgements}
-\input{frontmatter/abstract}
-
-\tableofcontents
-\listoffigures
-\listoftables
-\input{frontmatter/notation}
-
-% ---------- main matter (arabic page numbers) -------------------------
-\cleardoublepage
-\pagenumbering{arabic}
-\input{chapters/01_introduction}
-\input{chapters/02_background}
-\input{chapters/03_measurement_framework}
-\input{chapters/04_experimental_design}
-\input{chapters/05_study1_intrinsic}
-\input{chapters/06_study2_extrinsic}
-\input{chapters/07_discussion}
-\input{chapters/08_conclusion}
-
-% ---------- references ------------------------------------------------
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{chapter}{References}
-\printbibliography[title={References}]
-
-% ---------- appendices ------------------------------------------------
-\appendix
-\input{appendices/A_instruments}
-\input{appendices/B_infrastructure_fault}
-\input{appendices/C_run_registry}
-\input{appendices/D_full_tables}
-\input{appendices/E_reproducibility}
-
+\input{body}
 \end{document}

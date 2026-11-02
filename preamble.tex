@@ -101,6 +101,11 @@
 \newcommand{\newanalysis}[1]{\textcolor{flagred}{\textbf{New analysis:} #1}}
 \newcommand{\source}[1]{\textit{Source: #1}}
 
+% A known gap in the data, not a note to self. Shows as a red to-do while the
+% plan boxes are on, and as an honest statement in the clean build, so a
+% circulated PDF never shows "[fill]".
+\newcommand{\gap}[1]{\ifshowplan\textcolor{flagred}{[\,#1\,?]}\else\emph{#1}\fi}
+
 % Placeholder for a figure that has not been produced yet. It keeps the
 % label, caption and List of Figures working, so cross-references compile.
 %   \plannedfigure{label}{caption}{what goes in it / data / script}

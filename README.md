@@ -15,7 +15,9 @@ placeholders are already in place. Start with [`planning/OUTLINE.md`](planning/O
 ## Layout
 
 ```
-main.tex                 master file (report class, 12 pt, A4, IEEE citations via biblatex/biber)
+main.tex                 working build: shared body + plan boxes VISIBLE
+supervisor.tex           clean build: shared body + plan boxes HIDDEN (circulate this)
+body.tex                 the document body, shared by both so they cannot drift apart
 preamble.tex             packages, notation macros, plan-box switch (\showplantrue / \showplanfalse)
 frontmatter/             title page, letter to Head of School, declaration, AI statement,
                          acknowledgements, abstract (write last), notation
@@ -32,6 +34,8 @@ planning/                OUTLINE.md, references_audit.md, facts_ledger.md, ledge
    (GitHub synchronisation needs an Overleaf plan that includes it; your UQ
    account may already have one).
 2. Overleaf compiles `main.tex` with pdfLaTeX and runs biber automatically.
+   To circulate a clean PDF, set Menu -> Main document -> `supervisor.tex`
+   and recompile; switch back to `main.tex` to keep working.
 3. Overleaf syncs with the **`main`** branch only. Before anyone pushes to GitHub
    from outside Overleaf, use *Menu → GitHub → Push Overleaf changes to GitHub*
    first; after a push from outside, use *Pull GitHub changes into Overleaf*.
@@ -49,4 +53,11 @@ latexmk -pdf main.tex
 Fill sections in this order: Ch 3 → 4 → 5 → 6 → 2 → 7 → 1 → 8 → abstract. For
 each section, write under the plan box, keep the equations and tables, swap
 each `\plannedfigure{...}` for the real `\includegraphics`, then delete the plan
-box. Set `\showplanfalse` in `preamble.tex` for any version you hand in.
+box. Do not edit the switch by hand: compile `supervisor.tex` instead, which
+sets `\showplanfalse` and shares `body.tex` with `main.tex`.
+
+    latexmk -pdf supervisor.tex     # clean PDF, no plan boxes
+
+A known data gap is written `\gap{not reported}`, which shows as a red to-do
+in the working build and as an italic statement in the clean build, so a
+circulated PDF never shows `[fill]`.
