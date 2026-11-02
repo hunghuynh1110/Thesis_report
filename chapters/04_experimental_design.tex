@@ -25,15 +25,8 @@ Qwen projects the image into the token stream that self-attention already reads
 the fusion design, the prompts and the stimuli fixed, so that a trend across
 sizes can be distinguished from a property of one model.
 
-The three smaller models were added after the two large ones, on the
-supervisor's suggestion, so that two isolated points became a readable trend.
-They cost little, since a 2B or 7B model completes every phase on one GPU in
-under an hour. They also widen what the audit can claim, because a result that
-holds at 2B and again at 72B describes a family rather than a single
-checkpoint. One gap in the ladder cannot be closed, since Qwen2-VL ships
-nothing between 7B and 72B and Llama-3.2-Vision nothing between 11B and 90B.
-That leaves a span of more than six times unobserved, which bounds any claim
-about where along it the behaviour changes (\cref{sec:disc-threats}).
+The minor models were incorporated subsequent to the two larger ones, following the supervisor's recommendation, to transform two disparate points into a coherent trend. They are inexpensive, as a 2B or 7B model operates on a single GPU in less than an hour. They also modified the project's claims, as a result that is valid at both 2B and 72B pertains to a family rather than a specific checkpoint. A single void in the ladder remains unsealed. Qwen2-VL does not release any models between 7B and 72B, while Llama-3.2-Vision has no offerings between 11B and 90B, resulting in a gap of over six times between 11B and 72B.
+\cref{sec:disc-threats} states what that costs.
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}llll@{}}
@@ -48,7 +41,9 @@ Llama-3.2-90B-Vision-Instruct & 90B & cross-attention & bf16, 3$\times$H100 PCIe
 \bottomrule
 \end{tabular}
 \caption{The five models, ordered by parameter count. Every model ran all
-three phases at bf16 on byte-identical prompts and stimuli. Weights: 90B
+three phases at bf16 on byte-identical prompts and stimuli. The GPU column is
+the Phase~1A and Phase~2 allocation; Phase~1B placed the three smaller models
+on a single L40. Weights: 90B
 166\,GB in 37 shards, 72B 136\,GB in 38 shards. The reported 90B results come
 from the corrected 3$\times$H100 runs (jobs 27113679 and 27113680); two
 further 90B runs, a replication on a different node and a 4-bit single GPU
@@ -256,8 +251,9 @@ rated more attractive than the male sample, any difference in how the models
 responded could be read as an attractiveness effect wearing the name of gender.
 Within each cell the five faces nearest the overall median on the Attractive
 norm are therefore taken, a rule that is deterministic and uses no random seed.
-The achieved balance is reported at the start of every run, and the eight cells
-match to within 0.08 on a scale from 1.5 to 5.5.
+The achieved balance is reported at the start of every run: the eight cell
+means span 0.087 on the database's Attractive norm, which is rated from 1 to
+7.
 
 The unit of analysis follows from the design rather than from the row count,
 since each face contributes 110 measurements and those are averaged to a single
@@ -423,10 +419,10 @@ $\Yset$ and $\Nset$ are resolved against the tokeniser at load time rather than
 written out as fixed identifiers, since a vocabulary change would otherwise
 narrow the sets without any sign that it had. The implementation runs on
 PyTorch 2.11.0, Transformers 4.57.6 pinned below version 5, accelerate 1.0.1
-and bitsandbytes 0.49.2 \cite{wolf2020transformers}. A suite of 93 unit tests
-across eight modules covers the item table, the stimulus generators, the
-pooling logic, the SIGIR loader, the Phase~2 prompts and the cross device
-workaround of \cref{sec:design-faults}.
+and bitsandbytes 0.49.2 \cite{wolf2020transformers}. A suite of 111 unit tests
+across ten modules covers the item table, the stimulus generators, the pooling
+logic, the SIGIR and Chicago Face Database loaders, the Phase~1B metrics, the
+Phase~2 prompts and the cross device workaround of \cref{sec:design-faults}.
 
 % ---------------------------------------------------------------------
 \section{Compute environment and precision}\label{sec:design-compute}
