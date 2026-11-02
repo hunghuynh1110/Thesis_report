@@ -4,61 +4,82 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-% \begin{plan}[Plan --- Abstract (write last, after Chapters 5--8 are final)]
+% \begin{plan}[Plan --- Abstract (write last; updated 3 Nov 2026)]
 % \textbf{Brief from Hung (2 Nov 2026):} the abstract must let a reader
-% understand the \emph{whole} report in under three minutes. Treat three minutes
-% as a ceiling, not a target.
+% understand the \emph{whole} report in under three minutes. Treat three
+% minutes as a ceiling, not a target.
 %
-% \textbf{Length.} Three minutes of careful reading of technical prose is
-% roughly 500 to 650 words at 180 to 220 words per minute. That is about twice
-% the 300 words this plan previously called for, and it runs to one and a half
-% or two pages rather than one, so the front matter page budget in
-% \texttt{planning/OUTLINE.md} allows for two.
-% \decision{(D8) confirm whether the EECS submission template caps the abstract.
-% If it does, the cap wins: write to the cap and move the detail that will not
-% fit into \cref{sec:intro-contrib}, which is the next thing a reader reaches.
-% Resolve this with D7, which already covers copying the front matter from the
-% current template.}
+% \textbf{Length.} 500 to 650 words, about one and a half to two pages at
+% 180 to 220 words per minute.
+% \decision{(D8) confirm whether the EECS template caps the abstract. If it
+% does, the cap wins: write to the cap and move the overflow into
+% \cref{sec:intro-contrib}. Cut from Findings, never from Limits.}
 %
-% \textbf{What ``the whole report'' requires.} Every chapter must be represented,
-% and the abstract must stand alone: no citations, no undefined symbols, no
-% forward references, and every quantitative claim carries its number. A reader
-% who stops after the abstract should be able to state what was measured, on
-% which models, what was found, and what the finding does not establish. Six
-% moves:
+% \textbf{Scope, corrected 3 Nov.} The previous version of this plan described
+% three models and two phases. The audit is \emph{five} models over
+% \emph{three} phases, and Phase~1B carries the headline result. Every number
+% below is final and comes from \texttt{planning/ledger\_v2.json}.
+%
+% \textbf{Six moves, with the numbers to use.}
 % \begin{enumerate}
-%   \item \textbf{Context} (2 sentences): VLMs used as automated judges in
-%         retrieval and moderation; they inherit gender stereotypes.
-%   \item \textbf{Problem} (2--3 sentences): safety-aligned models sanitise what
-%         they \emph{say}, so self-report audits cannot separate debiasing from
-%         evasion (algorithmic defensiveness). Name the term here, since it is
-%         the thesis's own.
-%   \item \textbf{Method} (4--5 sentences): single forward pass, read the
-%         next-token distribution before sampling; captured mass reported with
-%         every probability; ASI administered through 5 prompt structures
-%         $\times$ 3 image conditions; SIGIR 2018 image-search ratings with CALM
-%         scale reversal, anchored to published human baselines;
-%         Llama-3.2-90B-Vision and Qwen2-VL-72B (Llama-3.2-11B for development);
-%         total measurements.
-%   \item \textbf{Findings} (6--8 sentences, the \emph{final} numbers from
-%         Chapters 5--6): the captured-mass collapse under any image, including a
-%         featureless grey patch, and that it is Llama-specific; the
-%         response-style confound in $\ASIint$ with the exact decomposition and
-%         the invariant alternative $\PS$; the exact permutation result; the
-%         robustness collapse under scale reversal in both production models,
-%         with $\dRR$ and its interval; the anchor-following slope that explains
-%         it; the deviation from the low-ASI baseline under whichever $\dm$
-%         definition is adopted (Decision D1).
-%   \item \textbf{Limits} (1--2 sentences): two production models, so RQ2 is
-%         descriptive; first-token probabilities need not match generated text.
-%         Keeping this in the abstract is what makes it honest at three minutes.
-%   \item \textbf{Contribution} (1--2 sentences): a reproducible, human-anchored
-%         logit-level audit protocol with built-in validity statistics.
+%   \item \textbf{Context} (2 sentences). VLMs are now used as automated
+%         judges in retrieval and moderation, and they inherit gender
+%         stereotypes from what they are trained on.
+%   \item \textbf{Problem} (2 to 3 sentences). Alignment changes what a model
+%         says rather than what it represents, so an audit reading generated
+%         text cannot separate a debiased model from one that recognises an
+%         audit. Name \emph{algorithmic defensiveness} here: it is the thesis's
+%         own term.
+%   \item \textbf{Method} (4 to 5 sentences). One forward pass per
+%         measurement, reading the next-token distribution before sampling;
+%         captured mass reported with every probability. Five models, two
+%         families, 2B to 90B: Qwen2-VL 2B, 7B, 72B and Llama-3.2-Vision 11B,
+%         90B. Three phases: 1A, the 22 ASI items in 5 structures under 3 image
+%         conditions (330 per model); 1B, the same items against 40 Chicago
+%         Face Database faces balanced over gender and race (4,400 per model);
+%         2, SIGIR 2018 image search results rated under CALM scale reversal
+%         against published human baselines (360 per model). 25,450
+%         measurements in all.
+%   \item \textbf{Findings} (6 to 8 sentences). In priority order, so that
+%         cutting takes the last first:
+%         \begin{itemize}
+%           \item \textbf{Lead with Phase~1B.} The benevolent half of the
+%                 inventory is attributed more readily to photographs of women
+%                 than of men in all five models, from $-0.007$ (Qwen-2B) to
+%                 $+0.054$ (Qwen-72B, $p<0.001$); four of five survive
+%                 Bonferroni at $p<0.01$. The combined ASI score hides this:
+%                 Llama-90B reports $+0.005$ at $p=0.62$ while its benevolent
+%                 gap is $+0.034$ at $p=0.003$.
+%           \item Visual input collapses robustness to the stated rating
+%                 scale in both largest models: $\RR$ falls from $0.900$ to
+%                 $0.044$ and $0.156$, giving $\dRR=-0.856$ and $-0.744$ with
+%                 bootstrap intervals excluding zero.
+%           \item Defensiveness is family-linked, not size-linked. Both Llama
+%                 models lose most of their yes/no mass under any image,
+%                 including a featureless grey patch (11B $0.979\to0.237$);
+%                 all three Qwen models are flat from 2B to 72B.
+%           \item The aggregate index measures response style: almost all of
+%                 Llama-90B's $+0.153$ is its assent rate, and filtering to
+%                 well-covered rows takes it to $+0.015$. On a style-invariant
+%                 measure every model leans the other way.
+%           \item (Cut first if over length.) Deviation from the low-ASI human
+%                 baseline, and the exact permutation result.
+%         \end{itemize}
+%   \item \textbf{Limits} (1 to 2 sentences). 20 faces per gender from one
+%         database; no model between 11B and 72B; first-token probabilities
+%         need not match generated text. Keeping this is what makes the
+%         abstract honest at three minutes.
+%   \item \textbf{Contribution} (1 to 2 sentences). A reproducible,
+%         human-anchored audit read at the level of logits, with validity
+%         statistics built in rather than assumed.
 % \end{enumerate}
 %
-% \textbf{Check before submitting.} Read it aloud and time it. If it runs over
-% three minutes, cut from Findings by dropping a secondary number, never by
-% dropping the Limits move.
+% \textbf{Constraints.} No citations, no undefined symbols, no forward
+% references, every quantitative claim with its number. A reader stopping here
+% should be able to say what was measured, on which models, what was found and
+% what it does not establish.
+%
+% \textbf{Check before submitting.} Read it aloud and time it.
 % \end{plan}
 
 \textbf{[Abstract --- write last. Target 500--650 words, about two pages;
