@@ -116,6 +116,7 @@ gives a uniform distribution).
 \end{plan}
 
 \begin{figure}[htbp]\centering
+\resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=5mm and 7mm,
   box/.style={draw,rounded corners,align=center,font=\footnotesize,minimum height=7mm,inner sep=3pt},
   tok/.style={draw,align=center,font=\scriptsize,minimum height=5.5mm,inner sep=2.5pt},
@@ -158,7 +159,7 @@ gives a uniform distribution).
 \draw[arr] ([yshift=4mm]dist.north) -- (dist);
 \node[below=2.5mm of dist,font=\footnotesize,text=blue!60!black]
   {\textbf{measured here} (\cref{eq:nexttoken})};
-\end{tikzpicture}
+\end{tikzpicture}}
 \caption{Two ways of injecting an image into a language model.
 Llama-3.2-Vision leaves the decoder's own layers unchanged and adds gated
 cross-attention blocks after every fourth self-attention layer, at indices 3,
@@ -674,9 +675,9 @@ reported method; no ``?'' remains.
 \end{plan}
 
 \begin{table}[htbp]\centering\small
-\begin{tabularx}{\linewidth}{@{}Xccccc@{}}
+\begin{tabularx}{\linewidth}{@{}lc>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}Xcc@{}}
 \toprule
-Work & Images & Level measured & Human anchor & Order control & Coverage stat. \\
+Work & Images & Level measured & Human anchor & \makecell{Order\\control} & \makecell{Coverage\\statistic} \\
 \midrule
 \cite{caliskan2017semantics} & -- & embeddings & IAT results & -- & -- \\
 \cite{ghate2025biases}       & \checkmark & embeddings $\to$ retrieval & -- & -- & -- \\
