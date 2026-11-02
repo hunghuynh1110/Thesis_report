@@ -74,6 +74,50 @@ collapse, it does not prevent these models from emitting a digit.
 
 % ---------------------------------------------------------------------
 \section{Robustness under scale reversal}\label{sec:s2-calm}
+
+The CALM manipulation asks each model to rate the same image twice, once with
+7 marked extremely objective and once with 7 marked extremely subjective. A
+model with a view about the image should give the same normalised rating
+either way, so the robustness rate of \cref{eq:rr} counts how often it does.
+\cref{tab:s2-rr} reports it at three tolerances for both conditions and
+\cref{fig:s2-rr} shows the contrast.
+
+The first expectation fails in the two largest models, and it fails hard.
+Without an image, Llama-90B and Qwen-72B both reproduce their own judgement on
+$0.900$ of pairs. With an image, that falls to $0.044$ and $0.156$, giving
+$\dRR=-0.856$ and $-0.744$ at the primary tolerance. Two models from
+different families, with different vision encoders and different ways of
+joining vision to language, lose almost all of their scale robustness on the
+same manipulation, which makes this a property of current visual grounding
+rather than of either design.
+
+The three smaller models show the same thing is not simply about images. None
+of them is robust in either condition: Qwen-2B sits at $0.200$ without an
+image and $0.189$ with one, Qwen-7B at $0.200$ and $0.156$, and Llama-11B at
+$0.000$ and $0.022$. Their $\dRR$ values of $-0.011$, $-0.044$ and $+0.022$
+are small because they have no robustness to lose, not because an image
+leaves them unaffected. Llama-11B is the extreme case, failing every one of
+the 90 text-only pairs, and it is reported rather than omitted because an
+apparent $\dRR$ near zero means two quite different things at 11B and at 90B.
+
+The conclusion does not depend on where the tolerance is set. At
+$\tau=0.25$ the gap for Llama-90B is $0.900$ against $0.000$ and for
+Qwen-72B $0.800$ against $0.089$; at $\tau=1$, where a whole scale point of
+drift is forgiven, it is $1.000$ against $0.300$ and $1.000$ against $0.267$.
+Loosening the criterion lifts every number without closing the gap between the
+conditions, so the result is not an artefact of the threshold chosen in
+\cref{sec:framework-calm}.
+
+Interval estimates use the cluster bootstrap of \cref{sec:framework-calm}
+rather than row-level standard errors, because the text-only condition has
+only ten independent inputs. Without an image the prompt is fixed by the query
+and the scale order alone, so the 90 text-only pairs are 10 distinct pairs
+measured nine times each, and treating them as independent would narrow the
+interval by roughly a factor of three. Resampling the ten queries $B=10{,}000$
+times gives $[-0.98,-0.66]$ for Llama-90B and $[-0.98,-0.50]$ for Qwen-72B,
+both excluding zero, against $[-0.30,+0.27]$ for Qwen-2B and $[-0.38,+0.22]$
+for Qwen-7B, which do not.
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
