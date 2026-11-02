@@ -348,6 +348,57 @@ the design inflating its own significance. This is the test promised in
 \cref{ch:study1} makes about keying.
 
 % ---------------------------------------------------------------------
+\section{The gender gap on real faces}\label{sec:framework-gap}
+
+Phase~1A measures agreement about a person the model is told nothing about, so
+it cannot separate a model that treats women and men alike from one that was
+never given a gender to respond to. Phase~1B supplies the gender in the image
+(\cref{sec:design-phase1b}), and the quantity of interest is the difference
+between the two halves of the face sample.
+
+\begin{definition}[Gender gap]\label{def:gap}
+For model $m$ let $\Fset$ and $\Mset$ be the sets of 20 female and 20 male
+faces, and for face $\phi$ let
+$\bar b_\phi = \frac{1}{110}\sum_{i,t} b_{i,t,\phi}$ be its mean directional
+bias score over the 22 items and 5 structures. Then
+\begin{equation}
+  G_m = \frac{1}{|\Fset|}\sum_{\phi\in\Fset}\bar b_\phi
+      - \frac{1}{|\Mset|}\sum_{\phi\in\Mset}\bar b_\phi ,
+  \label{eq:gap}
+\end{equation}
+and $G_m>0$ means the sexist direction of the inventory is attributed more
+readily to women than to men. The same quantity restricted to the eleven
+benevolent or the eleven hostile items is written $G_m^{\BS}$ and $G_m^{\HS}$.
+\end{definition}
+
+The averaging in \cref{eq:gap} is not a convenience, and getting it wrong is
+the easiest way to manufacture significance in this design. A face is shown
+110 prompts, so the 4,400 rows of a run are 40 clusters of 110 rather than
+4,400 independent observations. Collapsing each face to $\bar b_\phi$ before
+any comparison makes the face the unit of analysis, which leaves 20 numbers on
+each side however many prompts were run. Treating the rows as independent would
+divide the standard error by roughly $\sqrt{110}$ and turn a null result into a
+decisive one.
+
+Inference is a two sample $t$ test on those 40 face means, and the effect size
+is reported with it as
+$d = G_m / \sqrt{\tfrac12(s^2_{\Fset}+s^2_{\Mset})}$. Because five models are
+tested, a Bonferroni correction at $\alpha=0.05$ requires $p<0.01$ for a
+result to count, and \cref{sec:s1b-gap} marks which gaps clear that line.
+Power is bounded by the 20 faces a side rather than by the measurement count,
+and \cref{sec:disc-threats} states the consequence: the design is sensitive to
+effects of about one standard deviation between faces and no smaller.
+
+One property of \cref{eq:gap} matters for how the result is read. The item
+polarity $p_i$ in \cref{eq:bias} enters $G_m$ with the same sign for both
+halves of the sample, so $G_m$ inherits the subscale structure of the
+inventory. Should the two subscales move in opposite directions, their gaps
+partly cancel in the combined score, and a model with a real gap on one half
+can report a combined gap near zero. \cref{sec:s1b-gap} reports $G_m^{\BS}$ and
+$G_m^{\HS}$ beside $G_m$ for that reason, rather than treating the combined
+number as the headline.
+
+% ---------------------------------------------------------------------
 \section{Ratings on a scale from 1 to 7}\label{sec:framework-ratings}
 
 Study 2 asks a different question of the model and reads a different part of

@@ -53,6 +53,10 @@
 \newcommand{\Yset}{\mathcal{Y}}                  % yes surface forms
 \newcommand{\Nset}{\mathcal{N}}                  % no surface forms
 \newcommand{\Dset}{\mathcal{D}}                  % rating digits 1..7
+\newcommand{\Fset}{\mathcal{F}}                  % female faces (Phase 1B)
+\newcommand{\Mset}{\mathcal{M}}                  % male faces (Phase 1B)
+\newcommand{\BS}{\mathrm{BS}}                    % benevolent sexism subscale
+\newcommand{\HS}{\mathrm{HS}}                    % hostile sexism subscale
 \newcommand{\pyes}{p_{\mathrm{yes}}}             % pooled conditional P(yes)
 \newcommand{\capm}{\kappa}                       % captured mass
 \newcommand{\ASIint}{\mathrm{ASI}_{\mathrm{int}}}% ASI_intrinsic
@@ -104,7 +108,7 @@
 % A known gap in the data, not a note to self. Shows as a red to-do while the
 % plan boxes are on, and as an honest statement in the clean build, so a
 % circulated PDF never shows "[fill]".
-\newcommand{\gap}[1]{\ifshowplan\textcolor{flagred}{[\,#1\,?]}\else\emph{#1}\fi}
+\newcommand{\datagap}[1]{\ifshowplan\textcolor{flagred}{[\,#1\,?]}\else\emph{#1}\fi}
 
 % Placeholder for a figure that has not been produced yet. It keeps the
 % label, caption and List of Figures working, so cross-references compile.

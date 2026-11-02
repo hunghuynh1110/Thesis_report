@@ -243,6 +243,54 @@ no cross-GPU copy by construction and so cannot be affected by the fault of
 \end{plan}
 
 % ---------------------------------------------------------------------
+\section{The gender gap on real faces}\label{sec:s1b-gap}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{gap.pdf}
+\caption{Phase~1B gender gap by model and subscale, with the models ordered by
+parameter count. Each point is the difference between 20 female and 20 male
+face means (\cref{eq:gap}); bars are 95\% confidence intervals from the
+two sample $t$ test on those 40 face means. The benevolent gap is positive and
+significant in every model and grows with size in both families, while no
+hostile gap reaches the corrected threshold.}
+\label{fig:gap}
+\end{figure}
+\begin{plan}
+\begin{itemize}
+  \item Lead with the result: $G_m^{\BS}$ runs $-0.0071$, $+0.0185$,
+        $+0.0180$, $+0.0340$, $+0.0540$ over Qwen-2B, Qwen-7B, Llama-11B,
+        Llama-90B and Qwen-72B, and four of the five clear $p<0.01$ after
+        Bonferroni (Llama-11B at $p=0.039$ does not).
+  \item Then the point that gives the chapter its argument: the combined
+        $G_m$ hides this, because the hostile gap moves the other way and
+        cancels it. Llama-90B is $+0.0053$ at $p=0.622$ on the combined score
+        and $+0.0340$ at $p=0.003$ on the benevolent half.
+  \item Raw form for readability: on benevolent items in the sexist direction
+        with inversion excluded, Llama-90B puts $0.627$ on yes for women's
+        faces against $0.573$ for men's, and Qwen-72B $0.265$ against $0.185$.
+  \item Carry $\capm$ alongside, from \cref{sec:s1-quality}: Llama-11B averages
+        $0.140$ over the 4,400 Phase~1B rows and Llama-90B $0.479$, so their
+        gaps rest on a fraction of their behaviour while Qwen-72B's $0.972$
+        does not.
+  \item Power, by face: Cohen's $d$ is $-0.97$, $1.06$, $0.68$, $1.00$ and
+        $3.74$ in model order, so Llama-11B is the only underpowered case,
+        which is why its gap does not survive correction.
+\end{itemize}
+\end{plan}
+
+% ---------------------------------------------------------------------
+\section{Race, reported as exploratory}\label{sec:s1b-race}
+\begin{plan}
+Half a page. Five faces per race cell cannot support an inferential claim, so
+report the four per-race means descriptively and say so in the first sentence.
+The one pattern worth naming is Llama-90B, whose per-race means run $-0.0016$
+(Black) to $+0.0574$ (White) against a gender gap of $+0.0053$ on the same
+rows, so the spread across races exceeds the effect the design was built to
+measure. State it as a reason to run a powered race design, not as a finding.
+Also report $\capm$ by cell, since \cref{sec:design-phase1b} raises whether a
+model refuses more for some demographics than others.
+\end{plan}
+
+% ---------------------------------------------------------------------
 \section{Summary for RQ1}\label{sec:s1-summary}
 \begin{plan}
 Half a page. Answer RQ1 in three sentences: (i) the intrinsic score as defined

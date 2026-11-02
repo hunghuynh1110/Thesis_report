@@ -2,8 +2,8 @@
 """
 Generate every data figure in the thesis from the stored run outputs.
 
-Reads the parquet files of the code repository (hunghuynh1110/VLM_Audit,
-outputs_bunya/) plus planning/ledger.json, and writes vector PDFs into
+Reads the parquet files of the audit repository at ~/Code/VLM_Audit
+(outputs_bunya/) plus planning/ledger_v2.json, and writes vector PDFs into
 figures/, named after the LaTeX label without the "fig:" prefix.
 
 Nothing here estimates or rounds a published number: every value is recomputed
@@ -31,6 +31,7 @@ import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
+from scipy import stats
 
 # --------------------------------------------------------------------------
 # Style. Validated categorical palette, first three slots, which are the only
@@ -41,11 +42,26 @@ INK, INK2, MUTED = "#0b0b0b", "#52514e", "#8a8984"
 GRID = "#dddcd8"
 NEUTRAL = "#f0efec"
 
+# Five models at five parameter counts. Colour carries the family, which is
+# the comparison the design is built on, and the three validated categorical
+# slots are enough because there are only two families plus a neutral.
 MODELS = {
+    "qwen2b": ("Qwen-2B", AQUA),
+    "qwen7b": ("Qwen-7B", AQUA),
     "llama11b": ("Llama-11B", BLUE),
-    "llama90b": ("Llama-90B", ORANGE),
     "qwen72b": ("Qwen-72B", AQUA),
+    "llama90b": ("Llama-90B", BLUE),
 }
+# Ordered by parameter count, which is the x axis of every size figure.
+SIZE_ORDER = ["qwen2b", "qwen7b", "llama11b", "qwen72b", "llama90b"]
+PARAMS_B = {"qwen2b": 2, "qwen7b": 7, "llama11b": 11, "qwen72b": 72, "llama90b": 90}
+FAMILY = {"qwen2b": "qwen", "qwen7b": "qwen", "qwen72b": "qwen",
+          "llama11b": "llama", "llama90b": "llama"}
+FAMILY_LABEL = {"qwen": "Qwen2-VL", "llama": "Llama-3.2-Vision"}
+FAMILY_COLOUR = {"qwen": AQUA, "llama": BLUE}
+# Subscale series for the gender gap: two real series plus the combined score.
+SUBSCALE = {"BS": ("benevolent", BLUE), "HS": ("hostile", ORANGE),
+            "all": ("combined", MUTED)}
 PRODUCTION = ["llama90b", "qwen72b"]
 
 CONDITION_LABEL = {
@@ -115,18 +131,30 @@ class Data:
         self.audit = audit
         o = audit / "outputs_bunya"
         self.p1 = {
+            "qwen2b": pd.read_parquet(o / "phase1/qwen_2b.parquet"),
+            "qwen7b": pd.read_parquet(o / "phase1/qwen_7b.parquet"),
             "llama11b": pd.read_parquet(o / "phase1/llama_dev.parquet"),
-            "llama90b": pd.read_parquet(o / "phase1/llama.parquet"),
             "qwen72b": pd.read_parquet(o / "phase1/qwen.parquet"),
+            "llama90b": pd.read_parquet(o / "phase1/llama.parquet"),
+        }
+        # Phase 1B: the same inventory against 40 real faces.
+        self.p1b = {
+            "qwen2b": pd.read_parquet(o / "phase1b/qwen_2b_cfd.parquet"),
+            "qwen7b": pd.read_parquet(o / "phase1b/qwen_7b_cfd.parquet"),
+            "llama11b": pd.read_parquet(o / "phase1b/llama_dev_cfd.parquet"),
+            "qwen72b": pd.read_parquet(o / "phase1b/qwen_cfd.parquet"),
+            "llama90b": pd.read_parquet(o / "phase1b/llama_cfd.parquet"),
         }
         self.p1_rerun = pd.read_parquet(o / "phase1_rerun_h100/llama.parquet")
         self.p1_4bit = pd.read_parquet(o / "phase1_90b_1gpu_4bit/llama.parquet")
         self.p1_lowercase = pd.read_parquet(o / "phase1_lowercase_v1/llama_dev.parquet")
         self.p1_invalid90 = pd.read_parquet(o / "phase1/llama.invalid_multi_gpu.parquet")
         self.p2 = {
+            "qwen2b": pd.read_parquet(o / "phase2/qwen_2b_historical_2018.parquet"),
+            "qwen7b": pd.read_parquet(o / "phase2/qwen_7b_historical_2018.parquet"),
             "llama11b": pd.read_parquet(o / "phase2/llama_dev_historical_2018.parquet"),
-            "llama90b": pd.read_parquet(o / "phase2/llama_historical_2018.parquet"),
             "qwen72b": pd.read_parquet(o / "phase2/qwen_historical_2018.parquet"),
+            "llama90b": pd.read_parquet(o / "phase2/llama_historical_2018.parquet"),
         }
         self.p2_prefixbug = pd.read_parquet(o / "phase2_prefixbug/llama_dev_historical_2018.parquet")
         self.ledger = json.loads(ledger.read_text())
@@ -596,7 +624,105 @@ def fig_app_heatmap(d: Data, out: Path) -> None:
     finish(fig, "app-heatmap", out)
 
 
+# --------------------------------------------------------------------------
+# Phase 1B: the gender gap
+# --------------------------------------------------------------------------
+def face_gap(df: pd.DataFrame, subscale: str | None = None) -> dict:
+    """
+    Gender gap with a 95% interval, computed on face means.
+
+    The unit of analysis is the face: each of the 40 faces is collapsed to one
+    number before anything is compared, so the test is 20 against 20 however
+    many prompts were run. Treating the 4,400 rows as independent would divide
+    the standard error by about sqrt(110).
+    """
+    d = df if subscale is None else df[df.subscale == subscale]
+    per_face = d.groupby(["face_target", "face_gender"]).bias_score.mean().reset_index()
+    f = per_face[per_face.face_gender == "F"].bias_score.values
+    m = per_face[per_face.face_gender == "M"].bias_score.values
+    t, p = stats.ttest_ind(f, m)
+    nf, nm = len(f), len(m)
+    sp2 = ((nf - 1) * f.var(ddof=1) + (nm - 1) * m.var(ddof=1)) / (nf + nm - 2)
+    se = np.sqrt(sp2 * (1 / nf + 1 / nm))
+    half = stats.t.ppf(0.975, nf + nm - 2) * se
+    gap = f.mean() - m.mean()
+    return {"gap": gap, "p": p, "lo": gap - half, "hi": gap + half,
+            "d": gap / np.sqrt(sp2)}
+
+
+def fig_gap(d: Data, out: Path) -> None:
+    """The thesis's headline result: the benevolent gap, and its size trend."""
+    fig, (axL, axR) = plt.subplots(
+        1, 2, figsize=(TEXTWIDTH_IN, 3.5),
+        gridspec_kw={"width_ratios": [1.45, 1], "wspace": 0.34})
+
+    # ---- left: gap by model and subscale, with 95% intervals --------------
+    series = ["all", "BS", "HS"]
+    offs = {"all": -0.26, "BS": 0.0, "HS": 0.26}
+    xs = np.arange(len(SIZE_ORDER))
+    axL.axhline(0, color=INK, lw=0.8, zorder=1)
+    for sub in series:
+        lab, col = SUBSCALE[sub]
+        g = [face_gap(d.p1b[m], None if sub == "all" else sub) for m in SIZE_ORDER]
+        x = xs + offs[sub]
+        axL.vlines(x, [v["lo"] for v in g], [v["hi"] for v in g],
+                   color=col, lw=1.4, zorder=2)
+        # A filled marker clears the Bonferroni line for five models; hollow does not.
+        for xi, v in zip(x, g):
+            filled = v["p"] < 0.01
+            axL.plot(xi, v["gap"], "o", ms=5.5, mec=col, mew=1.4, zorder=3,
+                     mfc=col if filled else "white")
+        axL.plot([], [], "o", color=col, ms=5.5, label=lab)
+    axL.set_xticks(xs)
+    axL.set_xticklabels([MODELS[m][0] for m in SIZE_ORDER], rotation=20, ha="right")
+    axL.set_ylabel("gender gap  (women $-$ men)")
+    axL.set_title("by subscale", fontsize=9, loc="left", color=INK2)
+    axL.legend(frameon=False, fontsize=7.5, loc="upper left", handletextpad=0.4)
+    axL.spines[["top", "right"]].set_visible(False)
+    axL.grid(axis="y", color=GRID, lw=0.6)
+    axL.set_axisbelow(True)
+
+    # ---- right: the benevolent gap against parameter count ---------------
+    # The one gap in the ladder, named rather than interpolated over silently.
+    axR.axvspan(11, 72, color=NEUTRAL, zorder=0)
+    axR.axhline(0, color=INK, lw=0.8, zorder=1)
+    # Direct labels rather than x ticks: 7B and 11B, and 72B and 90B, sit too
+    # close in log space for tick labels to clear each other.
+    place = {"qwen2b": (0, 9), "qwen7b": (0, 9), "llama11b": (2, -14),
+             "qwen72b": (-2, 8), "llama90b": (0, -14)}
+    for fam in ("qwen", "llama"):
+        ms = [m for m in SIZE_ORDER if FAMILY[m] == fam]
+        xx = [PARAMS_B[m] for m in ms]
+        yy = [face_gap(d.p1b[m], "BS")["gap"] for m in ms]
+        axR.plot(xx, yy, "-o", color=FAMILY_COLOUR[fam], ms=5, lw=1.6,
+                 label=FAMILY_LABEL[fam], zorder=3)
+        for m, x, y in zip(ms, xx, yy):
+            axR.annotate(f"{PARAMS_B[m]}B", xy=(x, y), xytext=place[m],
+                         textcoords="offset points", ha="center",
+                         fontsize=7, color=FAMILY_COLOUR[fam], zorder=4)
+    axR.set_xscale("log")
+    axR.set_xticks([2, 10, 100])
+    axR.set_xticklabels(["2B", "10B", "100B"])
+    axR.minorticks_off()
+    axR.set_xlim(1.5, 150)
+    axR.set_xlabel("parameters")
+    axR.set_ylabel("benevolent gap")
+    axR.yaxis.set_major_formatter(mpl.ticker.FormatStrFormatter("%.2f"))
+    axR.set_title("and how it scales", fontsize=9, loc="left", color=INK2)
+    axR.legend(frameon=False, fontsize=7.5, loc="lower right",
+               borderaxespad=0.2, handletextpad=0.4)
+    axR.spines[["top", "right"]].set_visible(False)
+    axR.grid(axis="y", color=GRID, lw=0.6)
+    axR.set_axisbelow(True)
+    axR.annotate("no model between", xy=(28, 1.0), xycoords=("data", "axes fraction"),
+                 xytext=(0, -9), textcoords="offset points",
+                 ha="center", va="top", fontsize=7, color=MUTED, zorder=4)
+
+    finish(fig, "gap", out)
+
+
 FIGURES = {
+    "gap": fig_gap,
     "gate1": fig_gate1,
     "capm-fixes": fig_capm_fixes,
     "stimuli": fig_stimuli,
@@ -615,13 +741,14 @@ FIGURES = {
 def main() -> None:
     here = Path(__file__).resolve().parent.parent
     ap = argparse.ArgumentParser()
-    ap.add_argument("--audit-repo", type=Path, default=here.parent / "VLM_Audit")
+    ap.add_argument("--audit-repo", type=Path,
+                    default=Path.home() / "Code" / "VLM_Audit")
     ap.add_argument("--out", type=Path, default=here / "figures")
     ap.add_argument("--only", nargs="*", default=None)
     a = ap.parse_args()
 
     set_style()
-    d = Data(a.audit_repo, here / "planning" / "ledger.json")
+    d = Data(a.audit_repo, here / "planning" / "ledger_v2.json")
     names = a.only or list(FIGURES)
     for n in names:
         print(f"[{n}]")

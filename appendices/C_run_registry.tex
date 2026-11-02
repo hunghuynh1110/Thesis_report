@@ -6,9 +6,13 @@
 \pages{1--2 pages.} Every run, kept whether it worked or not
 (\texttt{results\_archive/README.md}). Only VALID runs are cited as results;
 FLAWED/INVALID runs are cited only as evidence for \cref{tab:faults}.
-\textbf{Two job IDs are missing from the repository} (Qwen production run and
-the 90B rerun) --- copy them from the Bunya logs, and add both runs to
-\texttt{results\_archive/}.
+\textbf{Checked (Nov 2026)} against \texttt{\textasciitilde/Code/VLM\_Audit},
+which is the working repository; the checkout beside this thesis is stale and
+holds neither Phase~1B nor the small Qwens. Job identifiers are recorded for
+the runs below. \textbf{Still missing:} the five Phase~1B job IDs, the Qwen-72B
+production job and the 90B rerun. Recover them from the Bunya accounting log
+and add the runs to \texttt{results\_archive/}, which has not been updated
+since August.
 \end{plan}
 
 \begin{table}[htbp]\centering\scriptsize
@@ -31,10 +35,13 @@ Job & Run & Status & Used in \\
 27113674 & three-arm workaround validation & VALID & \cref{tab:app-fault} \\
 27113679, 27113680 & Phase 1/2, 90B, bf16, 3$\times$H100, workaround & VALID & \cref{ch:study1,ch:study2} \\
 27114730 & Phase 1, 90B, 4-bit, 1 GPU & VALID (cross-check) & \cref{tab:s1-replication} \\
-\gap{job id not recorded} & Phase 1, 90B, rerun on repaired hardware & VALID & \cref{tab:s1-replication} \\
-\gap{job id not recorded} & Phase 1/2, Qwen2-VL-72B, bf16 & VALID & \cref{ch:study1,ch:study2} \\
+\datagap{job id not recorded} & Phase 1, 90B, rerun on repaired hardware & VALID & \cref{tab:s1-replication} \\
+\datagap{job id not recorded} & Phase 1/2, Qwen2-VL-72B, bf16 & VALID & \cref{ch:study1,ch:study2} \\
+27546008 & Phase 1/2, Qwen2-VL-7B, bf16, 1$\times$L40S & VALID & \cref{ch:study1,ch:study2} \\
+27546075 & Phase 1/2, Qwen2-VL-2B, bf16, 1$\times$L40S & VALID & \cref{ch:study1,ch:study2} \\
+\datagap{job ids not recorded} & Phase 1B, all five models, 4,400 rows each & VALID & \cref{sec:s1b-gap} \\
 \bottomrule
 \end{tabularx}
-\caption{All runs referred to in this thesis.}
+\caption{All runs referred to in this thesis. Phase~1A is listed as Phase~1, the name it carried when the runs were made.}
 \label{tab:app-runs}
 \end{table}
