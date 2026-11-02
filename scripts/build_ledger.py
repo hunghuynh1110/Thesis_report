@@ -135,6 +135,14 @@ def polarity_and_perm(df: pd.DataFrame) -> dict:
     }
 
 
+def _filtered(df: pd.DataFrame, thr: float) -> dict:
+    d = df[df.captured_mass >= thr]
+    ni = d[d.structure != "inversion"]
+    ps = ni[ni.polarity == 1].p_yes.mean() - ni[ni.polarity == -1].p_yes.mean()
+    return {"n": int(len(d)), "asi_intrinsic": r(d.bias_score.mean()),
+            "polarity_separation": r(float(ps))}
+
+
 def phase1a(stem: str) -> dict:
     df = pd.read_parquet(OUT / f"{stem}.parquet")
     return {
@@ -163,6 +171,12 @@ def phase1a(stem: str) -> dict:
             df.assign(low=df.captured_mass < 0.1)
               .groupby("condition").low.mean().items()},
         **polarity_and_perm(df),
+        # Sensitivity to measurement coverage: recompute the two headline
+        # quantities on progressively better-covered rows. Llama's vision-
+        # condition p_yes rests on a minority of its mass, so a result that
+        # depends on low-coverage rows is not safe to report.
+        "capm_filtered": {
+            str(thr): _filtered(df, thr) for thr in (0.1, 0.3, 0.5)},
     }
 
 

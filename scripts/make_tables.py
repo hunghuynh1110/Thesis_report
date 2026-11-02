@@ -215,10 +215,28 @@ def t_s2_person() -> str:
     return "\n".join(out)
 
 
+def t_s1_capmfilter() -> str:
+    out = [header("Rows kept"), r"\midrule"]
+    rows = [("all 330", None)] + [(f"$\\capm\\ge{t}$", t) for t in ("0.1", "0.3", "0.5")]
+    for label, thr in rows:
+        cells = []
+        for m in ORDER:
+            a = LEDGER["phase1a"][m]
+            if thr is None:
+                n, v, ps = a["n"], a["asi_intrinsic"], a["polarity_separation"]
+            else:
+                f = a["capm_filtered"][thr]
+                n, v, ps = f["n"], f["asi_intrinsic"], f["polarity_separation"]
+            cells.append(f"{n} / {v:+.3f} / {ps:+.3f}")
+        out.append(label + " & " + " & ".join(cells) + r" \\")
+    return "\n".join(out)
+
+
 TABLES = {"capm": t_capm, "s1-aggregate": t_aggregate, "s1-structure": t_structure,
           "s1-ps": t_s1_ps, "s1-perm": t_s1_perm, "s1b-gap": t_gap, "s2-rr": t_s2_rr,
           "s2-rr-full": t_s2_rr_full, "s2-anchor": t_s2_anchor,
-          "s2-deltam": t_s2_deltam, "s2-person": t_s2_person}
+          "s2-deltam": t_s2_deltam, "s2-person": t_s2_person,
+          "s1-capmfilter": t_s1_capmfilter}
 
 
 def main() -> None:

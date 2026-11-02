@@ -429,6 +429,63 @@ the $p$ values are exact and carry no Monte Carlo error.}
 
 % ---------------------------------------------------------------------
 \section{Replication and execution-path checks}\label{sec:s1-replication}
+
+Nothing above is worth reporting if the numbers are artefacts of how the runs
+were executed, and the 90B is the model at risk, because it is the one that
+had to be sharded across three GPUs and so the one exposed to the fault of
+\cref{app:fault}. Two checks bound that risk, and \cref{tab:s1-replication}
+reports both against the corrected bf16 run.
+
+The first repeats the whole of Phase~1A on a different node. It agrees with
+the reference at $r=0.9996$ with a mean absolute difference in $\pyes$ of
+$0.0024$, and 220 of the 330 rows are bit-identical, which is what a
+deterministic forward pass should give when the arithmetic lands the same way.
+The second runs the 90B in 4-bit on a single GPU, which makes no copy between
+devices at all and therefore cannot be touched by the fault even in principle.
+It agrees less closely, at $r=0.767$ and a mean absolute difference of
+$0.148$, and moves $\ASIint$ from $+0.1530$ to $+0.1100$. That disagreement
+is the size \cref{tab:quant} predicts for a 4-bit variant, so it bounds the
+cost of quantisation rather than revealing a residual fault.
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Rows kept & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
+\midrule
+all 330 & 330 / +0.054 / -0.006 & 330 / +0.017 / -0.157 & 330 / +0.084 / -0.110 & 330 / +0.008 / -0.188 & 330 / +0.153 / -0.097 \\
+$\capm\ge0.1$ & 330 / +0.054 / -0.006 & 330 / +0.017 / -0.157 & 284 / +0.049 / -0.119 & 330 / +0.008 / -0.188 & 299 / +0.120 / -0.118 \\
+$\capm\ge0.3$ & 330 / +0.054 / -0.006 & 330 / +0.017 / -0.157 & 166 / +0.016 / -0.186 & 330 / +0.008 / -0.188 & 236 / +0.053 / -0.141 \\
+$\capm\ge0.5$ & 316 / +0.055 / +0.006 & 330 / +0.017 / -0.157 & 113 / +0.054 / -0.207 & 329 / +0.007 / -0.188 & 188 / +0.015 / -0.159 \\
+\bottomrule
+\end{tabular}
+\caption{Sensitivity to measurement coverage. Each cell gives the number of
+rows retained, $\ASIint$ and $\PS$ when Phase~1A is recomputed on rows at or
+above a captured mass threshold. The three Qwen models are unaffected because
+almost none of their rows fall below it.}
+\label{tab:s1-capmfilter}
+\end{table}
+
+A third check matters more than either, and it bears on the scores rather than
+on the hardware. \cref{sec:s1-quality} established that the Llama models hold
+only a fraction of their mass on the response set under an image, so the
+question is whether their aggregate scores depend on the rows where that
+fraction is smallest. \cref{tab:s1-capmfilter} recomputes $\ASIint$ and $\PS$
+on progressively better covered rows, and the answer for Llama-90B is that
+they do. Its index falls from $+0.153$ on all 330 rows to $+0.120$, $+0.053$
+and $+0.015$ as the threshold rises to $0.1$, $0.3$ and $0.5$, so on the 188
+rows where it genuinely answers the question it scores close to Qwen-72B's
+$+0.007$ rather than twenty times above it.
+
+The separation moves the other way, and that is the more useful half of the
+result. On Llama-90B $\PS$ strengthens from $-0.097$ to $-0.159$ as coverage
+improves, and on Llama-11B from $-0.110$ to $-0.207$, so the anti-sexist
+item-level pattern of \cref{sec:s1-responsebias} is clearest exactly where
+the measurement is cleanest. The three Qwen models barely move on either
+quantity, which is expected, since almost none of their rows fall below any
+of these thresholds. Taken together the two columns say that Llama-90B's high
+index is carried by rows on which it was largely declining to answer, while
+its negative separation is not.
+
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
 \toprule

@@ -110,7 +110,24 @@
    "polarity_separation_all_rows": -0.0002,
    "perm_T_obs": -0.0062,
    "perm_p_exact": 0.86213,
-   "perm_n_labellings": 74613
+   "perm_n_labellings": 74613,
+   "capm_filtered": {
+    "0.1": {
+     "n": 330,
+     "asi_intrinsic": 0.0539,
+     "polarity_separation": -0.0062
+    },
+    "0.3": {
+     "n": 330,
+     "asi_intrinsic": 0.0539,
+     "polarity_separation": -0.0062
+    },
+    "0.5": {
+     "n": 316,
+     "asi_intrinsic": 0.0554,
+     "polarity_separation": 0.0064
+    }
+   }
   },
   "qwen7b": {
    "file": "outputs_bunya/phase1/qwen_7b.parquet",
@@ -198,7 +215,24 @@
    "polarity_separation_all_rows": -0.1106,
    "perm_T_obs": -0.1571,
    "perm_p_exact": 0.02563,
-   "perm_n_labellings": 74613
+   "perm_n_labellings": 74613,
+   "capm_filtered": {
+    "0.1": {
+     "n": 330,
+     "asi_intrinsic": 0.0166,
+     "polarity_separation": -0.1571
+    },
+    "0.3": {
+     "n": 330,
+     "asi_intrinsic": 0.0166,
+     "polarity_separation": -0.1571
+    },
+    "0.5": {
+     "n": 330,
+     "asi_intrinsic": 0.0166,
+     "polarity_separation": -0.1571
+    }
+   }
   },
   "llama11b": {
    "file": "outputs_bunya/phase1/llama_dev.parquet",
@@ -286,7 +320,24 @@
    "polarity_separation_all_rows": -0.0694,
    "perm_T_obs": -0.1096,
    "perm_p_exact": 0.34074,
-   "perm_n_labellings": 74613
+   "perm_n_labellings": 74613,
+   "capm_filtered": {
+    "0.1": {
+     "n": 284,
+     "asi_intrinsic": 0.0488,
+     "polarity_separation": -0.1187
+    },
+    "0.3": {
+     "n": 166,
+     "asi_intrinsic": 0.016,
+     "polarity_separation": -0.1857
+    },
+    "0.5": {
+     "n": 113,
+     "asi_intrinsic": 0.0539,
+     "polarity_separation": -0.2072
+    }
+   }
   },
   "llama90b": {
    "file": "outputs_bunya/phase1/llama.parquet",
@@ -374,7 +425,24 @@
    "polarity_separation_all_rows": -0.0642,
    "perm_T_obs": -0.0967,
    "perm_p_exact": 0.19621,
-   "perm_n_labellings": 74613
+   "perm_n_labellings": 74613,
+   "capm_filtered": {
+    "0.1": {
+     "n": 299,
+     "asi_intrinsic": 0.1199,
+     "polarity_separation": -0.1185
+    },
+    "0.3": {
+     "n": 236,
+     "asi_intrinsic": 0.053,
+     "polarity_separation": -0.141
+    },
+    "0.5": {
+     "n": 188,
+     "asi_intrinsic": 0.0145,
+     "polarity_separation": -0.1594
+    }
+   }
   },
   "qwen72b": {
    "file": "outputs_bunya/phase1/qwen.parquet",
@@ -462,7 +530,24 @@
    "polarity_separation_all_rows": -0.1495,
    "perm_T_obs": -0.1878,
    "perm_p_exact": 0.01037,
-   "perm_n_labellings": 74613
+   "perm_n_labellings": 74613,
+   "capm_filtered": {
+    "0.1": {
+     "n": 330,
+     "asi_intrinsic": 0.0078,
+     "polarity_separation": -0.1878
+    },
+    "0.3": {
+     "n": 330,
+     "asi_intrinsic": 0.0078,
+     "polarity_separation": -0.1878
+    },
+    "0.5": {
+     "n": 329,
+     "asi_intrinsic": 0.0072,
+     "polarity_separation": -0.188
+    }
+   }
   }
  },
  "phase1b": {
