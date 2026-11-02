@@ -35,18 +35,20 @@ a coverage artefact (contrast with \cref{tab:capm}).
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
-& \multicolumn{3}{c}{$\RR_{\text{vision}}(\tau)$ / $\RR_{\text{text}}(\tau)$} & $\dRR(0.5)$ & 95\% CI \emph{prelim} \\
+& \multicolumn{3}{c}{$\RR_{\text{vision}}(\tau)$ / $\RR_{\text{text}}(\tau)$} & $\dRR(0.5)$ & 95\% CI \\
 \cmidrule(lr){2-4}
 Model & $\tau=0.25$ & $\tau=0.5$ & $\tau=1$ & & \\
 \midrule
+Qwen-2B & 0.111 / 0.20 & 0.189 / 0.20 & 0.400 / 0.70 & $-0.011$ & $[-0.30,+0.27]$ \\
+Qwen-7B & 0.022 / 0.10 & 0.156 / 0.20 & 0.267 / 0.60 & $-0.044$ & $[-0.38,+0.22]$ \\
+Llama-11B & 0.022 / 0.00 & 0.022 / 0.00 & 0.078 / 0.00 & $+0.022$ & $[+0.00,+0.06]$ \\
+Qwen-72B & 0.089 / 0.80 & 0.156 / 0.90 & 0.267 / 1.00 & $-0.744$ & $[-0.98,-0.50]$ \\
 Llama-90B & 0.000 / 0.90 & 0.044 / 0.90 & 0.300 / 1.00 & $-0.856$ & $[-0.98,-0.66]$ \\
-Qwen-72B  & 0.089 / 0.80 & 0.156 / 0.90 & 0.267 / 1.00 & $-0.744$ & $[-0.97,-0.49]$ \\
-Llama-11B (dev) & 0.022 / 0.00 & 0.022 / 0.00 & 0.078 / 0.00 & $+0.022$ & -- \\
 \bottomrule
 \end{tabular}
 \caption{Robustness rate under CALM scale reversal. Vision: 90 pairs; text-only:
 90 rows but 10 distinct pairs. Interval: cluster bootstrap over the 10 queries
-($B=10{,}000$).}
+($B=10{,}000$), resampling queries rather than rows.}
 \label{tab:s2-rr}
 \end{table}
 \begin{figure}[htbp]\centering
@@ -76,9 +78,11 @@ rather than rows.}
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}
 Model & original & reversed & original & reversed \\
 \midrule
-Llama-90B & 2.75 & 5.13 & 4.79 & 4.64 \\
-Qwen-72B  & 2.65 & 5.20 & 5.50 & 4.19 \\
+Qwen-2B & 4.41 & 4.45 & 4.45 & 4.73 \\
+Qwen-7B & 3.76 & 3.41 & 5.21 & 4.42 \\
 Llama-11B & 2.51 & 3.15 & 3.36 & 2.84 \\
+Qwen-72B & 2.65 & 5.20 & 5.50 & 4.19 \\
+Llama-90B & 2.75 & 5.13 & 4.79 & 4.64 \\
 \bottomrule
 \end{tabular}
 \caption{Mean \emph{raw} expected rating $\rexp$ by condition and scale order.
@@ -108,14 +112,14 @@ follows it partially. Connect to option-ID priors
 % ---------------------------------------------------------------------
 \section{Deviation from the low-ASI human baseline}\label{sec:s2-deviation}
 \begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lccccc@{}}
 \toprule
-$\dm$ variant & Llama-90B & Qwen-72B & Llama-11B \\
+$\dm$ variant & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
 \midrule
-Original order only (\cref{eq:deltam}) \emph{prelim} & $-0.491$ & $+0.217$ & $-1.920$ \\
-Reversed order only & $-1.916$ & $-1.467$ & $-0.123$ \\
-Order-averaged (August draft) & $-1.203$ & $-0.625$ & $-1.022$ \\
-Anchor-insensitivity null (\cref{prop:null}) & $-1.280$ & $-1.280$ & $-1.280$ \\
+Original order only (\cref{eq:deltam}) & $-0.834$ & $-0.066$ & $-1.920$ & $+0.216$ & $-0.491$ \\
+Reversed order only & $-2.014$ & $-1.697$ & $-0.123$ & $-1.467$ & $-1.916$ \\
+Order-averaged & $-1.424$ & $-0.881$ & $-1.022$ & $-0.625$ & $-1.203$ \\
+Anchor-insensitivity null (\cref{prop:null}) & $-1.280$ & $-1.280$ & $-1.280$ & $-1.280$ & $-1.280$ \\
 \bottomrule
 \end{tabular}
 \caption{Extrinsic deviation from the SIGIR 2018 low-ASI baseline under the
@@ -147,13 +151,15 @@ candidate definitions (vision rows, 90 per order).}
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
-& \multicolumn{3}{c}{Original order \emph{prelim}} & \multicolumn{3}{c}{Order-averaged} \\
+& \multicolumn{3}{c}{Original order} & \multicolumn{3}{c}{Order-averaged} \\
 \cmidrule(lr){2-4}\cmidrule(lr){5-7}
 Model & 9 person queries & control & gap & 9 person queries & control & gap \\
 \midrule
+Qwen-2B & $-0.726$ & $-1.806$ & -1.080 & $-1.304$ & $-2.509$ & -1.206 \\
+Qwen-7B & $-0.036$ & $-0.328$ & -0.291 & $-0.778$ & $-1.815$ & -1.038 \\
+Llama-11B & $-1.927$ & $-1.864$ & 0.062 & $-0.994$ & $-1.274$ & -0.281 \\
+Qwen-72B & $+0.184$ & $+0.507$ & 0.322 & $-0.738$ & $+0.386$ & 1.124 \\
 Llama-90B & $-0.582$ & $+0.333$ & 0.915 & $-1.333$ & $-0.036$ & 1.297 \\
-Qwen-72B  & $+0.184$ & $+0.507$ & 0.322 & $-0.738$ & $+0.386$ & 1.124 \\
-Llama-11B & $-1.927$ & $-1.864$ & 0.063 & $-0.994$ & $-1.274$ & $-0.281$ \\
 \bottomrule
 \end{tabular}
 \caption{Mean deviation from the low-ASI baseline for the nine person queries

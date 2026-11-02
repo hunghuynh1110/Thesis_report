@@ -197,6 +197,87 @@ def phase1b(stem: str) -> dict:
     return out
 
 
+CONTROL_QUERY = "hot air baloon"
+
+
+def phase2_detail(df: pd.DataFrame, base: dict) -> dict:
+    """
+    Everything chapter 6 reports: robustness at three tolerances, the cluster
+    bootstrap interval, the delta_m variants and the person/control split.
+
+    Ratings are normalised onto the original polarity before anything is
+    compared, so a reversed-order 7 becomes a 1. The bootstrap resamples the
+    ten queries rather than the 90 rows, because without an image the input is
+    fixed by the query and order alone: the 90 text-only pairs are 10 distinct
+    pairs measured nine times.
+    """
+    def norm(sub):
+        v = sub.rating_expected.to_numpy()
+        return np.where(sub.scale_order.to_numpy() == "reversed", 8 - v, v)
+
+    out = {}
+    pairs = {}
+    for cond in ("vision", "text_only"):
+        c = df[df.condition == cond]
+        o = c[c.scale_order == "original"].set_index(["query", "image_id"]).sort_index()
+        r = c[c.scale_order == "reversed"].set_index(["query", "image_id"]).sort_index()
+        j = o[["rating_expected"]].join(r[["rating_expected"]], lsuffix="_o", rsuffix="_r").dropna()
+        d = (j.rating_expected_o - (8 - j.rating_expected_r)).abs()
+        pairs[cond] = d
+        out[f"rr_{cond}_by_tol"] = {str(t): r2(float((d <= t).mean())) for t in (0.25, 0.5, 1.0)}
+
+    # Cluster bootstrap over queries, B = 10,000, percentile interval.
+    rng = np.random.default_rng(42)
+    qs = sorted({q for q, _ in pairs["vision"].index})
+    vis = {q: pairs["vision"].xs(q, level=0).to_numpy() for q in qs}
+    txt = {q: pairs["text_only"].xs(q, level=0).to_numpy() for q in qs}
+    draws = []
+    for _ in range(10000):
+        pick = rng.choice(len(qs), len(qs), replace=True)
+        v = np.concatenate([vis[qs[i]] for i in pick])
+        t = np.concatenate([txt[qs[i]] for i in pick])
+        draws.append((v <= 0.5).mean() - (t <= 0.5).mean())
+    lo, hi = np.percentile(draws, [2.5, 97.5])
+    out["delta_rr_ci95"] = [r2(float(lo)), r2(float(hi))]
+    out["bootstrap_B"] = 10000
+    out["bootstrap_unit"] = "query"
+
+    # Mean raw rating by condition and order, which is what shows anchor following.
+    out["mean_raw_rating"] = {
+        cond: {order: r2(float(g.rating_expected.mean()))
+               for order, g in df[df.condition == cond].groupby("scale_order")}
+        for cond in ("vision", "text_only")}
+
+    # delta_m variants on the vision rows.
+    v = df[df.condition == "vision"].copy()
+    v["rnorm"] = norm(v)
+    v["dev"] = v.rnorm - v["query"].map(base)
+    by_order = {o: r2(float(g.dev.mean())) for o, g in v.groupby("scale_order")}
+    out["delta_m_original"] = by_order.get("original")
+    out["delta_m_reversed"] = by_order.get("reversed")
+    per_pair = v.groupby(["query", "image_id"]).dev.mean()
+    out["delta_m_order_averaged"] = r2(float(per_pair.mean()))
+    out["delta_m_null"] = r2(float(np.mean([4 - base[q] for q in base])))
+
+    # Person queries against the single non-person control.
+    for tag, sel in (("original", v[v.scale_order == "original"]),
+                     ("order_averaged", v)):
+        g = sel.groupby("query").dev.mean()
+        person = g[g.index != CONTROL_QUERY].mean()
+        ctrl = g.get(CONTROL_QUERY, float("nan"))
+        # gap = control - person, matching the draft's convention: positive
+        # means the model deviates further on pictures of people than on the
+        # non-person control.
+        out[f"person_vs_control_{tag}"] = {
+            "person_queries": r2(float(person)), "control": r2(float(ctrl)),
+            "gap": r2(float(ctrl - person))}
+    return out
+
+
+def r2(x, n=3):
+    return None if x is None or (isinstance(x, float) and np.isnan(x)) else round(float(x), n)
+
+
 def phase2(stem: str) -> dict:
     df = pd.read_parquet(OUT / f"{stem}.parquet")
     s = json.loads((OUT / f"{stem}_summary.json").read_text())
@@ -206,6 +287,7 @@ def phase2(stem: str) -> dict:
            "n": int(len(df)),
            "model_id": df.model_id.iloc[0]}
     out.update({k: r(s[k], 5) for k in keep if k in s})
+    out.update(phase2_detail(df, BASELINES))
     return out
 
 
@@ -222,6 +304,11 @@ def main() -> int:
         "_models": {k: {"label": LABEL[k], "params_b": PARAMS_B[k]} for k in MODELS},
         "phase1a": {}, "phase1b": {}, "phase2": {},
     }
+    sys.path.insert(0, str(REPO))
+    from src.data.sigir_loader import compute_low_asi_baselines
+    global BASELINES
+    BASELINES = {k: float(v) for k, v in compute_low_asi_baselines().items()}
+
     for key, (s1a, s1b, s2) in MODELS.items():
         ledger["phase1a"][key] = phase1a(s1a)
         ledger["phase1b"][key] = phase1b(s1b)
@@ -232,10 +319,7 @@ def main() -> int:
 
     # Human baselines are a property of the SIGIR dataset, not of any model,
     # so they sit beside the phases rather than inside one.
-    sys.path.insert(0, str(REPO))
-    from src.data.sigir_loader import compute_low_asi_baselines
-    ledger["human_low_asi_baselines"] = {
-        k: r(v) for k, v in compute_low_asi_baselines().items()}
+    ledger["human_low_asi_baselines"] = {k: r(v) for k, v in BASELINES.items()}
 
     # The superseded runs the fault register cites, kept so the before-and-after
     # figures can be rebuilt without the old ledger.

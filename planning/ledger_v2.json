@@ -807,7 +807,47 @@
    "rr_vision": 0.18889,
    "rr_text_only": 0.2,
    "delta_rr": -0.01111,
-   "mean_captured_mass": 0.9971
+   "mean_captured_mass": 0.9971,
+   "rr_vision_by_tol": {
+    "0.25": 0.111,
+    "0.5": 0.189,
+    "1.0": 0.4
+   },
+   "rr_text_only_by_tol": {
+    "0.25": 0.2,
+    "0.5": 0.2,
+    "1.0": 0.7
+   },
+   "delta_rr_ci95": [
+    -0.3,
+    0.267
+   ],
+   "bootstrap_B": 10000,
+   "bootstrap_unit": "query",
+   "mean_raw_rating": {
+    "vision": {
+     "original": 4.446,
+     "reversed": 4.734
+    },
+    "text_only": {
+     "original": 4.41,
+     "reversed": 4.45
+    }
+   },
+   "delta_m_original": -0.834,
+   "delta_m_reversed": -2.014,
+   "delta_m_order_averaged": -1.424,
+   "delta_m_null": -1.28,
+   "person_vs_control_original": {
+    "person_queries": -0.726,
+    "control": -1.806,
+    "gap": -1.08
+   },
+   "person_vs_control_order_averaged": {
+    "person_queries": -1.304,
+    "control": -2.509,
+    "gap": -1.206
+   }
   },
   "qwen7b": {
    "file": "outputs_bunya/phase2/qwen_7b_historical_2018.parquet",
@@ -818,7 +858,47 @@
    "rr_vision": 0.15556,
    "rr_text_only": 0.2,
    "delta_rr": -0.04444,
-   "mean_captured_mass": 0.99927
+   "mean_captured_mass": 0.99927,
+   "rr_vision_by_tol": {
+    "0.25": 0.022,
+    "0.5": 0.156,
+    "1.0": 0.267
+   },
+   "rr_text_only_by_tol": {
+    "0.25": 0.1,
+    "0.5": 0.2,
+    "1.0": 0.6
+   },
+   "delta_rr_ci95": [
+    -0.378,
+    0.222
+   ],
+   "bootstrap_B": 10000,
+   "bootstrap_unit": "query",
+   "mean_raw_rating": {
+    "vision": {
+     "original": 5.214,
+     "reversed": 4.417
+    },
+    "text_only": {
+     "original": 3.756,
+     "reversed": 3.407
+    }
+   },
+   "delta_m_original": -0.066,
+   "delta_m_reversed": -1.697,
+   "delta_m_order_averaged": -0.881,
+   "delta_m_null": -1.28,
+   "person_vs_control_original": {
+    "person_queries": -0.036,
+    "control": -0.328,
+    "gap": -0.291
+   },
+   "person_vs_control_order_averaged": {
+    "person_queries": -0.778,
+    "control": -1.815,
+    "gap": -1.038
+   }
   },
   "llama11b": {
    "file": "outputs_bunya/phase2/llama_dev_historical_2018.parquet",
@@ -829,7 +909,47 @@
    "rr_vision": 0.02222,
    "rr_text_only": 0.0,
    "delta_rr": 0.02222,
-   "mean_captured_mass": 0.99441
+   "mean_captured_mass": 0.99441,
+   "rr_vision_by_tol": {
+    "0.25": 0.022,
+    "0.5": 0.022,
+    "1.0": 0.078
+   },
+   "rr_text_only_by_tol": {
+    "0.25": 0.0,
+    "0.5": 0.0,
+    "1.0": 0.0
+   },
+   "delta_rr_ci95": [
+    0.0,
+    0.056
+   ],
+   "bootstrap_B": 10000,
+   "bootstrap_unit": "query",
+   "mean_raw_rating": {
+    "vision": {
+     "original": 3.359,
+     "reversed": 2.843
+    },
+    "text_only": {
+     "original": 2.51,
+     "reversed": 3.154
+    }
+   },
+   "delta_m_original": -1.92,
+   "delta_m_reversed": -0.123,
+   "delta_m_order_averaged": -1.022,
+   "delta_m_null": -1.28,
+   "person_vs_control_original": {
+    "person_queries": -1.927,
+    "control": -1.864,
+    "gap": 0.062
+   },
+   "person_vs_control_order_averaged": {
+    "person_queries": -0.994,
+    "control": -1.274,
+    "gap": -0.281
+   }
   },
   "llama90b": {
    "file": "outputs_bunya/phase2/llama_historical_2018.parquet",
@@ -840,7 +960,47 @@
    "rr_vision": 0.04444,
    "rr_text_only": 0.9,
    "delta_rr": -0.85556,
-   "mean_captured_mass": 0.99781
+   "mean_captured_mass": 0.99781,
+   "rr_vision_by_tol": {
+    "0.25": 0.0,
+    "0.5": 0.044,
+    "1.0": 0.3
+   },
+   "rr_text_only_by_tol": {
+    "0.25": 0.9,
+    "0.5": 0.9,
+    "1.0": 1.0
+   },
+   "delta_rr_ci95": [
+    -0.978,
+    -0.656
+   ],
+   "bootstrap_B": 10000,
+   "bootstrap_unit": "query",
+   "mean_raw_rating": {
+    "vision": {
+     "original": 4.789,
+     "reversed": 4.636
+    },
+    "text_only": {
+     "original": 2.748,
+     "reversed": 5.135
+    }
+   },
+   "delta_m_original": -0.491,
+   "delta_m_reversed": -1.916,
+   "delta_m_order_averaged": -1.203,
+   "delta_m_null": -1.28,
+   "person_vs_control_original": {
+    "person_queries": -0.582,
+    "control": 0.333,
+    "gap": 0.915
+   },
+   "person_vs_control_order_averaged": {
+    "person_queries": -1.333,
+    "control": -0.036,
+    "gap": 1.297
+   }
   },
   "qwen72b": {
    "file": "outputs_bunya/phase2/qwen_historical_2018.parquet",
@@ -851,7 +1011,47 @@
    "rr_vision": 0.15556,
    "rr_text_only": 0.9,
    "delta_rr": -0.74444,
-   "mean_captured_mass": 0.99955
+   "mean_captured_mass": 0.99955,
+   "rr_vision_by_tol": {
+    "0.25": 0.089,
+    "0.5": 0.156,
+    "1.0": 0.267
+   },
+   "rr_text_only_by_tol": {
+    "0.25": 0.8,
+    "0.5": 0.9,
+    "1.0": 1.0
+   },
+   "delta_rr_ci95": [
+    -0.978,
+    -0.5
+   ],
+   "bootstrap_B": 10000,
+   "bootstrap_unit": "query",
+   "mean_raw_rating": {
+    "vision": {
+     "original": 5.496,
+     "reversed": 4.187
+    },
+    "text_only": {
+     "original": 2.647,
+     "reversed": 5.2
+    }
+   },
+   "delta_m_original": 0.216,
+   "delta_m_reversed": -1.467,
+   "delta_m_order_averaged": -0.625,
+   "delta_m_null": -1.28,
+   "person_vs_control_original": {
+    "person_queries": 0.184,
+    "control": 0.507,
+    "gap": 0.322
+   },
+   "person_vs_control_order_averaged": {
+    "person_queries": -0.738,
+    "control": 0.386,
+    "gap": 1.124
+   }
   }
  },
  "human_low_asi_baselines": {

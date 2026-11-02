@@ -157,8 +157,68 @@ def t_s2_rr() -> str:
     return "\n".join(out)
 
 
+def t_s2_rr_full() -> str:
+    out = [r"% column spec: {@{}lccccc@{}}",
+           r"& \multicolumn{3}{c}{$\RR_{\text{vision}}(\tau)$ / $\RR_{\text{text}}(\tau)$} & $\dRR(0.5)$ & 95\% CI \\",
+           r"\cmidrule(lr){2-4}",
+           r"Model & $\tau=0.25$ & $\tau=0.5$ & $\tau=1$ & & \\",
+           r"\midrule"]
+    for m in ORDER:
+        p = LEDGER["phase2"][m]
+        tol = " & ".join(
+            f"{p['rr_vision_by_tol'][t]:.3f} / {p['rr_text_only_by_tol'][t]:.2f}"
+            for t in ("0.25", "0.5", "1.0"))
+        lo, hi = p["delta_rr_ci95"]
+        out.append(f"{LABEL[m]} & {tol} & {sgn(p['delta_rr'])} & "
+                   f"$[{lo:+.2f},{hi:+.2f}]$ \\\\")
+    return "\n".join(out)
+
+
+def t_s2_anchor() -> str:
+    out = [r"% column spec: {@{}lcccc@{}}",
+           r"& \multicolumn{2}{c}{Text only} & \multicolumn{2}{c}{Vision} \\",
+           r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}",
+           r"Model & original & reversed & original & reversed \\",
+           r"\midrule"]
+    for m in ORDER:
+        r_ = LEDGER["phase2"][m]["mean_raw_rating"]
+        out.append(f"{LABEL[m]} & " + " & ".join(
+            f"{r_[c][o]:.2f}" for c in ("text_only", "vision")
+            for o in ("original", "reversed")) + r" \\")
+    return "\n".join(out)
+
+
+def t_s2_deltam() -> str:
+    rows = [(r"Original order only (\cref{eq:deltam})", "delta_m_original"),
+            ("Reversed order only", "delta_m_reversed"),
+            ("Order-averaged", "delta_m_order_averaged"),
+            (r"Anchor-insensitivity null (\cref{prop:null})", "delta_m_null")]
+    out = [header(r"$\dm$ variant"), r"\midrule"]
+    for label, key in rows:
+        out.append(label + " & " + " & ".join(
+            sgn(LEDGER["phase2"][m][key]) for m in ORDER) + r" \\")
+    return "\n".join(out)
+
+
+def t_s2_person() -> str:
+    out = [r"% column spec: {@{}lcccccc@{}}",
+           r"& \multicolumn{3}{c}{Original order} & \multicolumn{3}{c}{Order-averaged} \\",
+           r"\cmidrule(lr){2-4}\cmidrule(lr){5-7}",
+           r"Model & 9 person queries & control & gap & 9 person queries & control & gap \\",
+           r"\midrule"]
+    for m in ORDER:
+        cells = []
+        for tag in ("original", "order_averaged"):
+            x = LEDGER["phase2"][m][f"person_vs_control_{tag}"]
+            cells += [sgn(x["person_queries"]), sgn(x["control"]), f"{x['gap']:.3f}"]
+        out.append(f"{LABEL[m]} & " + " & ".join(cells) + r" \\")
+    return "\n".join(out)
+
+
 TABLES = {"capm": t_capm, "s1-aggregate": t_aggregate, "s1-structure": t_structure,
-          "s1-ps": t_s1_ps, "s1-perm": t_s1_perm, "s1b-gap": t_gap, "s2-rr": t_s2_rr}
+          "s1-ps": t_s1_ps, "s1-perm": t_s1_perm, "s1b-gap": t_gap, "s2-rr": t_s2_rr,
+          "s2-rr-full": t_s2_rr_full, "s2-anchor": t_s2_anchor,
+          "s2-deltam": t_s2_deltam, "s2-person": t_s2_person}
 
 
 def main() -> None:
