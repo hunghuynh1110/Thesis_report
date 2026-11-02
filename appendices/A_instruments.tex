@@ -43,10 +43,14 @@ per model (15 cells each). Reverse-keyed items have $p_i=-1$.}
 \label{tab:items}
 \end{table}
 
-\plannedfigure{fig:app-heatmap}{Per-item bias score, items $\times$ models
-(and optionally items $\times$ structures for each model).}{Diverging heatmap,
-22 rows; the per-item heatmap promised in the proposal. Colour scale centred at
-0; annotate cells.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=0.78\linewidth]{app-heatmap.pdf}
+\caption{Mean bias score $b_{i,t,c}$ for each of the 22 ASI items, averaged over the
+five prompt structures and the three image conditions. Items keyed in reverse
+are marked ``rev''; HS and BS are the hostile and benevolent subscales. Colour
+diverges about zero.}
+\label{fig:app-heatmap}
+\end{figure}
 
 \section{Phase 2 prompts}\label{app:prompts}
 \begin{plan}

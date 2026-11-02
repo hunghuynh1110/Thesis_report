@@ -49,10 +49,14 @@ Llama-11B (dev) & 0.022 / 0.00 & 0.022 / 0.00 & 0.078 / 0.00 & $+0.022$ & -- \\
 ($B=10{,}000$).}
 \label{tab:s2-rr}
 \end{table}
-\plannedfigure{fig:s2-rr}{Robustness rate with and without the image, for each
-model, with query-level bootstrap intervals.}{Paired bars (text-only vs vision)
-per model, error bars from the cluster bootstrap. The headline figure of the
-chapter.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s2-rr.pdf}
+\caption{Robustness rate under scale reversal at $\tau=0.5$, with and without the
+image. Values beneath each model are $\dRR$ with a percentile interval from a
+cluster bootstrap over the ten queries, $B=10{,}000$, which resamples queries
+rather than rows.}
+\label{fig:s2-rr}
+\end{figure}
 \begin{plan}
 \begin{itemize}
   \item \newanalysis{(A4) cluster bootstrap and (A5) tolerance sensitivity.
@@ -82,12 +86,15 @@ Following the reversed anchors moves a rating $r$ to about $8-r$; ignoring them
 leaves it unchanged.}
 \label{tab:s2-anchor}
 \end{table}
-\plannedfigure{fig:s2-anchor}{Anchor following: raw rating under the reversed
-scale against the raw rating under the original scale, for every pair.}{Scatter
-per model, colour = condition, reference lines $y=8-x$ (anchors followed) and
-$y=x$ (anchors ignored); annotate the fitted slope $\beta_1$
-(\cref{sec:framework-calm}). Text-only points lie near $y=8-x$; Llama's
-vision points lie near $y=x$.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s2-anchor.pdf}
+\caption{Expected rating under the reversed scale against the expected rating under the
+original scale, one point per pair. With no image all three models track
+$y=8-x$, which is what following the stated anchors looks like. With an image
+the relation collapses, and Llama-90B's fitted slope turns positive, meaning it
+returns much the same digit whichever way the scale is labelled.}
+\label{fig:s2-anchor}
+\end{figure}
 \begin{plan}
 \newanalysis{(A3) anchor-following analysis. Why: $\dRR$ says \emph{that}
 robustness collapses; this says \emph{how} --- with an image present, Llama
@@ -153,11 +160,14 @@ Llama-11B & $-1.927$ & $-1.864$ & 0.063 & $-0.994$ & $-1.274$ & $-0.281$ \\
 and the ``hot air baloon'' control.}
 \label{tab:s2-person}
 \end{table}
-\plannedfigure{fig:s2-queries}{Per-query model rating against the low-ASI human
-baseline.}{Dumbbell plot: one row per query (control row highlighted), dots for
-the human baseline and each model's original-order mean, a faint marker for the
-order-averaged mean and a vertical band for the null value 4.0. Per-query values
-in \cref{tab:app-queries}.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s2-queries.pdf}
+\caption{Per-query mean rating against the low-ASI human baseline, queries ordered by
+baseline. Filled marks are the original scale order and hollow marks average
+the two CALM orders; the hollow marks cluster on the anchor-insensitivity null
+of 4.0 predicted by \cref{prop:null}. The control query is shaded.}
+\label{fig:s2-queries}
+\end{figure}
 \begin{plan}
 \begin{itemize}
   \item The dissociation survives in both definitions and both models: person

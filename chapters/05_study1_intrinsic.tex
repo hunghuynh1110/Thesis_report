@@ -42,11 +42,15 @@ All        & 0.473 & 0.582 & 0.955 \\
 $\capm<0.1$ in brackets). $n=110$ per cell.}
 \label{tab:capm}
 \end{table}
-\plannedfigure{fig:capm-dist}{Distribution of captured mass by image condition
-for the three models. Any image, including a featureless grey patch, moves
-most of Llama's probability mass off \{yes, no\}; Qwen is unaffected.}{Strip or
-box plot per model (3 panels), $x$ = condition, $y=\capm\in[0,1]$, 110 points
-per box. Data: Phase~1 parquets. This is the headline figure of the chapter.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{capm-dist.pdf}
+\caption{Captured mass by image condition, one point per prompt over the box, 110 points
+per condition. Adding any image to Llama's input, including a featureless grey
+patch, moves most of the probability mass off the yes and no tokens, while
+Qwen-72B is unaffected. Conditions are no image, uniform grey patch and
+Gaussian noise; means are printed above each box.}
+\label{fig:capm-dist}
+\end{figure}
 \begin{plan}
 \begin{itemize}
   \item Report this \emph{before} any bias score. It is the clearest Phase~1
@@ -101,13 +105,14 @@ Inversion    & $-0.322$ & 0.628 & $-0.219$ & 0.424 & $-0.117$ & 0.254 \\
 \caption{Mean bias score and mean $\pyes$ by prompt structure.}
 \label{tab:s1-structure}
 \end{table}
-\plannedfigure{fig:s1-structure}{Bias score by prompt structure, with the value
-predicted from each structure's yes-rate alone,
-$s_t\cdot\tfrac{10}{22}\cdot\overline{\pyes}_t$.}{Grouped bars (structure
-$\times$ model) with a marker for the prediction. Preliminary predictions:
-Llama-90B direct 0.293 vs observed 0.245, inversion $-0.193$ vs $-0.219$;
-Qwen direct 0.094 vs 0.002. Shows that the inversion ``sign flip'' is the
-formula applied to a positive yes-rate, not a finding about attitudes.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s1-structure.pdf}
+\caption{Mean bias score by prompt structure, with the value predicted from each
+structure's yes-rate alone, $s_t\cdot\tfrac{10}{22}\cdot\overline{\pyes}_t$,
+marked by a dash. The negative inversion scores are what the scoring formula
+returns for a positive yes-rate under $s_t=-1$, not a reversal of attitude.}
+\label{fig:s1-structure}
+\end{figure}
 \begin{plan}
 \begin{itemize}
   \item Read $\ASIint$ in the light of \cref{prop:shift}: Llama-90B's $+0.153$
@@ -146,11 +151,15 @@ agree \emph{more} with the anti-sexist (reverse-keyed) statements, yet all three
 have $\ASIint>0$.}
 \label{tab:s1-ps}
 \end{table}
-\plannedfigure{fig:s1-items}{Item-level agreement: mean $\pyes$ for each of the
-22 items (non-inversion rows), positively keyed vs reverse-keyed, for both
-production models.}{Dot plot, items on $y$ sorted by keying then by value, one
-colour per model; vertical lines at each group mean so $\PS$ is visible as the
-gap. Data: Phase~1 parquets.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s1-items.pdf}
+\caption{Mean $\pyes$ per item over the 12 cells outside the inversion structure, for
+the two production models, with items ordered by Llama-90B's value within each
+keying group. Dashed lines mark the group means, so the polarity separation
+$\PS$ is the horizontal gap between them. Both models agree more readily with
+the six items keyed in reverse than with the sixteen keyed towards sexism.}
+\label{fig:s1-items}
+\end{figure}
 \begin{plan}
 Explain with \cref{prop:shift,prop:invariance} why a positive $\ASIint$ can come
 from a model whose item-level pattern leans anti-sexist (16:6 keying, yes-rate
@@ -177,9 +186,14 @@ assignments. Within-subscale values are descriptive only (each subscale has
 three reverse-keyed items).}
 \label{tab:s1-perm}
 \end{table}
-\plannedfigure{fig:s1-perm}{Exact null distribution of the polarity separation
-under random keying, with the observed value for each model.}{Three small
-histograms (74,613 values each) with a vertical line at the observed $\PS$.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s1-perm.pdf}
+\caption{Exact null distribution of the polarity statistic $T(\bm\ell)$ under random
+keying, with the observed value marked. Each histogram enumerates all
+$\binom{22}{6}=74{,}613$ assignments of six reverse labels to the 22 items, so
+the $p$ values are exact and carry no Monte Carlo error.}
+\label{fig:s1-perm}
+\end{figure}
 \begin{plan}
 \begin{itemize}
   \item \newanalysis{(A6) the permutation test promised in the proposal.
@@ -207,9 +221,14 @@ Rerun, workaround inactive (220/330 rows bit-identical) & 0.9996 & 0.9996 & 0.00
 \caption{Llama-90B Phase~1 replication (reference $\ASIint=+0.1530$).}
 \label{tab:s1-replication}
 \end{table}
-\plannedfigure{fig:s1-replication}{Llama-90B $\pyes$ per prompt: reference run
-against the independent rerun (left) and the 4-bit single-GPU run (right).}{Two
-scatter panels, 330 points each, identity line.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s1-replication.pdf}
+\caption{Llama-90B per-prompt $\pyes$ against two comparison runs. The independent rerun
+reproduces the reference almost exactly. The 4-bit single-GPU run, which makes
+no cross-GPU copy by construction and so cannot be affected by the fault of
+\cref{app:fault}, agrees less closely and bounds the cost of quantisation.}
+\label{fig:s1-replication}
+\end{figure}
 \begin{plan}
 \begin{itemize}
   \item These checks establish that the host-staged copy workaround

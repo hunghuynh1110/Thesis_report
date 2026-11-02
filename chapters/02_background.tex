@@ -115,13 +115,59 @@ may be presented as the actual form, not only ``the general form''.
 gives a uniform distribution).
 \end{plan}
 
-\plannedfigure{fig:fusion}{Two ways of injecting an image into a language
-model: cross-attention adapters (Llama-3.2-Vision) and visual tokens in the
-input sequence (Qwen2-VL).}{TikZ block diagram, two panels side by side.
-Left: ViT-H/14 encoder $\to$ cross-attention layers interleaved every 4th
-decoder layer. Right: ViT $\to$ merger $\to$ visual tokens concatenated with
-text tokens. Both end at the LM head $\to$ next-token distribution, marked
-``measured here''. Draw from the two model papers; no copied figures.}
+\begin{figure}[htbp]\centering
+\begin{tikzpicture}[node distance=5mm and 7mm,
+  box/.style={draw,rounded corners,align=center,font=\footnotesize,minimum height=7mm,inner sep=3pt},
+  tok/.style={draw,align=center,font=\scriptsize,minimum height=5.5mm,inner sep=2.5pt},
+  arr/.style={-{Stealth[length=2mm]},semithick},
+  hdr/.style={font=\footnotesize\itshape}]
+
+% ---- left panel: cross-attention adapters -------------------------------
+\node[hdr] (lh) {Llama-3.2-Vision: gated cross attention};
+\node[box,below=4mm of lh.south west,anchor=north west] (lvit) {ViT-H/14\\\scriptsize 32 layers, width 1280};
+\node[box,below=of lvit] (lca) {cross-attention blocks\\\scriptsize layers 3, 8, 13, \ldots, 38};
+\node[box,below=of lca] (lsa) {self-attention layers\\\scriptsize unchanged};
+\node[box,below=of lsa,fill=blue!8] (lhead) {LM head};
+\draw[arr] (lvit) -- node[right,font=\scriptsize] {$\bm e(v)$} (lca);
+\draw[arr] (lca) -- (lsa);
+\draw[arr] (lsa) -- (lhead);
+\node[left=5mm of lsa,font=\scriptsize,align=right] (ltext) {text\\tokens};
+\draw[arr] (ltext) -- (lsa);
+\node[left=5mm of lvit,font=\scriptsize] (lim) {image $v$};
+\draw[arr] (lim) -- (lvit);
+
+% ---- right panel: visual tokens in the sequence --------------------------
+\node[hdr,right=34mm of lh.east,anchor=west] (rh) {Qwen2-VL: visual tokens in the sequence};
+\node[box,below=4mm of rh.south west,anchor=north west] (rvit) {ViT at native resolution};
+\node[box,below=of rvit] (rmrg) {patch merger};
+\node[tok,below=of rmrg] (rseq) {$[\,$visual tokens $\;\Vert\;$ text tokens$\,]$};
+\node[box,below=of rseq] (rdec) {decoder layers\\\scriptsize unchanged};
+\node[box,below=of rdec,fill=blue!8] (rhead) {LM head};
+\draw[arr] (rvit) -- (rmrg);
+\draw[arr] (rmrg) -- (rseq);
+\draw[arr] (rseq) -- (rdec);
+\draw[arr] (rdec) -- (rhead);
+\node[left=5mm of rvit,font=\scriptsize] (rim) {image $v$};
+\draw[arr] (rim) -- (rvit);
+
+% ---- shared output -------------------------------------------------------
+\node[box,below=9mm of $(lhead.south)!0.5!(rhead.south)$,fill=blue!8]
+  (dist) {next-token distribution $p(\cdot\mid x,v)$};
+\draw[arr] (lhead) |- ([yshift=4mm]dist.north) ;
+\draw[arr] (rhead) |- ([yshift=4mm]dist.north);
+\draw[arr] ([yshift=4mm]dist.north) -- (dist);
+\node[below=2.5mm of dist,font=\footnotesize,text=blue!60!black]
+  {\textbf{measured here} (\cref{eq:nexttoken})};
+\end{tikzpicture}
+\caption{Two ways of injecting an image into a language model.
+Llama-3.2-Vision leaves the decoder's own layers unchanged and adds gated
+cross-attention blocks after every fourth self-attention layer, at indices 3,
+8, 13, 18, 23, 28, 33 and 38 of 40. Qwen2-VL emits visual tokens that join the
+text tokens in the input sequence, so the sequence length grows with the
+image. Both routes end at the same distribution, which is where this thesis
+takes its reading.}
+\label{fig:fusion}
+\end{figure}
 
 % ---------------------------------------------------------------------
 \section{Social bias in learned representations}\label{sec:bg-bias}
