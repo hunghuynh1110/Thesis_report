@@ -630,6 +630,31 @@ hostile gap reaches the corrected threshold.}
 
 % ---------------------------------------------------------------------
 \section{Race, reported as exploratory}\label{sec:s1b-race}
+
+Race is stratified in the Phase~1B sample at five faces a cell, which is too
+thin to support an inferential claim, so what follows is descriptive and no
+test is applied to it. The design was powered for gender at 20 faces a side,
+and splitting the same 40 faces four ways leaves each race cell with a
+quarter of that.
+
+The per-race means are nonetheless worth recording, because on one model they
+are larger than the effect the study was built to measure. Llama-90B's mean
+bias score runs from $-0.0016$ on Black faces to $+0.0574$ on White faces, a
+spread of $0.0590$, while its gender gap on the same rows is $+0.0053$. The
+other four models are flatter, spanning $0.0029$ on Qwen-2B, $0.0084$ on
+Qwen-72B, $0.0135$ on Qwen-7B and $0.0208$ on Llama-11B. A spread that
+exceeds the measured gender effect by a factor of eleven on one model is a
+reason to run a study powered for race, not a result about race.
+
+Captured mass by cell was recorded for the same reason, since a model that
+declines more often for some demographics than others would make its own
+scores uneven in a way the means conceal. On Llama-90B it runs from $0.431$
+on Black female faces to $0.514$ on Asian female faces, a range of $0.083$
+around a mean of $0.479$, with no ordering that separates the cells cleanly
+by race or by gender. Nothing here suggests selective refusal, though five
+faces a cell could not establish its absence either.
+
+% ---------------------------------------------------------------------
 % \begin{plan}
 % Half a page. Five faces per race cell cannot support an inferential claim, so
 % report the four per-race means descriptively and say so in the first sentence.
