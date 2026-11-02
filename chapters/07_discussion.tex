@@ -133,6 +133,44 @@ are the ones this method currently cannot reach.
 
 % ---------------------------------------------------------------------
 \section{Methodological lessons}\label{sec:disc-lessons}
+
+Three lessons from this project generalise beyond it, and the first is that a
+logit-level audit must report its own coverage. Six measurement faults were
+found during the work (\cref{tab:faults}), and not one of them raised an
+error or produced an aggregate that looked wrong. A probe reading only
+lowercase tokens returned a plausible mean $\pyes$ while capturing $0.09\%$
+of the distribution, and a model whose hidden state had been zeroed by a
+hardware fault returned a mean expected rating of exactly $4.000$, the
+midpoint of the scale and a value a calibrated model might well produce. What
+exposed them was captured mass and output diversity, neither of which is part
+of any standard reporting practice. An audit that reports a probability
+without reporting how much of the distribution that probability describes
+cannot distinguish a measurement from an artefact.
+
+The second lesson concerns borrowing instruments. A psychometric scale built
+for people assumes a respondent whose tendency to agree is a modest
+perturbation rather than a free parameter, and the ASI's sixteen to six
+keying ratio is safe only under that assumption. A model violates it: mean
+$\pyes$ across the five audited here runs from $0.199$ to $0.599$ on the
+positively keyed rows alone, which is enough for the keying ratio by itself
+to order the models. Tjuatja et al. \cite{tjuatja2024response} and
+Dominguez-Olmedo et al. \cite{dominguez2024questioning} report the same
+divergence from human response behaviour on other instruments. Scores that are
+invariant to a uniform shift in assent, and inference that permutes the
+keying rather than assuming a null, are therefore requirements of
+administering such a scale to a model rather than refinements of it.
+
+The third lesson is about infrastructure, and it cost this project the most
+time. Every small model ran on one GPU and every large model on three, so
+model size and GPU count were perfectly confounded across the entire run
+history. When the 90B produced degenerate output, the observation that the
+same code worked on the 11B appeared to exonerate the code and implicate the
+checkpoint, and it did neither: forcing the 11B across three GPUs reproduced
+the failure exactly on weights known to be sound. An audit running on shared
+cluster hardware should vary the execution path deliberately rather than
+letting it track the variable under study, and \cref{sec:s1-replication}
+reports the checks that were added once this was understood.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Report coverage ($\capm$) and output diversity with every audit: six
