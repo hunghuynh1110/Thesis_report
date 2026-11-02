@@ -15,7 +15,7 @@ Title: name the method or object of study and, where possible, the finding.
 
 Abstract: one paragraph of 150 to 250 words covering the problem, why current approaches fall short, what was done, the key results as numbers, and what they imply. No citations.
 
-Introduction: move from the field to the specific problem. Describe each existing approach by giving it its due before naming its limitation. State the gap in one sentence. Then say what this work does ("In this report, we ..."), followed by the contributions, either inline ("First, ... Second, ...") or as a short list with one justifying sentence each. Claim novelty at most once ("To the best of our knowledge, ...").
+Introduction: move from the field to the specific problem. Describe each existing approach by giving it its due before naming its limitation. State the gap in one sentence. Then say what this work does ("In this report, we ...", or, under the project override above, "This report addresses ..."), followed by the contributions, either inline ("First, ... Second, ...") or as a short list with one justifying sentence each. Claim novelty at most once ("To the best of our knowledge, ...").
 
 Background or related work: group prior work by approach, not paper by paper. End each group by saying how the present work differs.
 
@@ -80,6 +80,8 @@ When an explanation has not been tested, say so in the same sentence ("We expect
 State limitations as plain facts with their cost in time, data, accuracy or scope. Do not apologise for them.
 
 ## Voice, tense and citation
+
+**Project override (REIT4841 thesis, set by Hung on 2 November 2026): do not use "we", "our" or "us" anywhere.** This thesis keeps an impersonal register throughout. Write "this thesis", "this report" or "this chapter" as the subject for authorial actions, decisions and claims ("This thesis takes X as primary", "This report addresses two research questions"), or recast so the work itself is the subject ("The gap this thesis addresses is ..."). This deliberately overrides the general rule that follows, which applies to papers written outside this project; do not "correct" the chapters back to first person.
 
 "We" for the authors' actions, decisions and claims. Agentless passives ("The samples were filtered at 50 Hz.") are normal for routine procedure; language models use them at about half the human rate, so do not avoid them.
 
