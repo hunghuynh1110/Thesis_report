@@ -521,6 +521,58 @@ no cross-GPU copy by construction and so cannot be affected by the fault of
 
 % ---------------------------------------------------------------------
 \section{The gender gap on real faces}\label{sec:s1b-gap}
+
+Phase~1B asks the question the rest of the chapter cannot. Everything to this
+point measures what a model says about a person whose gender is never given,
+so it can show that a model assents or discriminates between item types, but
+not that it treats women and men differently. With a photograph supplying the
+gender, the difference between the 20 female and the 20 male face means is
+directly observable, and \cref{tab:s1b-gap} and \cref{fig:gap} report it.
+
+The benevolent half of the inventory carries a gender gap in every one of the
+five models. It runs $-0.0071$ on Qwen-2B, $+0.0185$ on Qwen-7B, $+0.0180$ on
+Llama-11B, $+0.0340$ on Llama-90B and $+0.0540$ on Qwen-72B, and four of the
+five clear the Bonferroni threshold of $p<0.01$ that testing five models
+requires. Llama-11B at $p=0.039$ is the exception, and its Cohen's $d$ of
+$0.68$ against the others' $0.97$ to $3.74$ identifies it as the underpowered
+case rather than the discrepant one. Apart from Qwen-2B, every gap points the
+same way: the benevolent items are attributed more readily to photographs of
+women than to photographs of men.
+
+The combined score hides this, which is the result's second half. Llama-90B
+scores $+0.0053$ overall at $p=0.622$, a number that would be reported as no
+effect, while its benevolent gap is $+0.0340$ at $p=0.003$. The two subscales
+move in opposite directions and partly cancel, since the hostile gap is
+negative in four of the five models, so scoring the inventory as a single
+number destroys the one effect in it that is statistically solid. Four of the
+five models look unbiased on the combined score; only one of the five does on
+the benevolent half.
+
+The hostile gaps are not claimed. None reaches the corrected threshold, the
+values run from $-0.0234$ to $+0.0051$ with $p$ from $0.041$ to $0.638$, and
+the direction is visible without being defensible. There is also a scoring
+artefact behind the hostile numbers that makes them harder to read than they
+look: \cref{eq:bias} multiplies $\pyes$ by item polarity, and for Qwen-72B
+the negative hostile score comes almost entirely from the three reverse-coded
+items rather than from the eight keyed towards hostility.
+
+Expressed as yes-rates rather than as scores, the size of the effect is easier
+to judge. On the benevolent items stated in the sexist direction, with the
+inversion structure excluded, Llama-90B puts $0.627$ on yes for women's faces
+against $0.573$ for men's, and Qwen-72B $0.265$ against $0.185$. These are
+differences of five and eight points in how often a model assents to a
+statement such as that the person should be cherished and protected, depending
+only on whether the photograph shows a woman or a man.
+
+Two cautions attach to these numbers. The first is coverage: Llama-11B holds
+only $0.140$ of its mass on the response set across the 4,400 Phase~1B
+measurements and Llama-90B $0.479$, so both Llama gaps are computed on a
+minority of each model's behaviour, whereas Qwen-72B's $0.972$ is not. The
+second is scope: 20 faces a side detects an effect of about one standard
+deviation between faces and no smaller, and the faces come from one database,
+so these gaps describe these 40 photographs rather than photographs in
+general. \cref{sec:disc-threats} carries both forward.
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
