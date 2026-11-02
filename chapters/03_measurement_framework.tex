@@ -581,11 +581,12 @@ $\RMSNorm(\bm 0)=\bm 0$ because $\epsilon>0$; then $\bm z=W_{\text{out}}\bm 0=\b
 and \cref{eq:nexttoken} gives equal probabilities.
 \end{proof}
 
-The invalid Llama-90B runs produced that value for every token. The cause was
-not the model and not the code: on the cluster's PCIe nodes a direct copy
-between two GPUs returned zeros without raising an error, so a hidden state
-crossing a device boundary arrived as $\bm h=\bm 0$. Forcing the 11B across
-three GPUs reproduced the failure on weights known to be sound, and in the
+The invalid Llama-90B runs produced that value for every token, because on the
+cluster's PCIe nodes a direct copy between two GPUs returned zeros without
+raising an error, so a hidden state crossing a device boundary arrived as
+$\bm h=\bm 0$. Neither the model nor the measurement code was at fault.
+Forcing the 11B across three GPUs reproduced the failure on weights known to
+be sound, and in the
 rating task that run reported $\capm_{\Dset}=5.45783\times10^{-5}$, which is
 seven times the uniform probability, one for each digit.
 \cref{app:fault} gives the diagnosis and the fix.

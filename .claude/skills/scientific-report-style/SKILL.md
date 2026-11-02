@@ -65,6 +65,8 @@ Define each technical term once, with its abbreviation in parentheses, then use 
 
 A sentence may occasionally start with "But" or "So" when it marks a real turn in the argument.
 
+Bind a cause to its claim inside the sentence. Never assert that something fails, does not work or is not possible and then give the reason as a separate sentence ("Asking a deployed model what it thinks does not work, and it fails by design. Instruction tuning trains models to deflect..."). Write "we cannot do X because Y", or join the two with because, due to, since or a which clause ("A deployed model cannot usefully be asked what it thinks, because instruction tuning trains it to deflect..."). Avoid "by design", "that is the point" and similar flourishes attached to a failure. Subordinate causal clauses already carrying the logic, such as "which is why" or "for that reason", are fine.
+
 A genuine research question may be posed once, in the introduction, if it is the question the work answers. Never use rhetorical questions as hooks.
 
 ## Hedging and claims
@@ -135,7 +137,7 @@ Endings: a generic remark about the future of the field, or a final line that re
 
 ## Final check before returning the text
 
-Reread the draft and fix every instance of the following: a dash, or a hyphen outside a proper name or cited title; a paragraph that opens with an additive connector; more than one "however" in a paragraph; a present participle clause at the end of a sentence; an unattributed claim; a nominalisation where a verb would do; two consecutive sentences of similar length and shape; a quantitative adjective without a number; a hedge on a measured result, or two hedges stacked; a defined term replaced by a synonym; any item from the signals list.
+Reread the draft and fix every instance of the following: a dash, or a hyphen outside a proper name or cited title; a paragraph that opens with an additive connector; more than one "however" in a paragraph; a present participle clause at the end of a sentence; an unattributed claim; a nominalisation where a verb would do; two consecutive sentences of similar length and shape; a quantitative adjective without a number; a hedge on a measured result, or two hedges stacked; a failure or negation asserted with its reason in a separate sentence; a defined term replaced by a synonym; any item from the signals list.
 
 ## Exemplar of the target register
 
