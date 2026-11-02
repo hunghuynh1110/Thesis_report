@@ -1,5 +1,7 @@
 # The thesis draft is scoped to the wrong experiment
 
+**Status: data located and verified.** See "Found, and verified" below.
+
 Recorded 2 November 2026, after the model table in chapter 4 was questioned.
 
 ## What happened
@@ -128,22 +130,40 @@ chapter 1 aim 3 and in \cref{sec:s2-deviation}.**
   the fall from 0.90 to 0.16 mixes the two. Text only also rests on 10 distinct
   prompts, not 90.
 
-## What is missing from this machine
+## Found, and verified against the data
 
-Not present in the `VLM_Audit` checkout (HEAD `ff88e1d`, 21 Oct 2026) or in
-`Thesis_report`:
+The work is in **`~/Code/VLM_Audit`**, a different checkout from the
+`REIT4841/VLM_Audit` one the draft was built from. It holds all fifteen runs:
+five models across Phases 1A, 1B and 2, **25,450 measurements in total**, against
+the 2,070 the current draft claims.
 
-- the Qwen-2B and Qwen-7B runs, for every phase;
-- all Phase 1B data, for every model;
-- the Chicago Face Database stimuli and the selection script;
-- the code that runs Phase 1B and computes the gender gap, the t-tests and the
-  power analysis;
-- `src/models/qwen_extractor.py` still defines `_MODEL_IDS = {"qwen": 72B}`,
-  so the committed code cannot load the small models.
+`config.yaml` there carries the two models the other checkout lacks:
 
-`outputs_bunya/` holds three models and Phases 1A and 2 only. The handout
-predates HEAD by two days, so the Phase 1B work exists but was never committed
-here. Most likely it is still on Bunya under `/QRISdata/Q9468/`.
+    qwen_7b: Qwen/Qwen2-VL-7B-Instruct
+    qwen_2b: Qwen/Qwen2-VL-2B-Instruct
+
+Phase 1B lives in `src/phase1b/`, `src/data/cfd_loader.py`,
+`scripts/run_phase1b.py` and `outputs_bunya/phase1b/`, with the design recorded
+in `progress/phase1b_cfd_plan.md` (drafted 10 Sep, responding to the
+supervisor's request of 27 Aug to run against a neutral face dataset).
+
+**Every number in the tables above was recomputed from the parquets and
+matches the handout exactly**: all fifteen gap and p-value pairs, all five
+Cohen's d values, both raw yes-rate rows, the five-model Phase 1A captured mass
+table and the five-model robustness table. The handout is accurate and the data
+behind it is intact. `scripts/build_ledger.py` does the recomputation and
+writes `planning/ledger_v2.json`.
+
+The size axis holds in both families:
+
+| family | | | |
+|---|---|---|---|
+| Qwen | 2B: −0.0071 | 7B: +0.0185 | 72B: +0.0540 |
+| Llama | 11B: +0.0180 | 90B: +0.0340 | |
+
+One correction to the handout's own table: its "SD between faces" column is the
+pooled within-group SD (the denominator of d), not the SD across all 40 faces.
+Cohen's d is unaffected and reproduces exactly.
 
 ## Consequence for the draft
 

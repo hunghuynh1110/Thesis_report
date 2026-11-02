@@ -1,5 +1,12 @@
 # Facts ledger — where every number comes from
 
+> **Superseded in part, 2 Nov 2026.** This file covers three models and two
+> phases, because it was built from `REIT4841/VLM_Audit`, which is a stale
+> checkout. The project is **five models over three phases**. The current
+> ledger is `ledger_v2.json`, built by `scripts/build_ledger.py` from
+> **`~/Code/VLM_Audit`**. See `phase1b_gap.md`. The run table below is still
+> correct for the runs it lists; it is simply not all of them.
+
 All numbers are recomputed from the stored result files of the code repository
 (`hunghuynh1110/VLM_Audit`, `outputs_bunya/`), not copied from documents.
 
