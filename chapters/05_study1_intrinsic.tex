@@ -553,9 +553,9 @@ The hostile gaps are not claimed. None reaches the corrected threshold, the
 values run from $-0.0234$ to $+0.0051$ with $p$ from $0.041$ to $0.638$, and
 the direction is visible without being defensible. A scoring artefact also makes
 them harder to read than they look. \cref{eq:bias} multiplies $\pyes$ by item
-polarity, and for Qwen-72B the negative hostile score comes almost entirely
-from the three reverse-coded items rather than from the eight keyed towards
-hostility.
+polarity, and Qwen-72B's hostile gap of $-0.0099$ splits into $+0.0018$ over
+the eight items keyed towards hostility and $-0.0409$ over the three keyed
+against it, so the sign of the whole comes from the reverse-coded minority.
 
 Expressed as yes-rates rather than as scores, the size of the effect is easier
 to judge. On the benevolent items stated in the sexist direction, with the
