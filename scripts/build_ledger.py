@@ -163,6 +163,44 @@ def main() -> int:
               f"1B n={ledger['phase1b'][key]['n']:<6} "
               f"2 n={ledger['phase2'][key]['n']}")
 
+    # Human baselines are a property of the SIGIR dataset, not of any model,
+    # so they sit beside the phases rather than inside one.
+    sys.path.insert(0, str(REPO))
+    from src.data.sigir_loader import compute_low_asi_baselines
+    ledger["human_low_asi_baselines"] = {
+        k: r(v) for k, v in compute_low_asi_baselines().items()}
+
+    # The superseded runs the fault register cites, kept so the before-and-after
+    # figures can be rebuilt without the old ledger.
+    #
+    # The lowercase Phase 1 run stored only logit_yes/logit_no and the two-token
+    # softmax: captured mass was not instrumented until after that fault was
+    # found, which is why the lowercase figure for it comes from the 8-prompt
+    # diagnostic sweep (job 27103565) and is labelled as such rather than being
+    # passed off as a 330-row mean.
+    diag = json.loads((OUT / "diagnostics/diag_llama_dev_none.json").read_text())["rows"]
+    ledger["superseded"] = {
+        "llama11b_lowercase": {
+            "file": "outputs_bunya/phase1_lowercase_v1/llama_dev.parquet",
+            "n": int(len(pd.read_parquet(OUT / "phase1_lowercase_v1/llama_dev.parquet"))),
+            "mean_captured_mass": None,
+            "captured_mass_note": ("not recorded in this run; the lowercase pair "
+                                   "held 0.000877 on the 8-prompt diagnostic sweep"),
+            "diagnostic_mean_captured_mass": r(
+                sum(x["captured_mass"] for x in diag) / len(diag), 6),
+            "diagnostic_n": len(diag),
+            "diagnostic_job": "27103565",
+        },
+        "llama11b_phase2_prefixbug": {
+            "file": "outputs_bunya/phase2_prefixbug/llama_dev_historical_2018.parquet",
+            "mean_captured_mass": r(pd.read_parquet(
+                OUT / "phase2_prefixbug/llama_dev_historical_2018.parquet").captured_mass.mean(), 6)},
+        "llama90b_invalid_multigpu": {
+            "file": "outputs_bunya/phase1/llama.invalid_multi_gpu.parquet",
+            "mean_captured_mass": r(pd.read_parquet(
+                OUT / "phase1/llama.invalid_multi_gpu.parquet").captured_mass.mean(), 6)},
+    }
+
     # Size axis: does the benevolent gap grow with parameter count?
     fam = {"qwen": ["qwen2b", "qwen7b", "qwen72b"], "llama": ["llama11b", "llama90b"]}
     ledger["size_axis"] = {

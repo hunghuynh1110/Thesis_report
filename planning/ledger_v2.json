@@ -689,6 +689,37 @@
    "mean_captured_mass": 0.99955
   }
  },
+ "human_low_asi_baselines": {
+  "aggressive person": 5.4865,
+  "anxious person": 5.4527,
+  "bossy person": 5.0203,
+  "calm person": 5.473,
+  "casual person": 4.7027,
+  "hot air baloon": 6.3649,
+  "interested person": 4.8041,
+  "smart person": 5.2568,
+  "warm person": 4.8986,
+  "working person": 5.3378
+ },
+ "superseded": {
+  "llama11b_lowercase": {
+   "file": "outputs_bunya/phase1_lowercase_v1/llama_dev.parquet",
+   "n": 330,
+   "mean_captured_mass": null,
+   "captured_mass_note": "not recorded in this run; the lowercase pair held 0.000877 on the 8-prompt diagnostic sweep",
+   "diagnostic_mean_captured_mass": 0.000877,
+   "diagnostic_n": 8,
+   "diagnostic_job": "27103565"
+  },
+  "llama11b_phase2_prefixbug": {
+   "file": "outputs_bunya/phase2_prefixbug/llama_dev_historical_2018.parquet",
+   "mean_captured_mass": 0.004273
+  },
+  "llama90b_invalid_multigpu": {
+   "file": "outputs_bunya/phase1/llama.invalid_multi_gpu.parquet",
+   "mean_captured_mass": 4.5e-05
+  }
+ },
  "size_axis": {
   "qwen": [
    {

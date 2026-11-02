@@ -62,7 +62,10 @@ FAMILY_COLOUR = {"qwen": AQUA, "llama": BLUE}
 # Subscale series for the gender gap: two real series plus the combined score.
 SUBSCALE = {"BS": ("benevolent", BLUE), "HS": ("hostile", ORANGE),
             "all": ("combined", MUTED)}
-PRODUCTION = ["llama90b", "qwen72b"]
+# The two largest, one per family. Item-level figures show only these:
+# 22 items times five series is unreadable, and the palette carries two
+# families rather than five models.
+LARGEST = ["llama90b", "qwen72b"]
 
 CONDITION_LABEL = {
     "text_only": "no image",
@@ -215,15 +218,17 @@ def fig_capm_fixes(d: Data, out: Path) -> None:
     """
     L = d.ledger
     rows = [
-        ("Phase 1, Llama-11B\nlowercase probe",
-         L["phase1"]["llama11b_lowercase_FLAWED"].get("mean_captured_mass") or 0.000877,
-         L["phase1"]["llama11b"]["mean_captured_mass"]),
+        # The lowercase run never instrumented captured mass, so the "before"
+        # here is the 8-prompt diagnostic sweep, as the caption states.
+        ("Phase 1A, Llama-11B\nlowercase probe",
+         L["superseded"]["llama11b_lowercase"]["diagnostic_mean_captured_mass"],
+         L["phase1a"]["llama11b"]["mean_captured_mass"]),
         ("Phase 2, Llama-11B\ncue in the user turn",
          float(d.p2_prefixbug.captured_mass.mean()),
          float(d.p2["llama11b"].captured_mass.mean())),
-        ("Phase 1, Llama-90B\nzeroed cross-GPU copies",
+        ("Phase 1A, Llama-90B\nzeroed cross-GPU copies",
          float(d.p1_invalid90.captured_mass.mean()),
-         L["phase1"]["llama90b"]["mean_captured_mass"]),
+         L["phase1a"]["llama90b"]["mean_captured_mass"]),
     ]
     fig, ax = plt.subplots(figsize=(TEXTWIDTH_IN, 2.3))
     for i, (label, before, after) in enumerate(rows):
@@ -305,7 +310,8 @@ def fig_stimuli(d: Data, out: Path) -> None:
 
 def fig_capm_dist(d: Data, out: Path) -> None:
     """Headline figure of Study 1: captured mass by image condition."""
-    fig, axes = plt.subplots(1, 3, figsize=(TEXTWIDTH_IN, 2.6), sharey=True)
+    fig, axes = plt.subplots(1, len(MODELS), figsize=(TEXTWIDTH_IN, 2.6),
+                             sharey=True)
     rng = np.random.default_rng(7)
     for ax, (key, (name, colour)) in zip(axes, MODELS.items()):
         df = d.p1[key]
@@ -319,15 +325,17 @@ def fig_capm_dist(d: Data, out: Path) -> None:
             x = i + rng.uniform(-0.16, 0.16, len(g))
             ax.plot(x, g, "o", ms=2.0, alpha=0.35, color=colour,
                     mew=0, zorder=3, rasterized=False)
-            ax.text(i, 1.045, f"{g.mean():.3f}", ha="center", fontsize=7.5, color=INK2)
+            ax.text(i, 1.045, f"{g.mean():.2f}", ha="center", fontsize=6.5, color=INK2)
         ax.set_xticks(range(1, 4), [CONDITION_SHORT[c] for c in CONDITION_ORDER])
-        ax.set_xlabel("image condition")
-        ax.set_title(name, loc="left", color=INK, pad=14)
+        ax.tick_params(axis="x", labelsize=7, rotation=45)
+        ax.set_title(name, loc="left", color=INK, pad=14, fontsize=8.5)
         ax.set_ylim(-0.03, 1.12)
         ax.set_yticks(np.arange(0, 1.01, 0.25))
         ax.yaxis.grid(True)
         ax.set_axisbelow(True)
     axes[0].set_ylabel("captured mass $\\kappa$")
+    # No x label: five panels each carrying one ran the labels together, and
+    # none, grey and noise are named in the caption.
     finish(fig, "capm-dist", out)
 
 
@@ -359,7 +367,7 @@ def fig_s1_structure(d: Data, out: Path) -> None:
 
 
 def fig_s1_items(d: Data, out: Path) -> None:
-    """Per-item agreement, split by keying, for the two production models."""
+    """Per-item agreement, split by keying, for the largest model of each family."""
     base = item_means_noninv(d.p1["llama90b"])
     pos = base[base.polarity == 1].sort_values("p")
     neg = base[base.polarity == -1].sort_values("p")
@@ -368,7 +376,7 @@ def fig_s1_items(d: Data, out: Path) -> None:
 
     fig, ax = plt.subplots(figsize=(TEXTWIDTH_IN, 4.1))
     ax.axhspan(-0.6, len(neg) - 0.4, color=NEUTRAL, zorder=0)
-    for key in PRODUCTION:
+    for key in LARGEST:
         name, colour = MODELS[key]
         m = item_means_noninv(d.p1[key]).set_index("item_id")
         ax.plot([m.loc[i, "p"] for i in order], [ypos[i] for i in order],
@@ -388,7 +396,7 @@ def fig_s1_items(d: Data, out: Path) -> None:
     ax.xaxis.grid(True)
     ax.set_axisbelow(True)
     handles = [Line2D([], [], marker="o", ls="", color=MODELS[k][1], label=MODELS[k][0])
-               for k in PRODUCTION]
+               for k in LARGEST]
     handles.append(Line2D([], [], ls=(0, (4, 2)), color=MUTED, label="group mean"))
     ax.legend(handles=handles, ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.07))
     finish(fig, "s1-items", out)
@@ -410,21 +418,25 @@ def perm_null(df: pd.DataFrame) -> tuple[np.ndarray, float]:
 
 def fig_s1_perm(d: Data, out: Path) -> None:
     """Exact null distribution of polarity separation under random keying."""
-    fig, axes = plt.subplots(1, 3, figsize=(TEXTWIDTH_IN, 2.3), sharey=True)
+    fig, axes = plt.subplots(1, len(MODELS), figsize=(TEXTWIDTH_IN, 2.3),
+                             sharey=True)
     for ax, (key, (name, colour)) in zip(axes, MODELS.items()):
         null, t_obs = perm_null(d.p1[key])
         pval = float(np.mean(np.abs(null) >= abs(t_obs)))
         ax.hist(null, bins=70, color=GRID, edgecolor="none", zorder=2)
         ax.axvline(t_obs, color=colour, lw=1.6, zorder=4)
         ax.set_title(name, loc="left", pad=4)
+        ax.tick_params(axis="x", labelsize=7)
+        ax.xaxis.set_major_locator(mpl.ticker.MaxNLocator(3))
         ax.text(0.03, 0.93, f"observed {t_obs:+.3f}\nexact $p$ = {pval:.3f}",
                 transform=ax.transAxes, ha="left", va="top", fontsize=7.6,
                 color=INK2, linespacing=1.45)
-        ax.set_xlabel("$T(\\ell)$")
         ax.set_yticks([])
         for sp in ("left",):
             ax.spines[sp].set_visible(False)
     axes[0].set_ylabel(f"count of the\n{math.comb(22, 6):,} labellings")
+    # One x label under the middle panel: five sets of ticks ran together.
+    axes[len(MODELS) // 2].set_xlabel("$T(\\ell)$")
     finish(fig, "s1-perm", out)
 
 
@@ -520,7 +532,8 @@ def fig_s2_rr(d: Data, out: Path) -> None:
 
 def fig_s2_anchor(d: Data, out: Path) -> None:
     """Raw rating under the reversed scale against the original scale."""
-    fig, axes = plt.subplots(1, 3, figsize=(TEXTWIDTH_IN, 2.7), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, len(MODELS), figsize=(TEXTWIDTH_IN, 2.7),
+                             sharex=True, sharey=True)
     for ax, (key, (name, _)) in zip(axes, MODELS.items()):
         df = d.p2[key]
         ax.plot([1, 7], [7, 1], color=MUTED, lw=0.9, ls=(0, (3, 2)), zorder=2)
@@ -536,30 +549,36 @@ def fig_s2_anchor(d: Data, out: Path) -> None:
             ax.plot(x, y, "o", ms=3.4, alpha=0.55, color=colour, mew=0, zorder=4)
             if len(x) > 2 and np.ptp(x) > 1e-9:
                 slopes[cond] = float(np.polyfit(x, y, 1)[0])
-        ax.set_title(name, loc="left", pad=4)
-        txt = "\n".join(f"$\\beta_1$ {CONDITION_LABEL.get(c, c)} = {v:+.2f}"
-                        for c, v in slopes.items())
-        ax.text(0.04, 0.96, txt, transform=ax.transAxes, ha="left", va="top",
-                fontsize=7.4, color=INK2, linespacing=1.5)
+        ax.set_title(name, loc="left", pad=4, fontsize=8.5)
+        # Five narrow panels cannot hold "beta_1 no image = -1.12" on one line,
+        # so the slopes are stacked and coloured to match their series.
+        for row, (cond, colour) in enumerate([("text_only", BLUE), ("vision", ORANGE)]):
+            if cond not in slopes:
+                continue
+            ax.text(0.05, 0.97 - 0.11 * row, f"$\\beta_1$ {slopes[cond]:+.2f}",
+                    transform=ax.transAxes, ha="left", va="top",
+                    fontsize=7.2, color=colour)
         ax.set_xlim(0.7, 7.3)
         ax.set_ylim(0.7, 7.3)
         ax.set_xticks(range(1, 8))
         ax.set_yticks(range(1, 8))
-        ax.set_xlabel("$\\hat r$, original order")
         ax.grid(True)
         ax.set_axisbelow(True)
+    # One x label under the middle panel: five ran together.
+    axes[len(MODELS) // 2].set_xlabel("$\\hat r$, original order")
     axes[0].set_ylabel("$\\hat r$, reversed order")
     axes[0].legend(handles=[Line2D([], [], marker="o", ls="", color=BLUE, label="no image"),
                             Line2D([], [], marker="o", ls="", color=ORANGE, label="with image"),
                             Line2D([], [], ls=(0, (3, 2)), color=MUTED, label="$y=8-x$ (anchors followed)"),
                             Line2D([], [], ls=(0, (1, 2)), color=MUTED, label="$y=x$ (anchors ignored)")],
-                   loc="upper center", bbox_to_anchor=(1.75, -0.28), ncol=4)
+                   loc="upper center", bbox_to_anchor=(2.9, -0.30), ncol=4,
+                   fontsize=7.5)
     finish(fig, "s2-anchor", out)
 
 
 def fig_s2_queries(d: Data, out: Path) -> None:
     """Per-query model rating against the low-ASI human baseline."""
-    base = d.ledger["phase2"]["llama90b"]["human_low_asi_baselines"]
+    base = d.ledger["human_low_asi_baselines"]
     queries = sorted(base, key=lambda q: base[q])
     fig, ax = plt.subplots(figsize=(TEXTWIDTH_IN, 3.4))
     ax.axvline(4.0, color=MUTED, lw=1.0, ls=(0, (3, 2)), zorder=2)
