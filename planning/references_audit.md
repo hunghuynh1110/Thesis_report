@@ -12,6 +12,55 @@ each DOI/proceedings link once and confirm the pages (the "to confirm" column).
 * Published versions are used wherever they exist (e.g. CALM → ICLR 2025,
   InstructGPT → NeurIPS 2022, Yang et al. → EACL 2026).
 
+## Machine verification pass, 2 Nov 2026
+
+All 62 entries were re-checked programmatically against authoritative records,
+not against search summaries: Crossref for every DOI, the arXiv API for
+arXiv-only entries, and OpenAlex for entries carrying neither. Title, year and
+first-author surname were matched for each. **No hallucinated reference was
+found: every entry resolves to a real work.** Four entries were corrected or
+completed.
+
+| Key | Problem | Fix |
+|---|---|---|
+| dettmers2022int8 | **Wrong title.** Entry read `GPT3.int8()`, the arXiv v1 title. The published NeurIPS 2022 title is `LLM.int8()`. | Title corrected; added doi 10.52202/068431-2198 |
+| li2026scoring | Listed as "accepted, proceedings not confirmed" | Now published: LNCS, DASFAA 2026, pp. 19–34, doi 10.1007/978-981-92-0372-7_2 |
+| yang2026persona | No DOI | Added doi 10.18653/v1/2026.eacl-long.52 (confirms EACL 2026, pp. 1152–1170) |
+| raji2019actionable | No pages, no DOI; the Oct audit cited a DSpace handle `1721.1/123456` that does not identify this work | Added pp. 429–435, doi 10.1145/3306618.3314244 (AIES 2019). Disregard the old handle. |
+
+Three apparent mismatches were false alarms and need no change:
+
+* `otterbacher2017competent` and `metaxa2021image` — Crossref stores the ACM
+  main title only and puts the subtitle in a separate field, so the stored
+  title is shorter than the entry. Venue, year and pages all match.
+* `rottger2024xstest` — the author check failed on the LaTeX escaping of
+  `R{\"o}ttger`, not on the record. Title and pages match exactly.
+
+Year differences against OpenAlex for `dosovitskiy2021vit`, `sharma2024sycophancy`,
+`zheng2024robust` and `ye2025justice` are preprint years against publication
+years. The entries cite the published venue and are correct as they stand.
+`efron1993bootstrap` is the 1993 Chapman & Hall original; OpenAlex indexes the
+1994 CRC reissue.
+
+Still unconfirmed and carried forward: the article number for
+`metaxa2021image` (Crossref and OpenAlex both give only vol. 5, issue CSCW1,
+pp. 1–23).
+
+Separately, two claims the chapter drafts depend on were checked against
+primary sources rather than against the bibliography:
+
+* The SIGIR 2018 design and result were read from the paper itself
+  (`VLM_Audit/SIGIR paper.pdf`): 281 participants over UK, USA and India on
+  CrowdFlower, 10 queries, grids of 9 images, objectivity 1 to 7, ASI
+  administered last, benevolent sexism negatively associated with rating the
+  "smart person" and "warm person" grids as not objective.
+* The Llama-3.2 cross-attention adapter **is** tanh-gated, which
+  `chapters/02_background.tex` previously flagged as unverified. In the
+  reference implementation `MllamaCrossAttentionDecoderLayer` holds
+  `cross_attn_attn_gate` and `cross_attn_mlp_gate`, both initialised to zero
+  and applied as `residual + gate.tanh() * hidden_states`; default
+  `cross_attention_layers` are [3, 8, 13, 18, 23, 28, 33, 38].
+
 ## Changes from the proposal's reference list
 
 | Proposal ref | Change | Reason |
