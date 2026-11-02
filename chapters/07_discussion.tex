@@ -12,6 +12,42 @@
 
 % ---------------------------------------------------------------------
 \section{Answering the research questions}\label{sec:disc-rq}
+
+RQ1 asked for the intrinsic baseline attitude of a model evaluated in a
+vacuum, and the chapters above answer that the question presupposes something
+the measurement does not support. An intrinsic attitude, as the proposal
+conceived it, is a single signed number. What the five models produce is
+three quantities that move independently: how often the model assents, how
+sharply it distinguishes the two kinds of inventory item, and how much of its
+probability lands on the response set at all. Llama-90B scores highest on the
+first, lowest on the second among the models that separate at all, and worst
+on the third whenever an image is present. Collapsing those into one index
+produces $+0.153$, and \cref{sec:s1-aggregate} showed that almost all of it
+is the first quantity.
+
+Read as that triple rather than as an index, the answer to RQ1 is consistent
+across all five models. None leans towards the attitudes the inventory
+measures at the level of individual items: polarity separation is negative
+throughout, and where it is large enough to distinguish from chance it is
+the two larger Qwen models that reach significance. What differs between
+models is not the direction of the item-level pattern but how much response
+style sits on top of it, and how much of the behaviour the probe can see.
+
+RQ2 asked whether that intrinsic skew is descriptively consistent with
+downstream behaviour, and the honest answer is that the two do not line up.
+Ranked by intrinsic score the order is Llama-90B, Llama-11B, Qwen-2B, Qwen-7B
+and Qwen-72B; ranked by signed deviation from the human baseline it runs the
+other way, at $\rho=-0.70$ with $p=0.188$ over five points that are not
+independent. The direction is suggestive and the evidence will not carry it.
+
+What does hold between the two phases is not a correlation but a shared
+mechanism. The models whose Phase~1 captured mass collapses under an image
+are the Llama pair, and the models whose Phase~2 robustness collapses under
+an image are the two largest, Llama-90B among them. In both phases the
+presence of an image changes how the model engages with the prompt rather
+than only what it answers, which is a stronger and more specific claim than
+the one RQ2 was framed to test.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item \textbf{RQ1.} The proposal's intrinsic index is dominated by response
