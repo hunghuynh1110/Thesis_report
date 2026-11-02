@@ -188,34 +188,110 @@ reports the checks that were added once this was understood.
 
 % ---------------------------------------------------------------------
 \section{Threats to validity}\label{sec:disc-threats}
+
+Validity is a property of the inferences drawn from a score rather than of the
+instrument that produced it \cite{messick1995validity}, so the threats below
+are organised by the kind of inference each one undermines.
+\cref{tab:threats} lists them with their status, and the paragraphs that
+follow take the four groups in turn.
+
+The construct threats are the ones an examiner is most likely to press, and
+the first is the gap between what the ASI asks and what the probe asks. The
+inventory measures attitudes towards women as a group; Phase~1A asks about a
+person whose gender is never stated, and nine of the twenty two trait phrases
+contain no gender reference at all. On those items the probe measures
+willingness to attribute a trait to an unspecified person, which is a
+narrower construct than the one the instrument was validated for. Phase~1B is
+the remedy rather than a separate study: supplying the gender in a photograph
+restores the comparison the wording removed, which is why the gender gap and
+not $\ASIint$ is the result this thesis rests on. The second construct threat
+is not remedied. Participants judged a grid of nine images as a set, where
+gender skew actually lives, and the models judge each image alone, so the two
+quantities compared in \cref{ch:study2} are not the same quantity.
+
+Naming the harm matters as much as naming the construct
+\cite{blodgett2020language}. The harm at issue is not that a model holds an
+attitude but that a system built on it ranks and filters images people see,
+so a disposition that varies with the gender of a depicted person propagates
+into what users are shown. That is why Phase~2 exists and why the Phase~1B
+gap is reported in yes-rates as well as in scores: a difference of five points
+in how often a model assents to a protective description, depending on the
+gender in the photograph, is interpretable as a disposition that could shape
+a ranking.
+
+The internal threats are largely handled, and the chapters say where. Response
+style is separated from attitude by an exact identity rather than an
+adjustment (\cref{prop:shift}), low coverage is reported with every
+affected number and tested by filtering (\cref{tab:s1-capmfilter}), anchor
+insensitivity is bounded by comparison against an explicit null
+(\cref{prop:null}), and quantisation is excluded from every headline run
+after the sweep showed shifts of the same size as the effects. The one that
+remains open is the sign convention for $\dm$, which is a decision about
+interpretation rather than about measurement, and \cref{sec:s2-deviation}
+states the reading adopted and its basis.
+
+The statistical threats come down to small samples in three places, and the
+design responds to each differently. Twenty two items support an exact
+permutation test rather than an asymptotic one, so the $p$ values carry no
+distributional assumption; ten queries support a cluster bootstrap that
+resamples queries rather than rows; twenty faces a side support a $t$ test
+whose power is reported alongside every gap. None of these makes the samples
+larger. Reporting five models on the Phase~1B gap also multiplies the chance
+of a spurious result, which is why the Bonferroni threshold is applied and
+stated rather than left implicit, and why Llama-11B's $p=0.039$ is described
+as underpowered rather than as a failure to replicate.
+
+The external threats bound what any of this generalises to, and the bound is
+tight. Five models from two families, forty posed photographs from one
+database, ten queries from one 2018 dataset, English only, and raters from
+three countries. The size trend in \cref{sec:s1b-gap} is the claim most
+exposed, because no model exists between 11B and 72B in either family, so the
+trend is fitted across a gap of more than six times that contains no
+observation. Nothing here licenses a statement about vision language models
+in general, and the thesis makes none.
+
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lXX@{}}
 \toprule
 Type & Threat & Mitigation / status \\
 \midrule
-Construct & The ASI is about attitudes towards women; the probe asks about an
-ungendered ``person''. 9 of 22 trait phrases have no gender reference; items
-20--21 implicitly refer to a man. & State explicitly; future work: gendered
-referents (woman / man / person) as a factor. \\
+Construct & The ASI is about attitudes towards women; the Phase~1A probe asks
+about an ungendered ``person''. 9 of 22 trait phrases have no gender
+reference; items 20--21 implicitly refer to a man. & Stated in
+\cref{sec:design-phase1}; Phase~1B supplies the gender visually and is the
+intended remedy. \\
 Construct & Humans rated a 3$\times$3 \emph{grid}; the model rates single
-images. Gender skew is a property of the set, not of one image. & State;
+images. Gender skew is a property of the set, not of one image. & Stated;
 future work: present the grid as one composite image. \\
-Construct & Sign of $\dm$ relative to the SIGIR finding (D2). & Agree with
-supervisor; add high-ASI baseline (A10). \\
-Internal & Acquiescence / nay-saying drive $\ASIint$. & \cref{prop:shift};
-$\PS$ with exact test. \\
-Internal & Vision-condition $\pyes$ rests on low $\capm$ for Llama. & Report
-$\capm$ everywhere; $\capm$-filtered sensitivity (A8). \\
+Construct & Sign of $\dm$ relative to the SIGIR finding (D2). & Reading
+adopted in \cref{sec:framework-extrinsic}; awaiting confirmation; add
+high-ASI baseline (A10). \\
+Construct & Phase~1B measures response to a photograph, not to a person. CFD
+faces are posed, cropped and uniformly lit. & Stated; no claim beyond these
+40 images. \\
+Internal & Acquiescence drives $\ASIint$. & \cref{prop:shift}; $\PS$ with an
+exact test. \\
+Internal & Vision-condition $\pyes$ rests on low $\capm$ for both Llama
+models. & $\capm$ reported everywhere; filtered sensitivity in
+\cref{tab:s1-capmfilter}. \\
 Internal & Order-averaged $\dm$ contaminated by anchor insensitivity. &
-Original-order primary; null comparison (A1--A2). \\
-Internal & Quantisation shifts $\pyes$ by 0.07--0.11. & bf16 for all headline
-runs. \\
-Statistical & 22 items; 10 queries; text-only arm has 10 independent pairs. &
-Exact permutation test; query-level bootstrap. \\
-Statistical & Several metrics and variants reported. & Pre-declare primaries
-(D1, D3); label the rest as sensitivity. \\
-External & Two open-weight models, one dataset, English only, 2018 images,
-raters from three countries. & State; no claims beyond this sample. \\
+Original order primary; null comparison in \cref{tab:s2-deltam}. \\
+Internal & Quantisation shifts $\pyes$ by 0.065 to 0.107. & bf16 for every
+headline run. \\
+Statistical & 22 items; 10 queries; the text-only arm has 10 independent
+pairs. & Exact permutation test; query-level cluster bootstrap. \\
+Statistical & 20 faces per gender detects about one standard deviation
+between faces and no smaller. & Power reported per model; Llama-11B
+identified as the underpowered case. \\
+Statistical & Five models tested on the Phase~1B gap. & Bonferroni threshold
+of $p<0.01$ applied and stated. \\
+Statistical & Five faces per race cell. & Race reported descriptively and
+untested (\cref{sec:s1b-race}). \\
+External & Five open weight models from two families, one face database, one
+image search dataset, English only, 2018 images, raters from three countries.
+& Stated; no claims beyond this sample. \\
+External & No model between 11B and 72B, a span of more than six times. &
+Stated wherever a size trend is claimed; neither family ships one. \\
 \bottomrule
 \end{tabularx}
 \caption{Threats to validity, organised following \cite{messick1995validity}.}
