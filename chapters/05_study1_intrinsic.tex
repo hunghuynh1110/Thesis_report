@@ -148,6 +148,25 @@ zero.
 
 % ---------------------------------------------------------------------
 \section{Aggregate scores}\label{sec:s1-aggregate}
+
+The aggregate index is reported here, but \cref{prop:shift} has already fixed
+how it must be read. \cref{tab:s1-aggregate} gives $\ASIint$ for all five
+models together with the two terms of \cref{eq:decomp}, and the comparison
+between them is the result of this section. Llama-90B scores $+0.153$, the
+highest of the five, while a model answering yes at its mean rate of $0.585$
+to every prompt, and so carrying no information about any item, would score
+$\tfrac{3}{11}\times0.585=0.160$. Its residual $D$ is therefore $-0.007$, so
+almost the whole of its index is its willingness to say yes.
+
+The ordering by $\ASIint$ and the ordering by $D$ disagree. Qwen-72B scores
+$+0.008$, twenty times smaller than Llama-90B, yet its residual is $-0.061$,
+nearly nine times larger in magnitude. Qwen-7B and Llama-11B sit at $-0.075$
+and $-0.060$. By the index the five models differ mostly in how often they
+assent, whereas by the part of the index that depends on which item was asked,
+the model with the lowest headline score carries more item-level signal than
+the model with the highest. No conclusion about attitude survives from
+$\ASIint$ alone.
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
@@ -197,6 +216,31 @@ marked by a dash. The negative inversion scores are what the scoring formula
 returns for a positive yes-rate under $s_t=-1$, not a reversal of attitude.}
 \label{fig:s1-structure}
 \end{figure}
+
+The first expectation of \cref{sec:s1-aims} also fails.
+\cref{tab:s1-structure} and \cref{fig:s1-structure} report the scores by
+prompt structure, and the inversion rows carry the opposite sign in every one
+of the five models, from $-0.117$ on Qwen-72B to $-0.322$ on Llama-11B. The
+four remaining structures agree in sign but not in size, spanning $+0.002$ to
+$+0.245$ on the direct form alone. A score that moves this much with the
+wording of a question it is meant to hold constant is measuring the wording as
+much as the attitude.
+
+The sign flip on inversion has a mechanical explanation that does not require
+the model to have changed its view. Agreement is scored through
+\cref{eq:bias}, where inversion carries $s_t=-1$, so a model answering yes at
+a similar rate to both the direct and the inverted form produces a positive
+score on one and a negative score on the other whatever it holds. Separating
+the two readings needs the answers to the two forms compared directly rather
+than through the index, which \cref{sec:disc-rq} returns to.
+
+One result from the development model did not replicate. The difference
+between the hostile and benevolent subscales on Llama-11B is $0.150$, which
+the progress seminar reported as the signal surviving the measurement fixes.
+Llama-90B gives $0.011$ on the same quantity, Qwen-72B $0.045$, Qwen-7B
+$0.065$ and Qwen-2B $-0.010$. The gap is a property of the 11B rather than of
+the Llama family or of the method, and it is recorded here as a development
+result that the production runs did not confirm.
 % \begin{plan}
 % \begin{itemize}
 %   \item Read $\ASIint$ in the light of \cref{prop:shift}: Llama-90B's $+0.153$
