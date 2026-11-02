@@ -5,29 +5,62 @@
 \addcontentsline{toc}{chapter}{Abstract}
 
 \begin{plan}[Plan --- Abstract (write last, after Chapters 5--8 are final)]
-One page, about 300 words, no citations, no undefined symbols. Five moves:
+\textbf{Brief from Hung (2 Nov 2026):} the abstract must let a reader
+understand the \emph{whole} report in under three minutes. Treat three minutes
+as a ceiling, not a target.
+
+\textbf{Length.} Three minutes of careful reading of technical prose is
+roughly 500 to 650 words at 180 to 220 words per minute. That is about twice
+the 300 words this plan previously called for, and it runs to one and a half
+or two pages rather than one, so the front matter page budget in
+\texttt{planning/OUTLINE.md} allows for two.
+\decision{(D8) confirm whether the EECS submission template caps the abstract.
+If it does, the cap wins: write to the cap and move the detail that will not
+fit into \cref{sec:intro-contrib}, which is the next thing a reader reaches.
+Resolve this with D7, which already covers copying the front matter from the
+current template.}
+
+\textbf{What ``the whole report'' requires.} Every chapter must be represented,
+and the abstract must stand alone: no citations, no undefined symbols, no
+forward references, and every quantitative claim carries its number. A reader
+who stops after the abstract should be able to state what was measured, on
+which models, what was found, and what the finding does not establish. Six
+moves:
 \begin{enumerate}
   \item \textbf{Context} (2 sentences): VLMs used as automated judges in
         retrieval and moderation; they inherit gender stereotypes.
-  \item \textbf{Problem} (2 sentences): safety-aligned models sanitise what
+  \item \textbf{Problem} (2--3 sentences): safety-aligned models sanitise what
         they \emph{say}, so self-report audits cannot separate debiasing from
-        evasion (algorithmic defensiveness).
-  \item \textbf{Method} (3 sentences): single forward pass, read the
-        next-token distribution before sampling; ASI administered through 5
-        prompt structures $\times$ 3 image conditions; SIGIR 2018 image-search
-        ratings with CALM scale reversal; Llama-3.2-90B-Vision and
-        Qwen2-VL-72B (Llama-3.2-11B for development); total measurements.
-  \item \textbf{Findings} (4--5 sentences, use the \emph{final} numbers from
-        Chapters 5--6): RR collapse under visual input (both models);
-        Llama-specific loss of captured mass with any image; the response-bias
-        confound in $\ASIint$ and the invariant alternative; the
-        person/non-person dissociation, stated with whatever
-        $\dm$ definition is finally adopted (see Decision D1 in
-        \cref{sec:s2-deviation}).
+        evasion (algorithmic defensiveness). Name the term here, since it is
+        the thesis's own.
+  \item \textbf{Method} (4--5 sentences): single forward pass, read the
+        next-token distribution before sampling; captured mass reported with
+        every probability; ASI administered through 5 prompt structures
+        $\times$ 3 image conditions; SIGIR 2018 image-search ratings with CALM
+        scale reversal, anchored to published human baselines;
+        Llama-3.2-90B-Vision and Qwen2-VL-72B (Llama-3.2-11B for development);
+        total measurements.
+  \item \textbf{Findings} (6--8 sentences, the \emph{final} numbers from
+        Chapters 5--6): the captured-mass collapse under any image, including a
+        featureless grey patch, and that it is Llama-specific; the
+        response-style confound in $\ASIint$ with the exact decomposition and
+        the invariant alternative $\PS$; the exact permutation result; the
+        robustness collapse under scale reversal in both production models,
+        with $\dRR$ and its interval; the anchor-following slope that explains
+        it; the deviation from the low-ASI baseline under whichever $\dm$
+        definition is adopted (Decision D1).
+  \item \textbf{Limits} (1--2 sentences): two production models, so RQ2 is
+        descriptive; first-token probabilities need not match generated text.
+        Keeping this in the abstract is what makes it honest at three minutes.
   \item \textbf{Contribution} (1--2 sentences): a reproducible, human-anchored
         logit-level audit protocol with built-in validity statistics.
 \end{enumerate}
+
+\textbf{Check before submitting.} Read it aloud and time it. If it runs over
+three minutes, cut from Findings by dropping a secondary number, never by
+dropping the Limits move.
 \end{plan}
 
-\textbf{[Abstract --- write last.]}
+\textbf{[Abstract --- write last. Target 500--650 words, about two pages;
+see the plan above.]}
 \clearpage

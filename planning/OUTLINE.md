@@ -15,7 +15,7 @@ Turn the plan boxes off for the submitted version: `\showplanfalse` in
 
 | # | Chapter | File | Pages | Core content |
 |---|---|---|---|---|
-| — | Front matter (title, letter, declaration, AI statement, acknowledgements, abstract, contents, lists, notation) | `frontmatter/` | ~10 (roman) | Abstract written **last** |
+| — | Front matter (title, letter, declaration, AI statement, acknowledgements, abstract, contents, lists, notation) | `frontmatter/` | ~11 (roman) | Abstract written **last**, 500–650 words / ~2 pp: must be readable in under 3 min and stand alone (see its plan box) |
 | 1 | Introduction | `chapters/01_introduction.tex` | 5 | motivation, problem, RQs, contributions, scope |
 | 2 | Background and related work | `chapters/02_background.tex` | 12 | VLMs, bias, image search, ASI, surveys on LLMs, alignment, probability evaluation, judges, gap |
 | 3 | Measurement framework | `chapters/03_measurement_framework.tex` | 9 | all definitions, 5 propositions, 20 equations |
