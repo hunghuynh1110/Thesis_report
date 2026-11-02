@@ -347,6 +347,48 @@ the six items keyed in reverse than with the sixteen keyed towards sexism.}
 
 % ---------------------------------------------------------------------
 \section{Is the polarity separation distinguishable from chance?}\label{sec:s1-inference}
+
+A separation of $-0.188$ invites the question whether a separation that large
+could arise from keying labels that carry no information at all. The exact
+permutation test of \cref{eq:perm} answers it without any assumption about how
+$\pyes$ is distributed, by enumerating all $\binom{22}{6}=74{,}613$ ways of
+assigning six reverse labels to the twenty two items and counting how many
+produce a statistic at least as extreme as the observed one.
+\cref{tab:s1-perm} gives the result for each model and \cref{fig:s1-perm}
+shows the observed value against the full null distribution.
+
+Two of the five separations are distinguishable from chance and three are not.
+Qwen-72B reaches $p=0.010$ and Qwen-7B $p=0.026$, while Llama-90B gives
+$p=0.196$, Llama-11B $p=0.341$ and Qwen-2B $p=0.862$. This revises a claim the
+earlier drafts of this work carried. Reading the separations alone suggested
+that both production models discriminate in the anti-sexist direction, and on
+this test only the Qwen models do, with Llama-90B's separation sitting well
+inside what random keying produces.
+
+The reason the test is harsh is that its unit is the item. Each of the 22
+items is collapsed to its mean $\pyes$ over the twelve non-inversion cells
+before the labels are permuted, so the design has twenty two independent
+units however many prompts were run, and running 330 measurements per model
+buys precision within an item rather than more items. Treating the 264
+non-inversion rows as exchangeable would have produced far smaller $p$ values
+from the same data, and would have counted the five structures and three
+conditions as independent evidence about keying when they are not.
+
+Non-significance here is not evidence that a separation is absent. With
+twenty two items the test detects only a separation large relative to the
+spread of item means, so the right reading of Llama-90B's $p=0.196$ is that
+its separation of $-0.097$ is not large enough, against the variation among
+its own items, to be told apart from chance. Whether it would separate at a
+larger item count is a question this design cannot settle.
+
+The within-subscale rows of \cref{tab:s1-perm} are reported descriptively and
+are not tested. Splitting the inventory leaves eight positively keyed items
+against three reverse-keyed ones in each half, which is too thin for the same
+enumeration to mean anything, and the pattern across the five models is not
+consistent: the benevolent half separates more strongly than the hostile half
+on Llama-11B ($-0.300$ against $+0.081$) and on Qwen-7B ($-0.246$ against
+$-0.068$), whereas Llama-90B shows the reverse ($-0.081$ against $-0.113$).
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
