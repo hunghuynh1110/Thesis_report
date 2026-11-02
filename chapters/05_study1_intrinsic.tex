@@ -262,6 +262,54 @@ result that the production runs did not confirm.
 
 % ---------------------------------------------------------------------
 \section{Response style and polarity separation}\label{sec:s1-responsebias}
+
+The third expectation of \cref{sec:s1-aims} fails in the opposite direction
+from the one anticipated. \cref{tab:s1-ps} reports mean $\pyes$ separately for
+the sixteen items keyed towards sexism and the six keyed against, over the 264
+rows outside the inversion structure, and every model agrees more readily with
+the reverse-keyed items. Polarity separation is therefore negative throughout,
+running from $-0.006$ on Qwen-2B to $-0.188$ on Qwen-72B. On the item-level
+pattern, none of the five leans towards the attitudes the inventory measures.
+
+That this coexists with a positive $\ASIint$ in all five models is the exact
+situation \cref{prop:shift} describes. The index weights sixteen positively
+keyed items against six reverse-keyed ones, so the keying ratio alone converts
+a general willingness to agree into a positive score, and the item-level
+pattern has to be large enough to overcome that before it can show through.
+Llama-90B assents at $0.585$ and separates the two kinds of item by $-0.097$;
+the first of those numbers dominates the index and the second does not.
+
+Psychometrics has described this failure mode for decades in human samples,
+where acquiescence distorts a scale score in proportion to the share of items
+keyed in reverse \cite{baumgartner2001response}, and where reversed items
+bring their own systematic error from respondents who process them carelessly
+\cite{weijters2013reversed}. The present case is worse than the human one.
+A person's tendency to agree is a modest perturbation around a roughly
+balanced baseline, whereas a model's is a free parameter of its training:
+mean $\pyes$ runs from $0.199$ on Qwen-72B to $0.599$ on Llama-90B across the
+positively keyed rows alone. Tjuatja et al. \cite{tjuatja2024response} find
+that models tuned with human feedback diverge furthest from human response
+behaviour, and Dominguez-Olmedo et al. \cite{dominguez2024questioning} find
+survey answers governed by option position and label rather than by content.
+
+Polarity separation is the statistic that survives this, because
+\cref{prop:invariance} makes it invariant to any uniform shift in assent. By
+it the models rank differently again. Qwen-72B separates the two kinds of item
+$1.94$ times as sharply as Llama-90B, and Qwen-7B at $-0.157$ separates them
+more sharply than either Llama model, while Qwen-2B at $-0.006$ barely
+separates them at all. \cref{fig:s1-items} shows the item-level pattern behind
+the two largest models, with the group means marked so that $\PS$ is the
+horizontal gap between them.
+
+What this ranking does and does not say is worth stating precisely, because
+the quantity is easy to over-read. A large $|\PS|$ means the model
+distinguishes the two kinds of statement, not that it holds a more acceptable
+view of women; a model could separate them sharply and still sit anywhere on
+the scale of assent. Qwen-72B is not thereby shown to be less sexist than
+Llama-90B. It answers the inventory more discriminatingly while Llama-90B
+assents more uniformly, and \cref{sec:disc-rq} keeps those two properties
+apart.
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
