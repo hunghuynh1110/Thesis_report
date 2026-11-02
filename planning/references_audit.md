@@ -178,3 +178,20 @@ search, not errors):
 * `bai2025explicitly` — issue number not shown; the entry gives volume and
   article number only.
 * `li2026scoring` (reserve) — DASFAA 2026 proceedings page not yet indexed.
+
+
+## Merge of the 23 Oct re-verification, 3 Nov 2026
+
+The 23 Oct pass (commit `e3ea10a`) and the 2 Nov machine pass were made on
+diverged branches and merged today. Two of its three changes were re-checked
+against the publisher record and one was reverted.
+
+| Entry | 23 Oct change | Checked 3 Nov | Kept |
+|---|---|---|---|
+| `zhao2021calibrate` | author to "Zhao, Tony Z." | PMLR v139 (`proceedings.mlr.press/v139/zhao21c.html`) prints **Zihao Zhao**; Tony Z. Zhao is a different researcher | **reverted** to Zihao Zhao |
+| `hendricks2018women` | dropped pages and DOI as unconfirmed | Crossref resolves `10.1007/978-3-030-01219-9_47` to this title and gives **793--811**; the old `771--787` was wrong | DOI restored, pages corrected to 793--811 |
+| `raji2019actionable` | added DOI `10.1145/3306618.3314244` | the 2 Nov pass added the same DOI independently | kept, no conflict |
+
+The lesson for the remaining `reserve` entries: a page range that does not
+match the DOI record is a wrong page range, not an unverifiable one. Dropping
+it hides the error instead of fixing it.
