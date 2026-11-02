@@ -424,11 +424,44 @@ separately where the participants judged the grid as a whole
 
 % ---------------------------------------------------------------------
 \section{Summary for RQ2}\label{sec:s2-summary}
-% \begin{plan}
-% Half a page. (i) Visual input destroys scale-reversal robustness in both
-% production models --- the most robust result of the thesis; (ii) the
-% mechanism is that the stated scale anchors stop being used; (iii) relative to
-% the low-ASI baseline the sign and size of $\dm$ depend on the definition, and
-% only the person/non-person contrast is robust to it. Then the descriptive RQ2
-% comparison with Chapter~5 (two models: no rank statistic).
-% \end{plan}
+
+RQ2 asked whether the intrinsic skew of \cref{ch:study1} is descriptively
+consistent with what the models do downstream, and Aim 4 asked whether the
+image drives the behaviour at all. Aim 4 has the clearer answer. Both of the
+largest models reproduce their own rating under scale reversal on $0.900$ of
+pairs with no image and on $0.044$ and $0.156$ with one, giving
+$\dRR=-0.856$ and $-0.744$ with bootstrap intervals that exclude zero. Two
+independently trained architectures fail in the same way on the same
+manipulation.
+
+The size axis qualifies that result rather than extending it. The three
+smaller models show $\dRR$ near zero, but \cref{sec:s2-anchor} shows this is
+because they never read the scale definition in either condition: Qwen-2B
+answers with a slope of $+0.79$ whether the anchors are reversed or not. The
+collapse is therefore specific to models that were robust to begin with, and
+on these five that means the two largest. Nothing here locates where between
+11B and 72B the behaviour changes, because the families ship no model in that
+range.
+
+On RQ2 itself the two measures run in opposite directions. Ranked by
+intrinsic score the order is Llama-90B, Llama-11B, Qwen-2B, Qwen-7B and
+Qwen-72B, while by signed deviation on the original order it is Qwen-72B,
+Qwen-7B, Llama-90B, Qwen-2B and Llama-11B, so the models scoring highest on
+the inventory sit furthest below the human baseline. Across the five the rank
+correlation is $\rho=-0.70$ at $p=0.188$. Closest to the baseline in absolute
+terms is Qwen-7B at $-0.066$, not the model with the lowest intrinsic score.
+
+That correlation is reported for its direction and not as a result. Five
+points cannot support an inferential claim, the three Qwen variants share a
+family and a training recipe so they are not independent, and $p=0.188$ would
+not clear any threshold even if they were. \cref{sec:disc-rq} reads the
+pattern as evidence that the two phases measure different things rather than
+as a relationship between them.
+
+The comparison against human raters is the weakest part of the chapter and
+should be read as such. It rests on one scale orientation, ten queries, a
+single non-person control, and a model that judges each image where the
+participants judged a grid. The one alignment that holds is that three of the
+five models rate the male-skewed ``smart person'' grid furthest from the least
+sexist human raters, which is the query where human sexism mattered most in
+2018.
