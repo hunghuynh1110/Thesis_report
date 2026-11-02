@@ -65,6 +65,54 @@ the one RQ2 was framed to test.
 
 % ---------------------------------------------------------------------
 \section{What logit-level auditing reveals}\label{sec:disc-logit}
+
+The clearest benefit of reading the distribution rather than the text is that
+a refusal becomes a measurement instead of an obstacle. An audit that samples
+tokens and parses the result sees ``I cannot determine that from this image''
+as an unparseable string, and either discards the row or counts it as missing.
+Reading the distribution sees the same event as captured mass falling from
+$0.979$ to $0.237$, which is a number that can be averaged, compared across
+conditions and tested. Arditi et al. \cite{arditi2024refusal} showed that
+refusal is mediated by a single direction in the residual stream, so it is a
+quantity the model carries rather than a failure of the probe, and
+\cref{sec:s1-quality} measures exactly that.
+
+The same reading separates two things a text-level audit must conflate. A
+model that declines and a model that answers neutrally both produce
+uninformative text, but they are far apart in the distribution: the first
+moves its mass off the response set while the second splits it evenly within
+the set. This is the distinction that makes \cref{tab:capm} interpretable,
+and it is why defensiveness could be located in one model family rather than
+inferred from the tone of generated sentences.
+
+Phase~2 shows something a text-level audit would also miss, which is that the
+image changes how the model uses the prompt and not only what it concludes.
+\cref{sec:s2-anchor} found the two largest models applying the stated scale
+anchors with no image present and ceasing to apply them reliably when one is
+added. The prompt is unchanged, the scale definition is unchanged, and what
+degrades is the model's use of an instruction it had been following. That is
+a form of visual dominance over the text channel consistent with the mediation
+result of Weng et al. \cite{weng2024images}, observed here on a generative
+model and through behaviour rather than through component ablation.
+
+The limits of the method deserve the same prominence as its benefits. Wang et
+al. \cite{wang2024myanswer} found first token probabilities disagreeing with
+generated answers on more than 60\% of multiple choice items, worst in models
+heavily tuned on conversational and safety data, which is precisely the class
+of model audited here. Every claim in this thesis is therefore a claim about
+the next token distribution and not about what a deployed system would print.
+Hu and Levy \cite{hu2023prompting} argue that probabilities are the more
+faithful readout of what a model has learnt, and both things can hold at once:
+the distribution is the better measure of disposition, and the text is what a
+user actually receives.
+
+The method also inherits a boundary from the interface rather than from the
+model. Captured mass requires the full vocabulary in the denominator, which
+closed APIs do not expose, so GPT-4o could not be audited here at all
+(\cref{sec:design-models}). An audit designed around open weights is not a
+general audit of deployed systems, and the models most widely used as judges
+are the ones this method currently cannot reach.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Defensiveness becomes a number: Llama's refusal to answer a yes/no
