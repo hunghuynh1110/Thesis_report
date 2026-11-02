@@ -2,34 +2,34 @@
 \chapter{Introduction}\label{ch:intro}
 % =====================================================================
 
-\begin{plan}[Chapter plan --- Introduction]
-\pages{5 pages.}\quad
-\textbf{Job of this chapter:} convince the reader there is a real measurement
-problem (audits read what a model \emph{says}), state the RQs exactly, and list
-contributions that match what Chapters 5--6 actually show. No equations
-except a pointer to \cref{ch:framework}. One figure (\cref{fig:where-measured}).
-\end{plan}
+% \begin{plan}[Chapter plan --- Introduction]
+% \pages{5 pages.}\quad
+% \textbf{Job of this chapter:} convince the reader there is a real measurement
+% problem (audits read what a model \emph{says}), state the RQs exactly, and list
+% contributions that match what Chapters 5--6 actually show. No equations
+% except a pointer to \cref{ch:framework}. One figure (\cref{fig:where-measured}).
+% \end{plan}
 
 % ---------------------------------------------------------------------
 \section{Background and motivation}\label{sec:intro-motivation}
-\begin{plan}
-\begin{itemize}
-  \item VLMs are now used as automated judges for retrieval and moderation
-        (``MLLM-as-a-judge'') \citeplan{chen2024mllmjudge,zheng2023judging}.
-  \item Image search shapes beliefs about the world: occupational
-        under-representation and its effect on users
-        \cite{kay2015unequal,metaxa2021image}; warm/competent trait stereotypes
-        in results \cite{otterbacher2017competent}.
-  \item VLMs inherit these stereotypes, and image features contribute more
-        than text \cite{jiang2024modscan,weng2024images,hall2023visogender};
-        intrinsic encoder bias propagates to zero-shot retrieval
-        \cite{ghate2025biases}.
-  \item Close with the human anchor: people who score higher on the ASI are
-        less likely to see gender bias in image results
-        \cite{otterbacher2018sigir} --- so ``does the judge see bias like a
-        sexist or a non-sexist human?'' is a measurable question.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item VLMs are now used as automated judges for retrieval and moderation
+%         (``MLLM-as-a-judge'') \citeplan{chen2024mllmjudge,zheng2023judging}.
+%   \item Image search shapes beliefs about the world: occupational
+%         under-representation and its effect on users
+%         \cite{kay2015unequal,metaxa2021image}; warm/competent trait stereotypes
+%         in results \cite{otterbacher2017competent}.
+%   \item VLMs inherit these stereotypes, and image features contribute more
+%         than text \cite{jiang2024modscan,weng2024images,hall2023visogender};
+%         intrinsic encoder bias propagates to zero-shot retrieval
+%         \cite{ghate2025biases}.
+%   \item Close with the human anchor: people who score higher on the ASI are
+%         less likely to see gender bias in image results
+%         \cite{otterbacher2018sigir} --- so ``does the judge see bias like a
+%         sexist or a non-sexist human?'' is a measurable question.
+% \end{itemize}
+% \end{plan}
 
 Vision language models (VLMs) have moved from being the objects of evaluation
 to being its instruments. Collecting human relevance and quality judgements is
@@ -76,25 +76,25 @@ the inventory sees it, or as one who scores low does?
 
 % ---------------------------------------------------------------------
 \section{Problem statement: auditing a defensive judge}\label{sec:intro-problem}
-\begin{plan}
-\begin{itemize}
-  \item Alignment training changes what models say
-        \cite{ouyang2022training,bai2022constitutional}.
-  \item Evidence that it hides rather than removes bias: overt stereotypes
-        become positive while covert ones stay negative
-        \cite{hofmann2024covert}; explicitly unbiased models still form
-        biased associations \cite{bai2025explicitly}; measured gender bias
-        changes when the prompt signals an evaluation \cite{gao2025measuring};
-        persona framing changes social reasoning \cite{yang2026persona}.
-  \item Define \textbf{algorithmic defensiveness} (the thesis's term) in one
-        sentence: a sanitised response triggered by evaluative framing or, as
-        found here, by the mere presence of an image.
-  \item Using a model as the auditor adds its own position and scoring biases
-        \cite{zheng2023judging,wang2024fair,ye2025justice}.
-  \item The gap: no audit measures a multimodal model's distribution
-        \emph{before} sampling \emph{and} anchors it to a validated human scale.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Alignment training changes what models say
+%         \cite{ouyang2022training,bai2022constitutional}.
+%   \item Evidence that it hides rather than removes bias: overt stereotypes
+%         become positive while covert ones stay negative
+%         \cite{hofmann2024covert}; explicitly unbiased models still form
+%         biased associations \cite{bai2025explicitly}; measured gender bias
+%         changes when the prompt signals an evaluation \cite{gao2025measuring};
+%         persona framing changes social reasoning \cite{yang2026persona}.
+%   \item Define \textbf{algorithmic defensiveness} (the thesis's term) in one
+%         sentence: a sanitised response triggered by evaluative framing or, as
+%         found here, by the mere presence of an image.
+%   \item Using a model as the auditor adds its own position and scoring biases
+%         \cite{zheng2023judging,wang2024fair,ye2025justice}.
+%   \item The gap: no audit measures a multimodal model's distribution
+%         \emph{before} sampling \emph{and} anchors it to a validated human scale.
+% \end{itemize}
+% \end{plan}
 
 A deployed model cannot usefully be asked what it thinks about women, because
 instruction tuning and reinforcement learning from human feedback train it to
@@ -170,20 +170,20 @@ audit of generated text sees only as a refusal string.%
 
 % ---------------------------------------------------------------------
 \section{Research questions and aims}\label{sec:intro-rq}
-\begin{plan}
-State the RQs verbatim (they match the proposal and the thesis plan):
-\begin{description}
-  \item[RQ1] What is the intrinsic psychological baseline attitude of the model
-        when evaluated in a vacuum?
-  \item[RQ2] Is that intrinsic distributional skew descriptively consistent
-        with the model's extrinsic, downstream behaviour when evaluating
-        real-world search queries?
-\end{description}
-Then the four proposal aims, each with one line saying how far it was met
-(Aim 1 met for 2 production models; Aim 2 met on the historical stream only;
-Aim 3 descriptive only, $n=2$; Aim 4 met via $\dRR$). Note that RQ2 is
-stated descriptively because two models cannot support a correlation.
-\end{plan}
+% \begin{plan}
+% State the RQs verbatim (they match the proposal and the thesis plan):
+% \begin{description}
+%   \item[RQ1] What is the intrinsic psychological baseline attitude of the model
+%         when evaluated in a vacuum?
+%   \item[RQ2] Is that intrinsic distributional skew descriptively consistent
+%         with the model's extrinsic, downstream behaviour when evaluating
+%         real-world search queries?
+% \end{description}
+% Then the four proposal aims, each with one line saying how far it was met
+% (Aim 1 met for 2 production models; Aim 2 met on the historical stream only;
+% Aim 3 descriptive only, $n=2$; Aim 4 met via $\dRR$). Note that RQ2 is
+% stated descriptively because two models cannot support a correlation.
+% \end{plan}
 
 This report addresses two research questions, stated here as they were posed
 in the project proposal.
@@ -247,27 +247,27 @@ extent.
 
 % ---------------------------------------------------------------------
 \section{Contributions}\label{sec:intro-contrib}
-\begin{plan}
-Five numbered contributions. Word them to match the \emph{final} results
-(several thesis-plan claims change after the new analyses --- see
-\cref{sec:s1-inference,sec:s2-deviation}):
-\begin{enumerate}
-  \item A logit-level audit protocol for VLMs that never reads generated
-        text (\cref{ch:framework}).
-  \item Captured mass $\capm$ as a validity statistic reported with every
-        measurement; with an output-diversity check it exposed silent
-        measurement faults that produced plausible aggregates
-        (\cref{tab:faults}).
-  \item Visual input collapses scale-reversal robustness in both production
-        models ($\dRR = -0.856$ and $-0.744$) (\cref{sec:s2-calm}).
-  \item The Llama models lose most of their yes/no mass whenever an image is
-        present, Qwen does not --- defensiveness is model-specific
-        (\cref{sec:s1-quality}).
-  \item $\ASIint$ is confounded by response style and the inventory's 16:6
-        keying imbalance; a shift-invariant alternative with an exact test
-        is given (\cref{sec:framework-responsebias}).
-\end{enumerate}
-\end{plan}
+% \begin{plan}
+% Five numbered contributions. Word them to match the \emph{final} results
+% (several thesis-plan claims change after the new analyses --- see
+% \cref{sec:s1-inference,sec:s2-deviation}):
+% \begin{enumerate}
+%   \item A logit-level audit protocol for VLMs that never reads generated
+%         text (\cref{ch:framework}).
+%   \item Captured mass $\capm$ as a validity statistic reported with every
+%         measurement; with an output-diversity check it exposed silent
+%         measurement faults that produced plausible aggregates
+%         (\cref{tab:faults}).
+%   \item Visual input collapses scale-reversal robustness in both production
+%         models ($\dRR = -0.856$ and $-0.744$) (\cref{sec:s2-calm}).
+%   \item The Llama models lose most of their yes/no mass whenever an image is
+%         present, Qwen does not --- defensiveness is model-specific
+%         (\cref{sec:s1-quality}).
+%   \item $\ASIint$ is confounded by response style and the inventory's 16:6
+%         keying imbalance; a shift-invariant alternative with an exact test
+%         is given (\cref{sec:framework-responsebias}).
+% \end{enumerate}
+% \end{plan}
 
 This work makes five contributions.
 
@@ -329,12 +329,12 @@ This work makes five contributions.
 
 % ---------------------------------------------------------------------
 \section{Scope and thesis outline}\label{sec:intro-outline}
-\begin{plan}
-Half a page. One paragraph on scope changes from the proposal (GPT-4o not
-audited; contemporary 2026 stream not collected; attention heatmaps not
-produced; humanoid silhouette replaced by a grey patch) with a pointer to
-\cref{tab:scope}. Then one sentence per chapter.
-\end{plan}
+% \begin{plan}
+% Half a page. One paragraph on scope changes from the proposal (GPT-4o not
+% audited; contemporary 2026 stream not collected; attention heatmaps not
+% produced; humanoid silhouette replaced by a grey patch) with a pointer to
+% \cref{tab:scope}. Then one sentence per chapter.
+% \end{plan}
 
 Four departures from the proposed scope should be stated at the outset. GPT-4o
 was not audited, which leaves two production models rather than three; its API

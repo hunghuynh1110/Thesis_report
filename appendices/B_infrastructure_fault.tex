@@ -2,13 +2,13 @@
 \chapter{The Zeroed Cross-GPU Copy Fault}\label{app:fault}
 % =====================================================================
 
-\begin{plan}[Appendix plan --- infrastructure fault report]
-\pages{3 pages.} Condense \texttt{progress/findings\_summary.md} \S11 and
-\texttt{ai\_docs/rcc\_p2p\_bug\_report.md}: symptom, why it looked like a 90B
-problem (size and GPU count confounded), minimal reproduction, scope (torch
-2.7.1, 2.8.0, 2.11.0; A100 and H100 PCIe), mechanism (\cref{prop:uniform}),
-fix (host-staged copies), validation (table below), and what it invalidated.
-\end{plan}
+% \begin{plan}[Appendix plan --- infrastructure fault report]
+% \pages{3 pages.} Condense \texttt{progress/findings\_summary.md} \S11 and
+% \texttt{ai\_docs/rcc\_p2p\_bug\_report.md}: symptom, why it looked like a 90B
+% problem (size and GPU count confounded), minimal reproduction, scope (torch
+% 2.7.1, 2.8.0, 2.11.0; A100 and H100 PCIe), mechanism (\cref{prop:uniform}),
+% fix (host-staged copies), validation (table below), and what it invalidated.
+% \end{plan}
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}
@@ -20,14 +20,16 @@ B: sharded, no workaround & 0 / 0 / 0 & $5.46\times10^{-5}$ (uniform) \\
 C: sharded + host-staged copies & 2.13938 / 2.10143 / 1.66373 & 0.981027 \\
 \bottomrule
 \end{tabularx}
-\caption{Three-arm validation of the workaround. Arm C is bit-identical to the
-single-GPU reference. \source{progress/findings\_summary.md \S11.}}
+\caption{Three-arm validation of the workaround, all three arms on one node in
+job 27113674. Arm C is bit-identical to the single-GPU reference, so the
+host-staged copies restore the reference result rather than merely producing
+something that is not degenerate.}
 \label{tab:app-fault}
 \end{table}
 
-\begin{plan}
-Include the six-line PyTorch reproduction (copy of \texttt{arange(8)} to
-\texttt{cuda:1} reads back as zeros) as a listing, and the before/after table
-for the 90B (captured mass 0.0000 $\to$ 0.5823; distinct values 4 $\to$ 330;
-rows at exactly 0.5: 247 $\to$ 0; NaN: 59 $\to$ 0).
-\end{plan}
+% \begin{plan}
+% Include the six-line PyTorch reproduction (copy of \texttt{arange(8)} to
+% \texttt{cuda:1} reads back as zeros) as a listing, and the before/after table
+% for the 90B (captured mass 0.0000 $\to$ 0.5823; distinct values 4 $\to$ 330;
+% rows at exactly 0.5: 247 $\to$ 0; NaN: 59 $\to$ 0).
+% \end{plan}

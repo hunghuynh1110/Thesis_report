@@ -10,8 +10,10 @@
 \documentclass[12pt,a4paper,oneside]{report}
 \input{preamble}
 
-% Working copy: plan boxes visible. preamble.tex sets \showplantrue.
-% For a clean PDF with no plan boxes, compile supervisor.tex instead.
+% The plan boxes live in the chapter files as comments, so this builds clean.
+%   python3 scripts/plan_boxes.py show   -> put them back in the build
+%   python3 scripts/plan_boxes.py hide   -> take them out again
+% supervisor.tex stays as a clean build for when they are showing.
 
 \begin{document}
 \input{body}

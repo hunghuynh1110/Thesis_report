@@ -53,10 +53,17 @@ latexmk -pdf main.tex
 Fill sections in this order: Ch 3 → 4 → 5 → 6 → 2 → 7 → 1 → 8 → abstract. For
 each section, write under the plan box, keep the equations and tables, swap
 each `\plannedfigure{...}` for the real `\includegraphics`, then delete the plan
-box. Do not edit the switch by hand: compile `supervisor.tex` instead, which
-sets `\showplanfalse` and shares `body.tex` with `main.tex`.
+box. They are **commented out** in the chapter files, so they are readable in
+the editor beside the prose they describe and never reach the PDF:
 
-    latexmk -pdf supervisor.tex     # clean PDF, no plan boxes
+    python3 scripts/plan_boxes.py status   # how many, and where
+    python3 scripts/plan_boxes.py show     # put them back in the build
+    python3 scripts/plan_boxes.py hide     # take them out again
+
+`hide` refuses to write unless its own inverse restores the file exactly, so
+the round trip is safe. While they are showing, `supervisor.tex` still gives a
+clean PDF; `\showplanfalse` is the default in `preamble.tex` and governs the
+scaffolding that is not a plan box.
 
 A known data gap is written `\gap{not reported}`, which shows as a red to-do
 in the working build and as an italic statement in the clean build, so a

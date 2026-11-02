@@ -78,10 +78,17 @@
 % =====================================================================
 %  Planning helpers -- delete this block (and every plan box) at the end
 % =====================================================================
-% \showplantrue  -> plan boxes and figure placeholders are visible
-% \showplanfalse -> they disappear (use this for the submitted PDF)
+% The plan boxes themselves are commented out in the chapter files; see
+% scripts/plan_boxes.py, which hides and restores them reversibly.
+%
+% This switch governs what is left: \datagap, which marks a known gap in the
+% data, and the few captions carrying a note to self. False renders all of them
+% in their clean form, which is what any circulated PDF needs.
+%   \showplanfalse -> clean (the default, and what main.tex builds)
+%   \showplantrue  -> scaffolding visible; pair it with
+%                     "python3 scripts/plan_boxes.py show" to see the notes too
 \newif\ifshowplan
-\showplantrue
+\showplanfalse
 
 \usepackage[most]{tcolorbox}
 \usepackage{environ}

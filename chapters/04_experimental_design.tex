@@ -611,24 +611,24 @@ descriptive: five points cannot support an inferential claim, and the five are
 not independent, since three of them share a family and a training recipe
 (\cref{sec:s2-deviation}).
 
-\begin{plan}[Outstanding for this chapter]
-\textbf{Job identifiers.} The text and \cref{tab:models} rest on jobs 27103565
-(quantisation sweep), 27113674 (three arm cross device validation), 27113679
-and 27113680 (the corrected 90B Phase 1 and Phase 2 runs) and 27114730 (90B
-4-bit single GPU check). Two identifiers are still missing: the two Qwen2-VL
-production runs, and the independent 90B replication in
-\texttt{outputs\_bunya/phase1\_rerun\_h100/}. Recover all three from the Bunya
-accounting log and add them to \cref{app:runs} before submission.
-
-\textbf{Checked (Nov 2026):} \texttt{scripts/bunya\_rerun\_90b.sh} requests
-3$\times$A100 and reasons that a different GPU model is what makes the
-replication informative, but the output directory records H100, so the run was
-submitted with the documented hardware override because the A100 queue was
-days long. The replication therefore varies the node and the device map while
-holding the GPU model fixed, which is weaker than planned and should be
-described that way in \cref{sec:s1-replication}. The host staged workaround
-was \emph{active} in both runs, since both GPU types carry the fault; the row
-label ``workaround inactive'' in \cref{tab:s1-replication} has been corrected.
-\textbf{Decision D7} covers whether \cref{tab:scope} should also
-appear in the front matter as a statement of deviations from the proposal.
-\end{plan}
+% \begin{plan}[Outstanding for this chapter]
+% \textbf{Job identifiers.} The text and \cref{tab:models} rest on jobs 27103565
+% (quantisation sweep), 27113674 (three arm cross device validation), 27113679
+% and 27113680 (the corrected 90B Phase 1 and Phase 2 runs) and 27114730 (90B
+% 4-bit single GPU check). Two identifiers are still missing: the two Qwen2-VL
+% production runs, and the independent 90B replication in
+% \texttt{outputs\_bunya/phase1\_rerun\_h100/}. Recover all three from the Bunya
+% accounting log and add them to \cref{app:runs} before submission.
+%
+% \textbf{Checked (Nov 2026):} \texttt{scripts/bunya\_rerun\_90b.sh} requests
+% 3$\times$A100 and reasons that a different GPU model is what makes the
+% replication informative, but the output directory records H100, so the run was
+% submitted with the documented hardware override because the A100 queue was
+% days long. The replication therefore varies the node and the device map while
+% holding the GPU model fixed, which is weaker than planned and should be
+% described that way in \cref{sec:s1-replication}. The host staged workaround
+% was \emph{active} in both runs, since both GPU types carry the fault; the row
+% label ``workaround inactive'' in \cref{tab:s1-replication} has been corrected.
+% \textbf{Decision D7} covers whether \cref{tab:scope} should also
+% appear in the front matter as a statement of deviations from the proposal.
+% \end{plan}

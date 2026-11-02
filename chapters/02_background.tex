@@ -2,37 +2,37 @@
 \chapter{Background and Related Work}\label{ch:background}
 % =====================================================================
 
-\begin{plan}[Chapter plan --- Background and related work]
-\pages{12 pages} (the largest chapter, and where most of the bibliography is
-used). \textbf{Job:} give the reader exactly the theory needed for
-Chapters 3--6 and end with a gap that the thesis fills. Nine sections, each
-ending with one sentence on ``what this means for the audit''. Three
-equations (attention, cross-attention, next-token softmax), one architecture
-figure, two tables (SIGIR queries, gap comparison).
-\end{plan}
+% \begin{plan}[Chapter plan --- Background and related work]
+% \pages{12 pages} (the largest chapter, and where most of the bibliography is
+% used). \textbf{Job:} give the reader exactly the theory needed for
+% Chapters 3--6 and end with a gap that the thesis fills. Nine sections, each
+% ending with one sentence on ``what this means for the audit''. Three
+% equations (attention, cross-attention, next-token softmax), one architecture
+% figure, two tables (SIGIR queries, gap comparison).
+% \end{plan}
 
 % ---------------------------------------------------------------------
 \section{Vision language models}\label{sec:bg-vlm}
-\begin{plan}
-\begin{itemize}
-  \item Transformer attention \cite{vaswani2017attention} --- give
-        \cref{eq:attention}; vision transformers \cite{dosovitskiy2021vit};
-        contrastive image--text alignment \cite{radford2021clip}.
-  \item Two ways of fusing vision into a language model, both audited here:
-        (a) \emph{cross-attention adapters} (Flamingo-style
-        \cite{alayrac2022flamingo}; Llama~3.2-Vision inserts cross-attention
-        layers after every fourth self-attention layer of the language model,
-        fed by a ViT-H/14 encoder \cite{grattafiori2024llama3}) --- give
-        \cref{eq:crossattn}; (b) \emph{visual tokens in the input sequence}
-        with dynamic resolution (Qwen2-VL \cite{wang2024qwen2vl}).
-  \item Why it matters for the audit: in (a) the image enters through
-        dedicated layers, so a grey patch can change behaviour without
-        changing the prompt; in (b) image size changes the sequence length,
-        which is why the visual token budget is pinned (\cref{sec:design-impl}).
-  \item End with the output layer: \cref{eq:nexttoken}, the quantity this
-        thesis reads.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Transformer attention \cite{vaswani2017attention} --- give
+%         \cref{eq:attention}; vision transformers \cite{dosovitskiy2021vit};
+%         contrastive image--text alignment \cite{radford2021clip}.
+%   \item Two ways of fusing vision into a language model, both audited here:
+%         (a) \emph{cross-attention adapters} (Flamingo-style
+%         \cite{alayrac2022flamingo}; Llama~3.2-Vision inserts cross-attention
+%         layers after every fourth self-attention layer of the language model,
+%         fed by a ViT-H/14 encoder \cite{grattafiori2024llama3}) --- give
+%         \cref{eq:crossattn}; (b) \emph{visual tokens in the input sequence}
+%         with dynamic resolution (Qwen2-VL \cite{wang2024qwen2vl}).
+%   \item Why it matters for the audit: in (a) the image enters through
+%         dedicated layers, so a grey patch can change behaviour without
+%         changing the prompt; in (b) image size changes the sequence length,
+%         which is why the visual token budget is pinned (\cref{sec:design-impl}).
+%   \item End with the output layer: \cref{eq:nexttoken}, the quantity this
+%         thesis reads.
+% \end{itemize}
+% \end{plan}
 
 Both models audited in this thesis are decoder transformers with a vision
 encoder attached, and attention is the operation that both halves are built
@@ -100,20 +100,20 @@ there. Everything a user would see, a sampled token and then a sentence, is
 downstream of this distribution, which is the argument of \cref{ch:framework}
 for measuring here instead.
 
-\begin{plan}[Notes on the equations above]
-\cref{eq:crossattn} is the gated cross-attention form of
-\cite{alayrac2022flamingo}; $\bm e(v)$ are image-encoder features and
-$\alpha_\ell$ a learned gate. \textbf{Checked (Nov 2026):} the Llama-3.2
-adapter \emph{is} tanh-gated. \texttt{MllamaCrossAttentionDecoderLayer} in the
-reference implementation holds \texttt{cross\_attn\_attn\_gate} and
-\texttt{cross\_attn\_mlp\_gate}, both \texttt{nn.Parameter(torch.zeros(1))},
-applied as \texttt{residual + gate.tanh() * hidden\_states}; default
-\texttt{cross\_attention\_layers} are $[3,8,13,18,23,28,33,38]$ and the vision
-config is patch 14 / width 1280 / 32 layers / image 448. So \cref{eq:crossattn}
-may be presented as the actual form, not only ``the general form''.
-\cref{eq:nexttoken} reappears in \cref{prop:uniform} (why a zero hidden state
-gives a uniform distribution).
-\end{plan}
+% \begin{plan}[Notes on the equations above]
+% \cref{eq:crossattn} is the gated cross-attention form of
+% \cite{alayrac2022flamingo}; $\bm e(v)$ are image-encoder features and
+% $\alpha_\ell$ a learned gate. \textbf{Checked (Nov 2026):} the Llama-3.2
+% adapter \emph{is} tanh-gated. \texttt{MllamaCrossAttentionDecoderLayer} in the
+% reference implementation holds \texttt{cross\_attn\_attn\_gate} and
+% \texttt{cross\_attn\_mlp\_gate}, both \texttt{nn.Parameter(torch.zeros(1))},
+% applied as \texttt{residual + gate.tanh() * hidden\_states}; default
+% \texttt{cross\_attention\_layers} are $[3,8,13,18,23,28,33,38]$ and the vision
+% config is patch 14 / width 1280 / 32 layers / image 448. So \cref{eq:crossattn}
+% may be presented as the actual form, not only ``the general form''.
+% \cref{eq:nexttoken} reappears in \cref{prop:uniform} (why a zero hidden state
+% gives a uniform distribution).
+% \end{plan}
 
 \begin{figure}[htbp]\centering
 \resizebox{\linewidth}{!}{%
@@ -172,22 +172,22 @@ takes its reading.}
 
 % ---------------------------------------------------------------------
 \section{Social bias in learned representations}\label{sec:bg-bias}
-\begin{plan}
-\begin{itemize}
-  \item Human-like associations in embeddings, measured with an IAT
-        analogue \cite{caliskan2017semantics,greenwald1998iat}.
-  \item Vision: intersectional error disparities \cite{buolamwini2018gender};
-        VLM benchmarks for gender in image--text tasks
-        \cite{hall2023visogender}; stereotype bias from both modalities
-        \cite{jiang2024modscan}; image features as the main mediator
-        \cite{weng2024images}; propagation to retrieval \cite{ghate2025biases}.
-  \item What ``bias'' means and how it is measured: \cite{blodgett2020language}
-        (be explicit about the harm and the construct);
-        \cite{gallegos2024bias} classifies metrics as embedding-,
-        probability- or generation-based --- place this thesis in the
-        \emph{probability} level.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Human-like associations in embeddings, measured with an IAT
+%         analogue \cite{caliskan2017semantics,greenwald1998iat}.
+%   \item Vision: intersectional error disparities \cite{buolamwini2018gender};
+%         VLM benchmarks for gender in image--text tasks
+%         \cite{hall2023visogender}; stereotype bias from both modalities
+%         \cite{jiang2024modscan}; image features as the main mediator
+%         \cite{weng2024images}; propagation to retrieval \cite{ghate2025biases}.
+%   \item What ``bias'' means and how it is measured: \cite{blodgett2020language}
+%         (be explicit about the harm and the construct);
+%         \cite{gallegos2024bias} classifies metrics as embedding-,
+%         probability- or generation-based --- place this thesis in the
+%         \emph{probability} level.
+% \end{itemize}
+% \end{plan}
 
 The finding that learned representations carry human social associations
 predates the models audited here. Caliskan et al.\
@@ -247,29 +247,29 @@ generated text. This thesis works at the probability level throughout, and
 
 % ---------------------------------------------------------------------
 \section{Gender bias in image search and its human perception}\label{sec:bg-search}
-\begin{plan}
-\begin{itemize}
-  \item Under-representation and stereotype exaggeration for occupations,
-        and its effect on users' beliefs \cite{kay2015unequal}; little change
-        five years later \cite{metaxa2021image}.
-  \item Character traits rather than occupations: women shown for warm
-        traits, men for agentic ones \cite{otterbacher2017competent}, grounded
-        in the warmth/competence model \cite{fiske2002scm}.
-  \item \textbf{The human baseline used in this thesis}
-        \cite{otterbacher2018sigir}: crowdsourced, three countries (UK, USA,
-        India), 281 participants, 10 queries, 3$\times$3 Google image grids,
-        objectivity rated 1 (extremely subjective) to 7 (extremely objective),
-        ASI administered at the end. Key result: higher benevolent sexism
-        predicts \emph{not} rating the ``smart person'' and ``warm person''
-        grids as non-objective --- sexist participants are less likely to see
-        bias. This sign matters for interpreting $\dm$
-        (\cref{sec:framework-extrinsic}).
-  \item \cref{tab:sigir-queries}: the 10 queries; fill trait valence and
-        bias direction from Table 1 of \cite{otterbacher2018sigir} for the
-        five queries it lists, and mark the other five as reported in the
-        released dataset.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Under-representation and stereotype exaggeration for occupations,
+%         and its effect on users' beliefs \cite{kay2015unequal}; little change
+%         five years later \cite{metaxa2021image}.
+%   \item Character traits rather than occupations: women shown for warm
+%         traits, men for agentic ones \cite{otterbacher2017competent}, grounded
+%         in the warmth/competence model \cite{fiske2002scm}.
+%   \item \textbf{The human baseline used in this thesis}
+%         \cite{otterbacher2018sigir}: crowdsourced, three countries (UK, USA,
+%         India), 281 participants, 10 queries, 3$\times$3 Google image grids,
+%         objectivity rated 1 (extremely subjective) to 7 (extremely objective),
+%         ASI administered at the end. Key result: higher benevolent sexism
+%         predicts \emph{not} rating the ``smart person'' and ``warm person''
+%         grids as non-objective --- sexist participants are less likely to see
+%         bias. This sign matters for interpreting $\dm$
+%         (\cref{sec:framework-extrinsic}).
+%   \item \cref{tab:sigir-queries}: the 10 queries; fill trait valence and
+%         bias direction from Table 1 of \cite{otterbacher2018sigir} for the
+%         five queries it lists, and mark the other five as reported in the
+%         released dataset.
+% \end{itemize}
+% \end{plan}
 
 Image search is where the representational problem of
 \cref{sec:bg-bias} becomes a problem about people. Kay et al.\
@@ -361,24 +361,24 @@ a query with no person in it should.
 
 % ---------------------------------------------------------------------
 \section{Ambivalent sexism and its measurement}\label{sec:bg-asi}
-\begin{plan}
-\begin{itemize}
-  \item Hostile vs benevolent sexism, the 22-item ASI, 11 items each
-        \cite{glick1996asi}; cross-cultural validity and the HS--BS
-        correlation \cite{glick2000beyond}. (Reserve:
-        \cite{glick2001alliance} on BS as a justification of inequality;
-        \cite{dardenne2007insidious} on BS harming performance --- use if you
-        want to argue BS is not ``harmless''.)
-  \item Keying: 16 items are scored so that agreement means more sexism and
-        6 are reverse-keyed (items 6, 7, 9, 15, 20, 22). Introduce this here;
-        \cref{prop:shift} shows why it matters for a model.
-  \item Response styles: acquiescence and its effect on scale scores depend on
-        the share of reversed items \cite{baumgartner2001response}; reversed
-        items carry their own bias \cite{weijters2013reversed}.
-  \item Validity as an argument, not a property \cite{messick1995validity}
-        --- sets up the threats-to-validity structure of \cref{sec:disc-threats}.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Hostile vs benevolent sexism, the 22-item ASI, 11 items each
+%         \cite{glick1996asi}; cross-cultural validity and the HS--BS
+%         correlation \cite{glick2000beyond}. (Reserve:
+%         \cite{glick2001alliance} on BS as a justification of inequality;
+%         \cite{dardenne2007insidious} on BS harming performance --- use if you
+%         want to argue BS is not ``harmless''.)
+%   \item Keying: 16 items are scored so that agreement means more sexism and
+%         6 are reverse-keyed (items 6, 7, 9, 15, 20, 22). Introduce this here;
+%         \cref{prop:shift} shows why it matters for a model.
+%   \item Response styles: acquiescence and its effect on scale scores depend on
+%         the share of reversed items \cite{baumgartner2001response}; reversed
+%         items carry their own bias \cite{weijters2013reversed}.
+%   \item Validity as an argument, not a property \cite{messick1995validity}
+%         --- sets up the threats-to-validity structure of \cref{sec:disc-threats}.
+% \end{itemize}
+% \end{plan}
 
 Glick and Fiske \cite{glick1996asi} argued that sexism is not a single
 antipathy towards women but a pair of correlated attitudes that look opposite
@@ -423,21 +423,21 @@ evidence that most directly bears on the irrelevant explanation.
 
 % ---------------------------------------------------------------------
 \section{Administering questionnaires to language models}\label{sec:bg-surveys}
-\begin{plan}
-\begin{itemize}
-  \item Models show ordering/labelling biases on survey items, and once these
-        are controlled their answers tend toward uniform
-        \cite{dominguez2024questioning}.
-  \item RLHF-tuned models do not reproduce human response biases and react to
-        perturbations humans ignore \cite{tjuatja2024response}.
-  \item (Reserve) opinion alignment from answer-option probabilities
-        \cite{santurkar2023opinions}; agreement with the user
-        (sycophancy) as an RLHF effect \cite{sharma2024sycophancy} --- the
-        closest model analogue of acquiescence.
-  \item What this means here: a model's yes-rate is a free parameter, so an
-        inventory score must be read together with its response style.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Models show ordering/labelling biases on survey items, and once these
+%         are controlled their answers tend toward uniform
+%         \cite{dominguez2024questioning}.
+%   \item RLHF-tuned models do not reproduce human response biases and react to
+%         perturbations humans ignore \cite{tjuatja2024response}.
+%   \item (Reserve) opinion alignment from answer-option probabilities
+%         \cite{santurkar2023opinions}; agreement with the user
+%         (sycophancy) as an RLHF effect \cite{sharma2024sycophancy} --- the
+%         closest model analogue of acquiescence.
+%   \item What this means here: a model's yes-rate is a free parameter, so an
+%         inventory score must be read together with its response style.
+% \end{itemize}
+% \end{plan}
 
 Giving a questionnaire to a language model and reading the answers as opinions
 has become a common method, and the two most careful examinations of it are
@@ -479,22 +479,22 @@ reports the general tendency to agree alongside every score that depends on it.
 
 % ---------------------------------------------------------------------
 \section{Alignment, refusal and covert bias}\label{sec:bg-alignment}
-\begin{plan}
-\begin{itemize}
-  \item RLHF and constitutional training \cite{ouyang2022training,bai2022constitutional}
-        (reserve for multimodal RLHF: \cite{sun2024aligning}).
-  \item Over-refusal of safe prompts that resemble unsafe ones
-        \cite{rottger2024xstest} --- the closest text analogue of Llama
-        declining a yes/no question about ``this person'' in a grey square.
-  \item Refusal is represented internally (a single direction in activations)
-        \cite{arditi2024refusal} --- supports measuring it before decoding.
-  \item Overt vs covert bias \cite{hofmann2024covert,bai2025explicitly};
-        framing effects \cite{gao2025measuring,yang2026persona}. Note that
-        \cite{gao2025measuring} also report that token-probability measures
-        and discrete-choice measures give different bias estimates --- an
-        argument for reporting the measurement level explicitly.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item RLHF and constitutional training \cite{ouyang2022training,bai2022constitutional}
+%         (reserve for multimodal RLHF: \cite{sun2024aligning}).
+%   \item Over-refusal of safe prompts that resemble unsafe ones
+%         \cite{rottger2024xstest} --- the closest text analogue of Llama
+%         declining a yes/no question about ``this person'' in a grey square.
+%   \item Refusal is represented internally (a single direction in activations)
+%         \cite{arditi2024refusal} --- supports measuring it before decoding.
+%   \item Overt vs covert bias \cite{hofmann2024covert,bai2025explicitly};
+%         framing effects \cite{gao2025measuring,yang2026persona}. Note that
+%         \cite{gao2025measuring} also report that token-probability measures
+%         and discrete-choice measures give different bias estimates --- an
+%         argument for reporting the measurement level explicitly.
+% \end{itemize}
+% \end{plan}
 
 The models audited here have been trained to be careful. Instruction tuning
 followed by reinforcement learning from human preferences changed what models
@@ -551,23 +551,23 @@ measures a model that knows it is being audited, which is the problem
 
 % ---------------------------------------------------------------------
 \section{Evaluation from probabilities}\label{sec:bg-probability}
-\begin{plan}
-\begin{itemize}
-  \item Probability mass is split across surface forms of the same answer
-        \cite{holtzman2021surface} --- the theoretical reason for pooling
-        \{yes, Yes, YES\} (\cref{eq:pooled}).
-  \item Models carry answer priors that content-free inputs reveal
-        \cite{zhao2021calibrate} --- the noise and grey-patch stimuli are
-        content-free inputs in exactly this sense.
-  \item Direct probability measurements outperform prompting the model for a
-        judgement \cite{hu2023prompting}; but first-token probabilities and
-        text answers can disagree, especially for safety-tuned models
-        \cite{wang2024myanswer} --- state this as a limitation, not a
-        refutation.
-  \item Option-ID token priors cause selection bias \cite{zheng2024robust}
-        --- the digit prior seen in \cref{sec:s2-deviation}.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Probability mass is split across surface forms of the same answer
+%         \cite{holtzman2021surface} --- the theoretical reason for pooling
+%         \{yes, Yes, YES\} (\cref{eq:pooled}).
+%   \item Models carry answer priors that content-free inputs reveal
+%         \cite{zhao2021calibrate} --- the noise and grey-patch stimuli are
+%         content-free inputs in exactly this sense.
+%   \item Direct probability measurements outperform prompting the model for a
+%         judgement \cite{hu2023prompting}; but first-token probabilities and
+%         text answers can disagree, especially for safety-tuned models
+%         \cite{wang2024myanswer} --- state this as a limitation, not a
+%         refutation.
+%   \item Option-ID token priors cause selection bias \cite{zheng2024robust}
+%         --- the digit prior seen in \cref{sec:s2-deviation}.
+% \end{itemize}
+% \end{plan}
 
 Reading an answer off a probability distribution is harder than it looks, and
 the first complication is that one answer has many spellings. Holtzman et al.\
@@ -620,19 +620,19 @@ orientations.
 
 % ---------------------------------------------------------------------
 \section{LLM and MLLM judges, and positional perturbation}\label{sec:bg-judges}
-\begin{plan}
-\begin{itemize}
-  \item Position, verbosity and self-enhancement biases
-        \cite{zheng2023judging}; order of candidates changes rankings
-        \cite{wang2024fair}; multimodal judges diverge from humans on scoring
-        \cite{chen2024mllmjudge}.
-  \item CALM: a perturb-and-compare framework with robustness and consistency
-        rates \cite{ye2025justice} --- the source of $\RR$ (\cref{eq:rr}).
-  \item (Reserve) rubric-order and score-ID biases in scoring judges
-        \cite{li2026scoring}; judgement biases of humans vs LLMs
-        \cite{chen2024humans}.
-\end{itemize}
-\end{plan}
+% \begin{plan}
+% \begin{itemize}
+%   \item Position, verbosity and self-enhancement biases
+%         \cite{zheng2023judging}; order of candidates changes rankings
+%         \cite{wang2024fair}; multimodal judges diverge from humans on scoring
+%         \cite{chen2024mllmjudge}.
+%   \item CALM: a perturb-and-compare framework with robustness and consistency
+%         rates \cite{ye2025justice} --- the source of $\RR$ (\cref{eq:rr}).
+%   \item (Reserve) rubric-order and score-ID biases in scoring judges
+%         \cite{li2026scoring}; judgement biases of humans vs LLMs
+%         \cite{chen2024humans}.
+% \end{itemize}
+% \end{plan}
 
 Using a model to score the output of other models became standard practice
 faster than its failure modes were catalogued. Zheng et al.\
@@ -664,15 +664,15 @@ model judgement biases against human ones directly \cite{chen2024humans}.
 
 % ---------------------------------------------------------------------
 \section{Research gap}\label{sec:bg-gap}
-\begin{plan}
-One page. Summarise as \cref{tab:gap}, then one paragraph: prior work measures
-either generated text or embeddings; probability-level work is text-only;
-human-anchored work is either text-only or human-only; none reports how much
-of the distribution the measurement captured. \textbf{Verify every cell
-against the paper while writing}; cells marked ``?'' are not yet checked.
-\textbf{Done (Nov 2026):} every cell checked against the paper's abstract and
-reported method; no ``?'' remains.
-\end{plan}
+% \begin{plan}
+% One page. Summarise as \cref{tab:gap}, then one paragraph: prior work measures
+% either generated text or embeddings; probability-level work is text-only;
+% human-anchored work is either text-only or human-only; none reports how much
+% of the distribution the measurement captured. \textbf{Verify every cell
+% against the paper while writing}; cells marked ``?'' are not yet checked.
+% \textbf{Done (Nov 2026):} every cell checked against the paper's abstract and
+% reported method; no ``?'' remains.
+% \end{plan}
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lc>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}Xcc@{}}
