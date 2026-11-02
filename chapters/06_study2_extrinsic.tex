@@ -13,6 +13,31 @@
 
 % ---------------------------------------------------------------------
 \section{Aims and expectations}\label{sec:s2-aims}
+
+Study 2 moves the audit from an inventory to a task. The five models rate how
+objective a real image search result looks, on the ten queries and the same
+nine images per query that the participants of Otterbacher et al.
+\cite{otterbacher2018sigir} saw, which makes a human judgement available for
+comparison on every stimulus. RQ2 asks whether the intrinsic skew of
+\cref{ch:study1} is descriptively consistent with what the models do here, and
+Aim 4 asks whether what they do depends on the image at all.
+
+Three expectations were fixed in advance. If the language model alone drives
+the judgement, adding an image should leave robustness under scale reversal
+unchanged, so $\dRR\approx0$. If a model perceives bias as the least sexist
+human raters did, its deviation from their baseline should be near zero. And
+any deviation that is specific to pictures of people should be absent on the
+non-person control query, which depicts a hot air balloon.
+
+The order below follows the strength of the evidence rather than the order of
+the expectations. Measurement quality comes first (\cref{sec:s2-quality}),
+then the robustness result and the bootstrap interval around it
+(\cref{sec:s2-calm}), then the mechanism behind it (\cref{sec:s2-anchor}).
+The comparison against the human baseline follows (\cref{sec:s2-deviation}),
+then the person against control contrast (\cref{sec:s2-person}), and finally
+what all of it says about the 2018 result this study is anchored to
+(\cref{sec:s2-sigir}).
+
 % \begin{plan}
 % RQ2 and Aim 4. Expectations: (E4) if the language model alone drives the
 % judgement, adding the image should not change robustness ($\dRR\approx0$);
@@ -23,6 +48,23 @@
 
 % ---------------------------------------------------------------------
 \section{Measurement quality}\label{sec:s2-quality}
+
+The rating probe is answered almost completely by every model, which is worth
+establishing before anything is read from it, because \cref{ch:study1} showed
+that a probe can be well formed and still capture almost nothing. Mean
+$\capm_{\Dset}$ over the seven digits is $0.9944$ on Llama-11B, $0.9971$ on
+Qwen-2B, $0.9978$ on Llama-90B, $0.9993$ on Qwen-7B and $0.9996$ on Qwen-72B.
+Nothing in this chapter is a coverage artefact, and the contrast with
+\cref{tab:capm} is sharp: the same Llama-90B that holds under half its mass
+on yes and no when shown a grey patch holds all but two parts in a thousand
+on the digits when asked for a rating.
+
+The difference between the two probes is the response set rather than the
+image, since both phases show the model a picture. A rating from 1 to 7
+invites one of seven tokens and offers no obvious way to decline, whereas a
+yes or no question can be answered by neither. Whatever produces the Phase~1
+collapse, it does not prevent these models from emitting a digit.
+
 % \begin{plan}
 % One paragraph and one line of numbers: digit mass $\capm_{\Dset}$ mean / minimum
 % --- Llama-11B 0.994 / 0.955, Llama-90B 0.998 / 0.979, Qwen-72B 0.9995 / 0.999.
