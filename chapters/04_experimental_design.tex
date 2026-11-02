@@ -35,19 +35,17 @@ between 11B and 72B, a span of more than six times.
 \cref{sec:disc-threats} states what that costs.
 
 \begin{table}[htbp]\centering\small
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.19\linewidth}@{}}
+\begin{tabular}{@{}llll@{}}
 \toprule
 Model & Parameters & Fusion & Precision / GPUs \\
 \midrule
-Qwen2-VL-2B-Instruct  & 2B  & visual tokens & bf16, 1$\times$L40S \\
-Qwen2-VL-7B-Instruct  & 7B  & visual tokens & bf16, 1$\times$L40S \\
+Qwen2-VL-2B-Instruct          & 2B  & visual tokens   & bf16, 1$\times$L40S \\
+Qwen2-VL-7B-Instruct          & 7B  & visual tokens   & bf16, 1$\times$L40S \\
 Llama-3.2-11B-Vision-Instruct & 11B & cross-attention & bf16, 1$\times$L40 \\
-Qwen2-VL-72B-Instruct & 72B & visual tokens & bf16, 2$\times$H100 \\
+Qwen2-VL-72B-Instruct         & 72B & visual tokens   & bf16, 2$\times$H100 \\
 Llama-3.2-90B-Vision-Instruct & 90B & cross-attention & bf16, 3$\times$H100 PCIe \\
-\midrule
-GPT-4o & \emph{not audited} & -- & -- \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \caption{The five models, ordered by parameter count. Every model ran all
 three phases at bf16 on byte-identical prompts and stimuli. Weights: 90B
 166\,GB in 37 shards, 72B 136\,GB in 38 shards. The reported 90B results come
@@ -235,14 +233,14 @@ Race is a secondary stratification at five faces a cell, which is too thin to
 support a claim and is reported as exploratory in \cref{sec:s1b-race}.
 
 \begin{table}[htbp]\centering\small
-\begin{tabularx}{\linewidth}{@{}lXccccr@{}}
+\begin{tabular}{@{}lccccc@{}}
 \toprule
-& & Asian & Black & Latino & White & total \\
+& Asian & Black & Latino & White & total \\
 \midrule
-Female & \multicolumn{1}{l}{} & 5 & 5 & 5 & 5 & 20 \\
-Male   & \multicolumn{1}{l}{} & 5 & 5 & 5 & 5 & 20 \\
+Female & 5 & 5 & 5 & 5 & 20 \\
+Male   & 5 & 5 & 5 & 5 & 20 \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \caption{The Phase~1B face sample. Each face is shown all 22 items in all five
 structures, so one face contributes 110 measurements and the phase contributes
 4,400 per model.}
@@ -302,16 +300,25 @@ and the distribution over the seven digits is read at the next position, as
 \cref{sec:design-impl} describes.
 
 \begin{table}[htbp]\centering\small
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.28\linewidth}XX@{}}
+\begin{tabular}{@{}ll@{}}
 \toprule
-& Original order & Reversed order \\
+Scale order & Anchors, stated in full in the prompt \\
 \midrule
-Image (``this image result'') & 1 = extremely subjective, 7 = extremely objective & 1 = extremely objective, 7 = extremely subjective \\
-No image (``a typical result'') & same anchors & same anchors \\
+original & 1 = extremely subjective \\
+         & 7 = extremely objective \\[2pt]
+reversed & 1 = extremely objective \\
+         & 7 = extremely subjective \\
+\midrule
+Image condition & Referent, the only other wording that changes \\
+\midrule
+image shown & ``this image result'' \\
+no image    & ``a typical result'' \\
 \bottomrule
-\end{tabularx}
-\caption{The four CALM runs per query--image pair. Only the anchor positions
-change between orders; the wording is otherwise identical.}
+\end{tabular}
+\caption{The two factors crossed in Phase~2. The anchors depend on the scale
+order alone and the referent on the image condition alone, so the two vary
+independently and every query and image pair is rated four times. Nothing else
+in the prompt changes.}
 \label{tab:calm}
 \end{table}
 
@@ -323,7 +330,7 @@ reversing a scale whose endpoints were never stated is undefined. Both orders
 therefore name their endpoints and the original order keeps the polarity of
 the human instrument, where 7 means objective, so model ratings and the
 baselines of \cref{tab:sigir-queries} remain on one axis.
-\cref{tab:calm} sets out the four runs per query and image pair.
+\cref{tab:calm} sets out the two factors and the four runs they generate.
 
 Two features of the design depart from the human task. Participants rated the
 $3\times3$ grid as a whole, whereas the model rates each of the nine images
