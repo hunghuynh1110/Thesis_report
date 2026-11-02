@@ -41,11 +41,11 @@ against it, which is to say $\PS>0$ in \cref{eq:ps}.
 One of those expectations fails early, and that failure sets the order of what
 follows. Measurement quality is reported first (\cref{sec:s1-quality}),
 because captured mass decides how much of a model's behaviour any later score
-describes. The aggregate scores come next (\cref{sec:s1-aggregate}), then the
-decomposition separating attitude from response style
-(\cref{sec:s1-responsebias}), the exact test that does not depend on response
-style (\cref{sec:s1-inference}), and the checks that the execution path shaped
-none of it (\cref{sec:s1-replication}). Phase~1B closes the chapter with the
+describes. The aggregate scores come next (\cref{sec:s1-aggregate}), followed by the
+decomposition that separates attitude from response style
+(\cref{sec:s1-responsebias}). \cref{sec:s1-inference} then gives the exact
+test that does not depend on response style, and \cref{sec:s1-replication}
+the checks that the execution path shaped none of it. Phase~1B closes the chapter with the
 comparison Phase~1A cannot make, between photographs of women and photographs
 of men (\cref{sec:s1b-gap,sec:s1b-race}).
 
@@ -93,6 +93,58 @@ Gaussian noise; means are printed above each box.}
 %         describes about a third to a half of its behaviour.
 % \end{itemize}
 % \end{plan}
+
+Captured mass is reported before any bias score, because it bounds what a bias
+score can mean. \cref{eq:binary} is a ratio between two pooled masses, and it is
+unchanged whether those masses hold most of the distribution or almost none of
+it. A $\pyes$ taken where $\capm$ is low therefore describes only a small
+corner of what the model would do. \cref{tab:capm} gives $\capm$ by image
+condition for all five models and \cref{fig:capm-dist} shows the
+distributions behind those means.
+
+The second expectation of \cref{sec:s1-aims} fails, and it fails on one family
+only. Both Llama models lose most of their yes and no mass as soon as any
+image is supplied: Llama-11B falls from $0.979$ with no image to $0.237$ on
+the grey patch and $0.204$ on noise, and Llama-90B from $0.951$ to $0.467$ and
+$0.329$. All three Qwen models are flat across the same contrast, moving by at
+most $0.027$ in either direction. The grey patch carries no shape, no person
+and no content of any kind, so what triggers the collapse is the presence of
+the visual modality rather than anything depicted in it.
+
+Size does not explain the split. The two Llama models sit at 11B and 90B and
+both collapse, while the three Qwen models span 2B to 72B and none does, so
+the behaviour tracks the family and not the parameter count. Qwen-2B holds
+$0.883$ of its mass under an image while Llama-90B, forty five times larger,
+holds $0.398$. This is the clearest result in Phase~1A and it does not depend
+on the scoring formula at all, since it is a property of where the probability
+sits rather than of how the two sides are combined.
+
+Phase~1B sharpens the same contrast. A photograph of a real face is a stronger
+stimulus than a grey rectangle, and Llama-11B falls further under it, to
+$0.140$ averaged over all 4,400 measurements, while Qwen-7B holds $0.998$.
+Llama-90B recovers somewhat, to $0.479$, which is above its noise figure of
+$0.329$ but still barely half of what it holds with no image at all. Whatever
+the Llama models are doing when an image appears, a recognisable human face
+does not undo it.
+
+Where the mass goes was recorded in only one run, so the word for it needs
+care. In the diagnostic sweep on the 11B (job 27103565) the largest competitor
+to yes and no on the first inventory item was the token \texttt{I}, which took
+$0.4149$ and begins a reply of the form ``I cannot determine\ldots''. The
+production runs stored the target tokens alone, so the same inspection cannot
+be repeated on the 90B, and calling its behaviour refusal is an inference from
+the 11B rather than an observation. The pattern it resembles is the
+exaggerated safety R\"ottger et al. \cite{rottger2024xstest} document in text,
+where models decline prompts that merely look like unsafe ones.
+
+Everything later in this chapter inherits a consequence from these numbers.
+For the two Llama models under an image, $\pyes$ is conditioned on between a
+seventh and a half of the model's behaviour, so their vision-condition scores
+are weaker evidence than the same figure computed on Qwen. The fraction of
+rows falling below a captured mass of $0.1$ makes the same point at the level
+of individual measurements: on Llama-11B it is 13\% under the grey patch and
+29\% under noise, on Llama-90B 10\% and 18\%, and on every Qwen model it is
+zero.
 
 % ---------------------------------------------------------------------
 \section{Aggregate scores}\label{sec:s1-aggregate}
