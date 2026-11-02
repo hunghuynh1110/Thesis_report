@@ -19,6 +19,7 @@ those rather than the other way round.
 """
 from __future__ import annotations
 
+import itertools
 import json
 import sys
 from pathlib import Path
@@ -75,6 +76,65 @@ def face_gap(df: pd.DataFrame) -> dict:
     }
 
 
+def polarity_and_perm(df: pd.DataFrame) -> dict:
+    """
+    Polarity separation and its exact permutation test.
+
+    PS is taken on the four structures where "yes" means agreement; inversion
+    flips that meaning, so including it mixes two opposite quantities. The null
+    enumerates all C(22,6) = 74,613 ways of labelling six items reverse-keyed,
+    which makes the p-value exact rather than sampled.
+    """
+    noninv = df[df.structure != "inversion"]
+    pos = noninv[noninv.polarity == 1].p_yes
+    rev = noninv[noninv.polarity == -1].p_yes
+    ps = pos.mean() - rev.mean()
+
+    allrows = df[df.polarity == 1].p_yes.mean() - df[df.polarity == -1].p_yes.mean()
+
+    # Item means over the 12 non-inversion cells; the item is the unit.
+    item_mean = noninv.groupby("item_id").p_yes.mean().sort_index()
+    vals = item_mean.to_numpy()
+    rev_ids = sorted(df[df.polarity == -1].item_id.unique())
+    obs_idx = tuple(sorted(item_mean.index.get_loc(i) for i in rev_ids))
+    total = vals.sum()
+    n_rev = len(obs_idx)
+    n_pos = len(vals) - n_rev
+
+    def stat(idx):
+        srev = vals[list(idx)].sum()
+        return (total - srev) / n_pos - srev / n_rev
+
+    t_obs = stat(obs_idx)
+    hits = count = 0
+    for comb in itertools.combinations(range(len(vals)), n_rev):
+        count += 1
+        if abs(stat(comb)) >= abs(t_obs) - 1e-12:
+            hits += 1
+    # Within each subscale: 8 positively keyed against 3 reverse keyed, which is
+    # too thin to test and is reported descriptively.
+    within = {}
+    for sub in ("HS", "BS"):
+        w = noninv[noninv.subscale == sub]
+        wp, wr = w[w.polarity == 1].p_yes, w[w.polarity == -1].p_yes
+        within[sub] = {
+            "separation": r(wp.mean() - wr.mean()),
+            "n_positive_items": int(w[w.polarity == 1].item_id.nunique()),
+            "n_reverse_items": int(w[w.polarity == -1].item_id.nunique()),
+        }
+
+    return {
+        "within_subscale_separation": within,
+        "p_yes_positive_noninv": r(pos.mean()),
+        "p_yes_reverse_noninv": r(rev.mean()),
+        "n_positive_noninv": int(len(pos)), "n_reverse_noninv": int(len(rev)),
+        "polarity_separation": r(ps),
+        "polarity_separation_all_rows": r(allrows),
+        "perm_T_obs": r(t_obs), "perm_p_exact": r(hits / count, 5),
+        "perm_n_labellings": count,
+    }
+
+
 def phase1a(stem: str) -> dict:
     df = pd.read_parquet(OUT / f"{stem}.parquet")
     return {
@@ -96,6 +156,13 @@ def phase1a(stem: str) -> dict:
                              df.groupby("subscale").bias_score.mean().items()},
         "per_item_bias": {str(k): r(v) for k, v in
                           df.groupby("item_id").bias_score.mean().items()},
+        "by_structure_p_yes": {k: r(v) for k, v in
+                               df.groupby("structure").p_yes.mean().items()},
+        "frac_capm_below_0.1_by_condition": {
+            k: r(v) for k, v in
+            df.assign(low=df.captured_mass < 0.1)
+              .groupby("condition").low.mean().items()},
+        **polarity_and_perm(df),
     }
 
 
