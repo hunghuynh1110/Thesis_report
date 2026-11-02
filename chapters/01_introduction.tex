@@ -31,6 +31,49 @@ except a pointer to \cref{ch:framework}. One figure (\cref{fig:where-measured}).
 \end{itemize}
 \end{plan}
 
+Vision language models (VLMs) have moved from being the objects of evaluation
+to being its instruments. Collecting human relevance and quality judgements is
+slow and expensive, so multimodal models are now asked to score, rank and
+filter image content for retrieval and moderation systems, a practice that has
+come to be called MLLM as a judge \cite{chen2024mllmjudge,zheng2023judging}.
+The appeal is clear, since a model produces judgements at a scale and cost no
+annotator pool can match. The consequence is less clear. When a model is
+promoted from candidate to referee, whatever dispositions it carries stop being
+a curiosity of its output distribution and become part of the infrastructure
+that decides which images people see.
+
+For gender, that infrastructure has a documented effect. Image search results
+underrepresent women in occupations where women are in fact well represented,
+and exposure to those results shifts users' beliefs about who does which job
+\cite{kay2015unequal}. The distortion has persisted across platforms and across
+years of later auditing \cite{metaxa2021image}. It is not confined to counts.
+Retrieved images of women are also associated with warmth rather than
+competence, so the ranked list reproduces the trait structure of human
+stereotyping \cite{otterbacher2017competent}.
+
+VLMs inherit this structure from the distributions they are trained on, and
+they inherit it most strongly through the visual pathway. Multimodal models
+show stereotyped associations that are attributable more to image features than
+to the accompanying text \cite{jiang2024modscan,weng2024images}, and they
+resolve gendered references in occupational images along lines consistent with
+stereotypes \cite{hall2023visogender}. Bias measured inside a vision encoder
+also propagates to the ranking behaviour of retrieval systems built on that
+encoder without further training \cite{ghate2025biases}. A judge assembled from
+such a model is therefore not a neutral replacement for the annotators it
+displaces.
+
+What makes this more than a restatement of the bias literature is that the
+human side of the comparison has already been measured on the same task.
+Otterbacher et al.\ \cite{otterbacher2018sigir} asked crowd workers to rate the
+objectivity of image search result grids and also administered the Ambivalent
+Sexism Inventory (ASI) \cite{glick1996asi}. Raters who scored higher on the
+inventory were less likely to perceive gender bias in the same results. In that
+study, sexism predicted what people could see in a search engine rather than
+what they said about women. This supplies the anchor that an audit of an
+automated judge otherwise lacks, and it makes the question comparative: when a
+VLM judges image search results, does it see bias as a human who scores high on
+the inventory sees it, or as one who scores low does?
+
 % ---------------------------------------------------------------------
 \section{Problem statement: auditing a defensive judge}\label{sec:intro-problem}
 \begin{plan}
@@ -53,6 +96,53 @@ except a pointer to \cref{ch:framework}. One figure (\cref{fig:where-measured}).
 \end{itemize}
 \end{plan}
 
+Asking a deployed model what it thinks about women does not work, and it fails
+by design. Instruction tuning and reinforcement learning from human feedback
+train models to decline or deflect requests that look like solicitations of
+prejudice \cite{ouyang2022training}, and explicit constitutional objectives
+make that refusal behaviour a stated training target
+\cite{bai2022constitutional}. These procedures change what a model says.
+Whether they change what it represents is a separate question, and several
+studies now show that the two come apart.
+
+Hofmann et al.\ \cite{hofmann2024covert} found that in models trained with
+human feedback, overtly elicited stereotypes became markedly more favourable
+while covertly elicited ones stayed negative, so alignment improved the self
+report rather than the underlying association. Models that describe themselves
+as unbiased still form associations consistent with stereotypes when probed
+indirectly \cite{bai2025explicitly}. Gao and Kreiss \cite{gao2025measuring}
+showed that measured gender bias in large language models is brittle with
+respect to framing: the same underlying disposition yields different bias
+scores depending on whether the prompt reads as a test. Work on persona framing
+reports the same sensitivity in social reasoning tasks \cite{yang2026persona}.
+Taken together, these results mean that an audit which reads generated text
+cannot separate a model that has been debiased from one that has learnt to
+recognise an audit.
+
+This thesis calls that failure mode algorithmic defensiveness: a sanitised
+response triggered by cues that the model is being evaluated rather than by the
+content of the question. In one of the two production models audited here the
+trigger is weaker still, since the mere presence of an image is enough,
+including a featureless grey patch that carries no social content
+(\cref{sec:s1-quality}).
+
+The obvious remedy, having a second model conduct the audit, substitutes one
+problem for another. Judges built on large language models carry their own
+position and verbosity biases together with a preference for their own outputs
+\cite{zheng2023judging}, their scores are sensitive to the order and
+presentation of the options they are given \cite{wang2024fair}, and these
+effects are systematic and quantifiable rather than incidental
+\cite{ye2025justice}. An audit built on a judge inherits the judge's artefacts.
+
+The gap this thesis addresses is therefore specific: no existing audit measures
+a multimodal model's disposition before the sampling step that the safety
+overlay acts upon and anchors that measurement to a validated human scale with
+published baselines on the same task. Reading the distribution over the next
+token from a single forward pass, rather than the text decoded from it,
+addresses the first requirement. Administering the ASI and comparing against
+the SIGIR human baselines addresses the second. \cref{fig:where-measured} shows
+where in the pipeline each kind of audit takes its reading.
+
 \begin{figure}[htbp]\centering
 \begin{tikzpicture}[node distance=7mm and 9mm,
   box/.style={draw,rounded corners,align=center,font=\small,minimum height=9mm,inner sep=4pt},
@@ -72,8 +162,9 @@ except a pointer to \cref{ch:framework}. One figure (\cref{fig:where-measured}).
 \draw[-{Stealth},red!60!black] (usual) -- (txt);
 \end{tikzpicture}
 \caption{Where the measurement is taken. Reading the distribution before
-decoding observes the model's disposition, including probability mass that a
-self-report audit only sees as a refusal string. (Draft TikZ --- restyle as needed.)}
+decoding observes the model's disposition, including probability mass that an
+audit of generated text sees only as a refusal string.%
+\ifshowplan\ (Draft TikZ, restyle as needed.)\fi}
 \label{fig:where-measured}
 \end{figure}
 
@@ -93,6 +184,66 @@ Then the four proposal aims, each with one line saying how far it was met
 Aim 3 descriptive only, $n=2$; Aim 4 met via $\dRR$). Note that RQ2 is
 stated descriptively because two models cannot support a correlation.
 \end{plan}
+
+In this report we address two research questions, stated here as they were
+posed in the project proposal.
+
+\begin{description}
+  \item[RQ1] What is the intrinsic psychological baseline attitude of the model
+        when evaluated in a vacuum?
+  \item[RQ2] Is that intrinsic distributional skew descriptively consistent
+        with the model's extrinsic, downstream behaviour when evaluating
+        real-world search queries?
+\end{description}
+
+RQ2 asks about descriptive consistency by design. The proposal asked whether
+the intrinsic attitude predicts downstream behaviour, but with two production
+models successfully audited no inferential claim of prediction is defensible,
+and \cref{ch:discussion} reports the comparison as a description rather than as
+a test.
+
+The proposal set four aims. Each was pursued, and each was met to a different
+extent.
+
+\begin{enumerate}
+  \item The first aim was to measure the intrinsic psychological baseline by
+        administering the ASI through implicit prompt structures adapted from
+        Gao and Kreiss \cite{gao2025measuring} and extracting raw logit
+        distributions, so that textual safety alignment is bypassed. This was
+        met for two production models, Llama-3.2-Vision-90B and Qwen2-VL-72B,
+        with a smaller Llama-11B model used for development and reported
+        throughout as a third point of comparison (\cref{ch:study1}). GPT-4o,
+        the proposal's third production model, was not audited, because its API
+        returns only the top $N$ log probabilities, so $\capm$ is not
+        observable and $\pyes$ cannot be evaluated over pooled surface forms as
+        defined.
+
+  \item The second aim was to evaluate downstream visual judgement on queries
+        from the SIGIR 2018 image search dataset, mapping the models'
+        judgements against the published human baselines for high and low
+        scorers on the inventory. This was met on the historical stream only.
+        The planned 2026 recrawl was not collected, so the temporal comparison
+        is absent, and $\dm$ is reported against the low scoring baseline
+        alone, since the high scoring baseline needs data at item level that
+        the published tables do not contain (\cref{ch:study2}).
+
+  \item The third aim was to characterise the consistency between each model's
+        $\ASIint$ score and its extrinsic deviation from the human baseline.
+        This is descriptive only. The proposal already treated it as a case
+        study at $n=3$ and reported Spearman's $\rho$ as a descriptive
+        statistic; at $n=2$ even that is not meaningful, and
+        \cref{sec:s2-deviation} presents the comparison for each model
+        separately.
+
+  \item The fourth aim was to confirm that the measured signal comes from the
+        visual pathway rather than from linguistic artefacts, using the CALM
+        positional perturbation framework \cite{ye2025justice}. This was met
+        through $\dRR$ rather than through the consistency rate of the
+        proposal, which is not identifiable with only two option orders
+        (\cref{sec:framework-calm}). The check returned a stronger result than
+        expected: with an image present, robustness collapses outright
+        (\cref{sec:s2-calm}).
+\end{enumerate}
 
 % ---------------------------------------------------------------------
 \section{Contributions}\label{sec:intro-contrib}
@@ -118,6 +269,64 @@ Five numbered contributions. Word them to match the \emph{final} results
 \end{enumerate}
 \end{plan}
 
+This work makes five contributions.
+
+\begin{enumerate}
+  \item A protocol for auditing VLMs at the level of logits, which never reads
+        generated text. Model disposition is recovered from the distribution
+        over the next token in a single forward pass, with pooled surface forms
+        for the response options and an explicit account of the chat template
+        and assistant prefill that fix the read position
+        (\cref{ch:framework}).
+
+  \item Captured mass $\capm$, used as a validity statistic and reported with
+        every measurement. The proportion of probability mass over the next
+        token that falls on the intended response set is a precondition for
+        interpreting any aggregate computed from it. Paired with a check on
+        output diversity, $\capm$ exposed several silent measurement faults
+        during this project, none of which raised an error and all of which
+        produced plausible aggregates (\cref{tab:faults}).
+
+  \item Evidence that visual input collapses robustness under scale reversal in
+        both production models. When the rating scale is presented in reversed
+        order, judgements made without an image are reproduced at a robustness
+        rate of $0.900$, while judgements made with an image are reproduced at
+        $0.044$ for Llama-90B and $0.156$ for Qwen-72B, giving
+        $\dRR = -0.856$ and $-0.744$ (\cref{sec:s2-calm}). Two independently
+        trained architectures fail in the same way, which makes this a property
+        of current visual grounding in VLMs rather than one model's quirk.
+
+  \item Evidence that algorithmic defensiveness is specific to a model rather
+        than a general property of VLMs aligned for safety. The Llama models
+        lose most of their yes and no probability mass whenever an image is
+        present. For the 90B, $\capm$ falls from $0.951$ without an image to
+        $0.467$ with a grey patch and $0.329$ with visual noise, while
+        Qwen-72B holds $\capm$ near $0.95$ in all three conditions
+        (\cref{sec:s1-quality}). A featureless grey patch is enough to trigger
+        the collapse, so the mechanism is the presence of the visual modality
+        rather than anything depicted in the image.
+
+  \item A correction to the aggregate sexism score, together with an
+        alternative that is invariant to shifts in assent. $\ASIint$ as
+        conventionally computed is confounded with response style, because the
+        bias score for each item scales with $\pyes$: a model that assents
+        indiscriminately scores according to the inventory's keying balance,
+        and one that dissents indiscriminately scores near zero, whatever its
+        attitudes. The inventory's split of 16 positively keyed items to 6
+        reverse keyed items makes this worse. An exact decomposition
+        (\cref{sec:framework-responsebias}) separates the two components and
+        shows that Llama-90B's $\ASIint$ of $0.153$ sits marginally below the
+        $0.160$ that its mean assent rate of $0.585$ predicts on its own.
+        Polarity separation, the difference in mean $\pyes$ between positively
+        keyed and reverse keyed items, is invariant to uniform shifts in
+        assent, and by it Qwen-72B discriminates about $1.9$ times more
+        strongly than Llama-90B. An exact permutation test over all
+        $\binom{22}{6} = 74{,}613$ keying assignments replaces the asymptotic
+        approximation. Qwen is not thereby shown to be less biased. It answers
+        the inventory more discriminatingly while Llama acquiesces, which the
+        aggregate score cannot express (\cref{sec:s1-inference}).
+\end{enumerate}
+
 % ---------------------------------------------------------------------
 \section{Scope and thesis outline}\label{sec:intro-outline}
 \begin{plan}
@@ -126,3 +335,34 @@ audited; contemporary 2026 stream not collected; attention heatmaps not
 produced; humanoid silhouette replaced by a grey patch) with a pointer to
 \cref{tab:scope}. Then one sentence per chapter.
 \end{plan}
+
+Four departures from the proposed scope should be stated at the outset. GPT-4o
+was not audited, which leaves two production models rather than three; its API
+returns only the top $N$ log probabilities, enough to bound captured mass but
+not to compute it, so the measurement would not be the one taken on the open
+weights models (\cref{ch:conclusion} treats a variant for the top $N$ regime as
+future work). The contemporary 2026 image search stream was not collected, so
+Phase~2 runs on the 2018 archive alone and the planned temporal comparison is
+absent. Cross attention heatmaps were not produced, so the claim that visual
+input drives the observed effects rests on behavioural contrasts between
+conditions rather than on attribution inside the model. The humanoid silhouette
+intended as the Phase~1 visual anchor was replaced by a uniform grey patch
+after it failed stimulus validation, where the 11B model read a gender gap of
+$0.853$ against a threshold of $0.20$. \cref{tab:scope} sets out each change
+with its reason and the as built measurement counts, and
+\cref{sec:disc-threats} carries the consequences through to the limitations.
+
+The remainder of the thesis proceeds as follows. \cref{ch:background} reviews
+bias in vision encoders, the vulnerabilities of automated judges, the evidence
+for defensiveness induced by alignment, and the human baselines this thesis
+relies on, and it states the gap precisely. \cref{ch:framework} develops the
+measurement framework: logit extraction, captured mass, the intrinsic and
+extrinsic metrics, and the propositions that establish their invariance
+properties. \cref{ch:design} describes the system as built, covering models,
+instruments, stimulus construction and validation, the CALM design, and a
+register of the measurement faults encountered. \cref{ch:study1} reports the
+intrinsic study and answers RQ1, and \cref{ch:study2} reports the downstream
+study and addresses RQ2. \cref{ch:discussion} draws the two together, states
+what measurement at the level of logits does and does not reveal, and tabulates
+the threats to validity. \cref{ch:conclusion} concludes and identifies the
+measurements that would settle the questions this thesis can only pose.
