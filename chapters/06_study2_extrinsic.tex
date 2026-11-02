@@ -235,6 +235,51 @@ since a judge is used one item at a time.
 
 % ---------------------------------------------------------------------
 \section{Deviation from the low-ASI human baseline}\label{sec:s2-deviation}
+
+Every model is compared against the mean objectivity rating given to the same
+query's grid by the participants who scored lowest on the inventory, and
+\cref{tab:s2-deltam} reports the comparison under each of the candidate
+definitions of $\dm$. Two choices have to be settled before the numbers mean
+anything, and \cref{sec:framework-extrinsic} settled both.
+
+The first is which ratings to use. \cref{eq:deltam} takes the original scale
+order alone, because the human participants rated on one orientation and the
+reversed order exists only as a manipulation. Averaging the two orders folds
+in the anchor insensitivity of \cref{prop:null}, and \cref{tab:s2-deltam}
+shows how much that matters: Llama-90B's order-averaged deviation of $-1.203$
+sits $0.077$ from the null of $-1.280$ that a model ignoring the anchors
+entirely would produce, so on that definition it cannot be read as a judgement
+about the images at all. On the original order alone it is $-0.491$, which
+can.
+
+The second choice is what the sign means, and it is the opposite of the
+reading the proposal assumed. Otterbacher et al. \cite{otterbacher2018sigir}
+found that participants scoring higher on the inventory were \emph{less}
+likely to call a biased grid non-objective, which is to say they rated such
+grids higher. A model rating below the low-ASI baseline is therefore further
+from the sexist end of the human range rather than closer to it, and every
+comparison below states its direction in words rather than relying on the
+sign.
+
+On the original order the five models straddle the baseline. Qwen-72B sits
+$+0.216$ above it, Qwen-7B $-0.066$ below, Llama-90B $-0.491$, Qwen-2B
+$-0.834$ and Llama-11B $-1.920$. Read with the sign convention just given,
+Qwen-72B judges these grids slightly more objective than the least sexist
+human raters did, and the other four judge them less objective, with
+Llama-11B furthest from the human range in that direction. The second
+expectation of \cref{sec:s2-aims} therefore holds for two models and fails
+for three, though not in the direction that would indicate sexism.
+
+Two cautions belong with these numbers. The deviations are not independent of
+\cref{sec:s2-calm}, since a model whose ratings are unstable under reversal is
+one whose position on this axis is unstable too, and Llama-11B's extreme
+$-1.920$ comes from a model that failed every robustness pair. The index
+$\lambda$ of \cref{eq:lambda}, which would place each model between the
+low-ASI and high-ASI human groups rather than measuring distance from one of
+them, is not computed here because the high-ASI baseline needs the raw
+participant responses rather than the published group means.
+\cref{sec:disc-threats} records that omission.
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
 \toprule
