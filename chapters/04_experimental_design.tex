@@ -14,25 +14,26 @@ table.
 \section{Models under audit}\label{sec:design-models}
 
 Five open weight models are audited, drawn from two families at five
-parameter counts. Llama-3.2-Vision contributes its 11B and 90B variants and
-Qwen2-VL its 2B, 7B and 72B, which are every size the two families ship. The
-design has two axes rather than one. Across families it contrasts two ways of
-joining vision to language: Llama inserts gated cross-attention adapters into a
-frozen language model, whereas Qwen projects the image into the token stream
-that self-attention already reads (\cref{sec:bg-vlm}). Within a family it
-varies parameter count while holding the fusion design, the prompts and the
-stimuli fixed, so a trend across sizes can be told apart from a property of one
-model.
+parameter counts: Llama-3.2-Vision contributes its 11B and 90B variants, and
+Qwen2-VL its 2B, 7B and 72B, which between them are every size the two families
+ship. Because the sample spans both families and five sizes, it separates two
+questions that a single model from each family would leave confounded. Across
+families it contrasts two ways of joining vision to language, since Llama
+inserts gated cross-attention adapters into a frozen language model whereas
+Qwen projects the image into the token stream that self-attention already reads
+(\cref{sec:bg-vlm}). Within a family it varies parameter count while holding
+the fusion design, the prompts and the stimuli fixed, so that a trend across
+sizes can be distinguished from a property of one model.
 
-The small models were added after the two large ones, at the supervisor's
-suggestion, to turn two isolated points into a trend that can be read. They
-cost little, because a 2B or 7B model runs on one GPU in under an hour. They
-also changed what the project can claim, since a result holding at both 2B and
-72B is a property of a family rather than of a checkpoint. One gap in the
-ladder cannot be closed. Qwen2-VL ships nothing between 7B and 72B and
-Llama-3.2-Vision nothing between 11B and 90B, so there is no observation
-between 11B and 72B, a span of more than six times.
-\cref{sec:disc-threats} states what that costs.
+The three smaller models were added after the two large ones, on the
+supervisor's suggestion, so that two isolated points became a readable trend.
+They cost little, since a 2B or 7B model completes every phase on one GPU in
+under an hour. They also widen what the audit can claim, because a result that
+holds at 2B and again at 72B describes a family rather than a single
+checkpoint. One gap in the ladder cannot be closed, since Qwen2-VL ships
+nothing between 7B and 72B and Llama-3.2-Vision nothing between 11B and 90B.
+That leaves a span of more than six times unobserved, which bounds any claim
+about where along it the behaviour changes (\cref{sec:disc-threats}).
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}llll@{}}
@@ -73,25 +74,26 @@ image.}
 \label{tab:phases}
 \end{table}
 
-Phase~1B is the phase that answers the question the project is named after,
-and it was added during the work rather than planned from the start. Phase~1A
-shows the model no person at all, which was deliberate, because the humanoid
-silhouette intended as a visual anchor failed its neutrality gate
-(\cref{sec:design-stimuli}). The cost of that decision is that nothing in
-Phase~1A can show whether a model treats photographs of women differently from
-photographs of men. \cref{sec:design-phase1b} describes the phase built to
-close that gap.
+Phase~1B was added during the work rather than planned from the outset, and
+it bears more directly than either other phase on the question the project sets
+out to answer. Phase~1A shows the model no person at all, which was deliberate,
+because the humanoid silhouette intended as the visual anchor failed its
+neutrality gate (\cref{sec:design-stimuli}). That decision carries a cost,
+since nothing in Phase~1A can show whether a model treats photographs of women
+differently from photographs of men, and it is this gap that
+\cref{sec:design-phase1b} was built to close.
 
-Development costs shaped the order of the runs. A 90B job holds three H100
-cards for hours and waits in a shared queue before it starts, so a prompt
-defect found in its output costs a day rather than a minute. Every instrument
-below was therefore exercised on the 11B first, and Phase~1B was smoke tested
-on two faces with one small model per family before any full run was queued.
+The order in which the runs were made follows from what a large job costs on
+a shared cluster. A 90B job holds three H100 cards for hours and waits in the
+queue before it starts, so a prompt defect found in its output costs a day
+rather than a minute. Every instrument described below was therefore exercised
+on the 11B first, and Phase~1B was smoke tested on two faces with one small
+model from each family before any full run was queued.
 
-The 11B earned a second role it was not designed for. Every 11B job ran on a
-single L40, so no 11B measurement ever crossed a device boundary, which made
-that model the uncorrupted reference against which the fault of
-\cref{sec:design-faults} was identified.
+Beyond its development role, the 11B also supplied the reference against which
+the fault of \cref{sec:design-faults} was identified. Every 11B job ran on a
+single L40, so no 11B measurement ever crossed a device boundary, and its
+output remained trustworthy when that of the sharded runs did not.
 
 GPT-4o was named in the proposal and is not audited here, because its interface
 does not return the quantity the method depends on. The API exposes at most the
@@ -248,32 +250,34 @@ structures, so one face contributes 110 measurements and the phase contributes
 \end{table}
 
 Which five faces fill a cell is not arbitrary, because an uncontrolled
-selection would confound the result it is meant to measure. The database ships
-norming ratings. Were the female sample rated more attractive than the male
-sample, any difference in how the models responded could be read as an
-attractiveness effect wearing the name of gender. Within each cell the five
-faces nearest the overall median on the Attractive norm are taken, which is
-deterministic and uses no random seed. The achieved balance is reported at
-run start and the eight cells match to within 0.08 on a scale from 1.5 to 5.5.
+selection would confound the very result it is meant to measure. The database
+ships norming ratings alongside the photographs, and were the female sample
+rated more attractive than the male sample, any difference in how the models
+responded could be read as an attractiveness effect wearing the name of gender.
+Within each cell the five faces nearest the overall median on the Attractive
+norm are therefore taken, a rule that is deterministic and uses no random seed.
+The achieved balance is reported at the start of every run, and the eight cells
+match to within 0.08 on a scale from 1.5 to 5.5.
 
-The unit of analysis follows from the design rather than from the row count.
-Each face contributes 110 measurements, and those are averaged to one number
-per face before anything is tested. The gender comparison is therefore 20
-numbers against 20, not 2,200 against 2,200. Treating the measurements as
+The unit of analysis follows from the design rather than from the row count,
+since each face contributes 110 measurements and those are averaged to a single
+number per face before anything is tested. The gender comparison is therefore
+20 numbers against 20, not 2,200 against 2,200. Treating the measurements as
 independent would overstate the precision by more than an order of magnitude,
-because the 110 rows behind a face all share that face.
-\cref{sec:framework-gap} defines the statistic and \cref{sec:s1b-gap} reports
-it.
+because the 110 rows behind a face all share that face. The statistic that
+follows from this choice is defined in \cref{sec:framework-gap} and reported in
+\cref{sec:s1b-gap}.
 
-Two constraints on the stimuli are worth recording. The visual token budget is
-pinned for Qwen exactly as in \cref{sec:design-impl}, because that model varies
-its token count with resolution and the faces differ slightly in size. Without
-pinning, a face would be confounded with the length of the sequence describing
-it. The database's licence permits non commercial academic use and forbids
-redistributing or republishing the images, so no face appears anywhere in this
-thesis and the images were held outside the repository throughout.
-\cref{fig:stimuli} shows the Phase~1A stimuli for that reason and
-\cref{fig:gap} reports Phase~1B as measurements rather than as pictures.
+The visual token budget is pinned for Qwen exactly as in
+\cref{sec:design-impl}, because that model varies its token count with
+resolution and the faces differ slightly in size. Without pinning, a face
+would be confounded with the length of the sequence describing it. A
+second constraint is legal rather than technical: the database's licence
+permits non commercial academic use and forbids redistributing or republishing
+the images, so no face appears anywhere in this thesis and the images were held
+outside the repository throughout. For that reason \cref{fig:stimuli} shows the
+Phase~1A stimuli alone, and \cref{fig:gap} reports Phase~1B as measurements
+rather than as pictures.
 
 % ---------------------------------------------------------------------
 \section{Phase 2: SIGIR 2018 queries and the CALM design}\label{sec:design-phase2}
@@ -427,8 +431,8 @@ workaround of \cref{sec:design-faults}.
 % ---------------------------------------------------------------------
 \section{Compute environment and precision}\label{sec:design-compute}
 
-All runs were executed on UQ Bunya under SLURM. Two properties of that
-environment shaped the design. Model weights are loaded by
+All runs were executed on UQ Bunya under SLURM, an environment whose storage
+and scheduling shaped the design in two ways. Model weights are loaded by
 \texttt{safetensors}, which memory maps the file by default. On the shared
 parallel file system every page fault is a network round trip, so a cold load
 of the 23\,GB 11B checkpoint took roughly 100 minutes. Weights are therefore
@@ -576,12 +580,13 @@ production models measured in one phase against synthetic stimuli. The audit as
 built covers five models over three phases and takes eight times as many
 measurements.
 
-Two additions carry the weight. Phase~1B was built after the supervisor asked
-for a run against real faces, and it answers a question Phase~1A cannot
-(\cref{sec:design-phase1b}). The parameter size axis was added for a related
-reason. With one model per family, a difference between Llama and Qwen cannot
-be told apart from a difference between 90B and 72B, whereas three Qwen sizes
-against two Llama sizes separate the two explanations.
+Of those additions, two account for most of the extra work. Phase~1B was
+built after the supervisor asked for a run against real faces, and it answers a
+question Phase~1A cannot reach (\cref{sec:design-phase1b}). The parameter size
+axis addresses a related confound, because with one model from each family a
+difference between Llama and Qwen cannot be told apart from a difference
+between 90B and 72B. Three Qwen sizes against two Llama sizes separate the two
+explanations.
 
 Three reductions follow from results given earlier in this chapter. GPT-4o was
 dropped because its interface does not expose $\capm$
@@ -590,20 +595,21 @@ gender gate at $0.853$ (\cref{sec:design-stimuli}), and the consistency rate
 was dropped because \cref{sec:framework-calm} shows it is not identifiable from
 two scale orders.
 
-The remaining reduction is a decision about where to spend a fixed budget. The
-proposal planned a fresh crawl of the same ten queries alongside the 2018
-archive, which together would have measured drift over eight years. A fresh
-crawl supplies no human ratings, so the extrinsic comparison of
-\cref{sec:framework-extrinsic} would have had no baseline on that stream, and
-the queue time it would have consumed went to Phase~1B and the small models
-instead. \cref{sec:disc-threats} records the temporal question as open.
+The remaining reduction is a decision about where to spend a fixed budget.
+The proposal planned a fresh crawl of the same ten queries alongside the 2018
+archive, which together would have measured drift over eight years, but only
+the archive was run. A fresh crawl supplies no human ratings, so the extrinsic
+comparison of \cref{sec:framework-extrinsic} would have had no baseline on that
+stream, and the queue time it would have consumed went instead to Phase~1B and
+the small models, leaving the temporal question open
+(\cref{sec:disc-threats}).
 
-Two planned analyses were not delivered. Cross-attention heatmaps were
-intended to show which image regions the adapter attends to while a rating is
-produced. The attention hook written for the purpose never returned populated
-tensors on the sharded 90B. Diagnosing it was set aside once the cross device
-fault showed that anything read across a device boundary on those nodes was
-untrustworthy. The attention attribution the proposal envisaged is therefore
+Two analyses that the proposal planned were not delivered. Cross-attention
+heatmaps were intended to show which image regions the adapter attends to while
+a rating is produced, but the attention hook written for the purpose never
+returned populated tensors on the sharded 90B. Diagnosing it was set aside once
+the cross device fault showed that anything read across a device boundary on
+those nodes was untrustworthy. The attention attribution the proposal envisaged is therefore
 absent, and the claim that visual input drives the observed effects rests on
 behavioural contrasts between conditions instead. The Spearman correlation
 across models was specified for three and is reported for five, where it stays
