@@ -157,6 +157,18 @@ rather than rows.}
 % \end{itemize}
 % \end{plan}
 
+% ---------------------------------------------------------------------
+\section{Why robustness collapses: anchor following}\label{sec:s2-anchor}
+
+The robustness rate says that a model stops reproducing its own judgement
+under reversal, but not what it does instead, and two quite different
+behaviours produce the same low number. A model may read the reversed anchors
+and apply them wrongly, or it may ignore the anchors and return the same digit
+whatever the scale says. The slope $\beta_1$ of \cref{sec:framework-calm}
+separates them: a model following the stated anchors gives $\beta_1=-1$,
+because reversing the scale should reverse the raw digit, and one ignoring
+them gives $\beta_1=+1$.
+
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -185,6 +197,32 @@ the relation collapses, and Llama-90B's fitted slope turns positive, meaning it
 returns much the same digit whichever way the scale is labelled.}
 \label{fig:s2-anchor}
 \end{figure}
+
+The two large models follow the anchors when there is nothing to look at and
+stop following them when there is. Llama-90B gives $\beta_1=-0.97$ without an
+image and Qwen-72B $-1.03$, both within three points of the ideal, and
+\cref{tab:s2-anchor} shows the behaviour behind those slopes: Llama-90B rates
+$2.75$ on average under the original order and $5.13$ under the reversed one,
+which is close to the $8-r$ a model honouring the anchors would produce. With
+an image the slopes weaken to $-0.87$ and $-0.67$, and the mean ratings
+converge to $4.79$ against $4.64$ and $5.50$ against $4.19$.
+
+The small models never follow the anchors at all. Qwen-2B gives $\beta_1=+0.79$
+in both conditions and rates near $4.5$ whatever the scale says, and Qwen-7B
+moves from $-0.06$ without an image, which is neither following nor ignoring,
+to $+0.74$ with one. Their flat robustness in \cref{tab:s2-rr} is therefore
+explained: they were never reading the scale definition, so there was nothing
+for an image to disrupt.
+
+Llama-90B is the case that shows $\RR$ and $\beta_1$ measure different
+things. Its slope falls only from $-0.97$ to $-0.87$ under an image, a change
+of $0.10$, while its robustness rate falls from $0.900$ to $0.044$. A slope
+near $-1$ means the model still inverts its answer in the right direction on
+average; the robustness rate asks whether each individual pair lands within
+half a scale point, and a model can preserve the average relationship while
+losing the per-item precision entirely. Both facts belong in the account, and
+\cref{sec:disc-rq} treats the second as the one that matters for a judge,
+since a judge is used one item at a time.
 % \begin{plan}
 % \newanalysis{(A3) anchor-following analysis. Why: $\dRR$ says \emph{that}
 % robustness collapses; this says \emph{how} --- with an image present, Llama
