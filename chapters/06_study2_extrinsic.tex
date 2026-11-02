@@ -317,6 +317,32 @@ candidate definitions (vision rows, 90 per order).}
 
 % ---------------------------------------------------------------------
 \section{People versus the non-person control}\label{sec:s2-person}
+
+Nine of the ten queries return pictures of people and one, the hot air
+balloon, does not. If a deviation from the human baseline reflects something
+about how a model judges pictures of people, it should be smaller on the
+control query, and \cref{tab:s2-person} reports the two sides separately with
+\cref{fig:s2-queries} giving the per query detail.
+
+The third expectation of \cref{sec:s2-aims} holds for the two largest models
+and fails for the rest. On the original order Llama-90B deviates by $-0.582$
+over the nine person queries while rating the balloon $+0.333$ above the
+baseline, a gap of $0.915$, and Qwen-72B gives $+0.184$ against $+0.507$, a
+gap of $0.322$. Both treat pictures of people differently from a picture of an
+object, and in the same direction. The other three do not: Llama-11B's gap is
+$+0.062$, which is nothing, and the two small Qwens have gaps of $-0.291$ and
+$-1.080$ pointing the other way, with the balloon rated further from the
+baseline than the people.
+
+One query cannot carry this result, and that is the honest limit of it. A
+single non-person stimulus cannot separate a person effect from whatever else
+distinguishes a hot air balloon from a portrait, including that the balloon's
+human baseline is the highest of the ten at $6.365$ and therefore the hardest
+to exceed. \cref{sec:disc-threats} records the single control as a design
+weakness, and a stronger version of this test would need several non-person
+queries matched on baseline.
+
+% ---------------------------------------------------------------------
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
@@ -356,6 +382,32 @@ of 4.0 predicted by \cref{prop:null}. The control query is shaded.}
 
 % ---------------------------------------------------------------------
 \section{Relation to the SIGIR 2018 findings}\label{sec:s2-sigir}
+
+The 2018 study did not find that sexism predicted every judgement equally.
+Benevolent sexism was associated with rating two particular grids as objective:
+``smart person'', whose results skew male, and ``warm person'', whose results
+skew female \cite{otterbacher2018sigir}. Those are the two queries where human
+sexism mattered, so they are where a model's deviation is most interesting.
+
+The alignment is partial and is reported as such. On the original order
+``smart person'' is the query a model rates furthest below the low-ASI
+baseline in three of the five models, at $-0.816$ on Qwen-72B, $-1.749$ on
+Llama-90B and $-0.697$ on Qwen-7B, and it is also the lowest of the nine
+person queries for each of those three. ``Warm person'' does not behave the
+same way. It is second lowest on Qwen-72B at $-0.472$ but only fourth lowest
+on Llama-90B at $-0.674$, and it sits mid-range on the other three models. An
+earlier draft of this work described both queries as the two lowest for both
+production models, which the per query figures do not support.
+
+What survives is narrower than the 2018 result and should not be stretched to
+meet it. Three models rate the male-skewed ``smart person'' grid furthest from
+the least sexist human raters, in the direction those raters themselves took,
+and the female-skewed ``warm person'' grid shows no consistent pattern across
+the five. Ten queries, one of them a control, cannot support a claim about
+which kinds of query provoke the effect, and the model judges each image
+separately where the participants judged the grid as a whole
+(\cref{sec:disc-threats}).
+
 % \begin{plan}
 % \begin{itemize}
 %   \item In \cite{otterbacher2018sigir} benevolent sexism predicted the
