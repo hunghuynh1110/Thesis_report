@@ -307,11 +307,36 @@ Stated wherever a size trend is claimed; neither family ships one. \\
 
 % ---------------------------------------------------------------------
 \section{Ethics and responsible disclosure}\label{sec:disc-ethics}
-% \begin{plan}
-% Half a page: secondary use of anonymised, publicly released SIGIR data (no
-% new human participants, no HREC needed --- as in the proposal); the hardware
-% fault was reported to UQ RCC with a minimal reproduction
-% (\texttt{ai\_docs/rcc\_p2p\_bug\_report.md}); stimuli are programmatic;
-% third-party images from the SIGIR grids are \emph{not} reproduced in the thesis
-% (decision D5).
-% \end{plan}
+
+This study used no new human participants. The human ratings it compares
+against are the anonymised responses released by Otterbacher et al.
+\cite{otterbacher2018sigir}, and their secondary use requires no further
+ethics approval, as the project proposal recorded. The Phase~1A stimuli are
+generated programmatically rather than drawn from any person, which was a
+deliberate choice: a generated image of a supposedly neutral person would
+carry its generator's own associations into the measurement
+(\cref{sec:design-stimuli}).
+
+Two bodies of third-party material are used under terms that restrict what
+may be reproduced. The Chicago Face Database permits non commercial academic
+use and forbids redistributing or republishing the images, so no face appears
+anywhere in this thesis and the files were held outside the repository
+throughout \cite{ma2015cfd}. The image search results from the 2018 study are
+third-party photographs whose subjects did not consent to appear in this
+work, so they are likewise not reproduced, and \cref{ch:study2} reports them
+as measurements rather than as pictures.
+
+A hardware fault found during the work was reported rather than merely worked
+around. Direct copies between GPUs on the cluster's PCIe nodes returned zeros
+silently, which produced plausible aggregates from models that were computing
+nothing (\cref{app:fault}). This was reported to UQ Research Computing with a
+minimal reproduction, since any other user sharding a model across those nodes
+would have been affected in the same undetectable way.
+
+One ethical point concerns the result rather than the procedure. Reporting
+that a model attributes protective descriptions more readily to photographs
+of women than of men names a disposition in a deployed system, and the
+appropriate response is to measure it rather than to leave it unstated. The
+thesis therefore reports the gaps with their uncertainty, their coverage and
+their sample limits, and avoids the stronger claim that any of these models is
+sexist, which neither the design nor the evidence would support.
