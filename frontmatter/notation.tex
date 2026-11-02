@@ -32,8 +32,13 @@ $\Dset$ & rating digits $\{1,\dots,7\}$ \\
 $\rexp$, $\rnorm$ & expected rating; rating mapped to the original scale orientation \\
 $\rlow$, $\rhigh$ & mean SIGIR 2018 rating of query $q$ by low-/high-ASI participants \\
 $\dm$ & extrinsic deviation of model $m$ from the low-ASI baseline \\
+$\lambda_{m,q}$ & position of model $m$ between the low- and high-ASI human groups \\
 $\RR$, $\dRR$ & robustness rate under scale reversal; vision minus text-only \\
 $\tau$ & robustness tolerance (default $0.5$ scale points) \\
+$\beta_1$ & slope of the reversed-order on the original-order expected rating \\
+$D$ & item-dependent term of the response-style decomposition (\cref{eq:decomp}) \\
+$T(\bm\ell)$, $\Lambda$ & permutation test statistic; set of all $\binom{22}{6}$ keying labellings \\
+$u$ & output diversity, $|\{\text{distinct }\pyes\}|/n$ \\
 \bottomrule
 \end{tabularx}
 \caption{Notation used throughout the thesis.}
