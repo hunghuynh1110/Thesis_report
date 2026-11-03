@@ -82,59 +82,39 @@
 % \textbf{Check before submitting.} Read it aloud and time it.
 % \end{plan}
 
-Vision language models are increasingly used as automated judges, scoring and
-filtering the images that retrieval and moderation systems show users. Such
-models inherit gender stereotypes from the distributions they are trained on,
-so a judge built from one is not a neutral replacement for the annotators it
-displaces.
+Vision language models are increasingly used to judge images, raising questions
+about gender bias and the reliability of their evaluations. This thesis
+examines gender-related responses in five models from the Qwen2-VL and
+Llama-3.2-Vision families and their relationship with downstream image search
+judgements.
 
-Auditing that disposition is difficult, because alignment training changes
-what a model says rather than what it represents. A model trained to decline
-requests resembling solicitations of prejudice produces clean text whether or
-not the association remains, so an audit reading generated text cannot
-separate a debiased model from one that has learnt to recognise an audit.
-This thesis calls that failure mode algorithmic defensiveness.
+The audit reads next-token probabilities without generating text and reports
+captured mass, the proportion assigned to the intended response set.
+Three experimental phases produced 25,450 measurements using the Ambivalent
+Sexism Inventory, 40 face photographs and image search results evaluated
+under original and reversed rating scales. Downstream judgements were
+compared with ratings from the low-scoring inventory group in a 2018 human
+study. That study associated higher benevolent sexism with reduced recognition
+of bias in particular search results. The model evaluation found partial
+query-level correspondence but did not establish that this relationship
+repeated across models.
 
-The audit reported here never reads generated text. Each measurement is one
-forward pass recording the distribution over the next token before any
-sampling, together with the share of it falling on the intended response set.
-Five models were audited across two families and five parameter counts:
-Qwen2-VL at 2B, 7B and 72B, and Llama-3.2-Vision at 11B and 90B. Three phases
-were run, giving 25,450 measurements. The first administers the 22 items of
-the Ambivalent Sexism Inventory in five prompt structures under three image
-conditions. The second puts the same items against 40 photographs from the
-Chicago Face Database, balanced across gender and race. The third rates real
-image search results under a reversed rating scale, anchored to published
-human judgements of the same stimuli.
+The conventional inventory score is sensitive to a model's general tendency
+to agree. Polarity separation, which compares agreement between positively
+keyed and reverse-keyed items, distinguishes item discrimination from uniform
+shifts in assent. Face images revealed differences in the attribution of
+benevolent sexist traits, with four of five gender gaps reaching the
+corrected significance threshold; combining subscales partly obscured these
+differences. Both Llama models assigned substantially less probability to
+binary responses when images were present, including a featureless grey
+patch. Scale reversal robustness fell from $0.900$ without images to $0.044$
+for Llama-90B and $0.156$ for Qwen-72B in the image condition. Concurrent
+wording changes prevent attributing this contrast solely to visual input.
 
-The central result comes from the photographs. The benevolent half of the
-inventory is attributed more readily to pictures of women than of men in all
-five models, from $-0.007$ on the smallest to $+0.054$ on Qwen2-VL-72B at
-$p<0.001$, and four of the five gaps survive correction for testing five
-models. Scoring the inventory as one number conceals this, because the two
-subscales move in opposite directions and cancel: Llama-3.2-90B reports
-$+0.005$ at $p=0.62$ overall while its benevolent gap is $+0.034$ at
-$p=0.003$.
-Visual input also collapses robustness to a stated rating scale in both of the
-largest models, where the rate at which a model reproduces its own judgement
-under reversal falls from $0.900$ with no image to $0.044$ and $0.156$ with
-one. A third result belongs to one family rather than to scale: both Llama models
-move most of their probability off the response set whenever an image is
-present, including a featureless grey rectangle, falling from $0.979$ to
-$0.237$ on the smaller, while all three Qwen models are unaffected from 2B to
-72B. The aggregate sexism index is shown to measure response style rather than
-attitude, since almost all of Llama-3.2-90B's $+0.153$ is its rate of assent,
-and restricting to measurements the model actually answers reduces it to
-$+0.015$.
-
-These findings are bounded by the sample. Twenty faces per gender drawn from
-one database detect an effect of about one standard deviation between faces
-and no smaller, neither family ships a model between 11B and 72B, and
-probabilities read at the first token need not match the text a deployed
-system would print.
-
-The contribution is a reproducible audit conducted at the level of logits and
-anchored to human judgements on the same task, with the statistics needed to
-tell a measurement from an artefact reported beside every result rather than
-assumed.
+The contribution is a reproducible probability-based audit that checks response
+coverage, response style and rating robustness before interpreting model
+scores. Interpretation remains limited by the five-model sample, one face
+database and the comparison between individual-image model ratings and human
+grid ratings. Next-token measurements also need not correspond to the text
+produced during generation.
 \clearpage
