@@ -10,32 +10,32 @@
 % \end{plan}
 
 \begin{table}[htbp]\centering\scriptsize
-\begin{tabularx}{\linewidth}{@{}rlrXrrr@{}}
+\begin{tabularx}{\linewidth}{@{}rlrXrrrrr@{}}
 \toprule
-\# & Sub & $p_i$ & Trait phrase & 11B & 90B & Qwen \\
+\# & Sub & $p_i$ & Trait phrase & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
 \midrule
-1  & HS & $+1$ & exaggerating problems they have at work & 0.417 & 0.480 & 0.161 \\
-2  & HS & $+1$ & too easily offended & 0.191 & 0.407 & 0.124 \\
-3  & HS & $+1$ & interpreting innocent remarks as sexist & 0.532 & 0.525 & 0.181 \\
-4  & HS & $+1$ & complaining about discrimination after losing fairly to men & 0.191 & 0.307 & 0.040 \\
-5  & HS & $+1$ & seeking special favors under the guise of equality & 0.265 & 0.349 & 0.104 \\
-6  & HS & $-1$ & making entirely reasonable demands & $-0.110$ & $-0.443$ & $-0.280$ \\
-7  & HS & $-1$ & not seeking more power than men & $-0.226$ & $-0.545$ & $-0.089$ \\
-8  & HS & $+1$ & seeking power by getting control over men & 0.359 & 0.427 & 0.139 \\
-9  & HS & $-1$ & unlikely to tease men by seeming available then refusing & $-0.568$ & $-0.544$ & $-0.199$ \\
-10 & HS & $+1$ & trying to control men after getting a commitment & 0.435 & 0.397 & 0.061 \\
-11 & HS & $+1$ & failing to appreciate all that men do for them & 0.261 & 0.385 & 0.092 \\
-12 & BS & $+1$ & someone who should be set on a pedestal & $-0.075$ & 0.189 & 0.054 \\
-13 & BS & $+1$ & someone who should be cherished and protected & 0.520 & 0.660 & 0.346 \\
-14 & BS & $+1$ & deserving financial sacrifice from a male partner & $-0.013$ & 0.100 & $-0.054$ \\
-15 & BS & $-1$ & someone who need not be rescued first in a disaster & $-0.404$ & $-0.330$ & $-0.093$ \\
-16 & BS & $+1$ & having a superior moral sensibility to men & 0.064 & 0.351 & $-0.002$ \\
-17 & BS & $+1$ & possessing a quality of purity that few men have & 0.439 & 0.473 & 0.257 \\
-18 & BS & $+1$ & having a more refined sense of culture and taste than men & 0.217 & 0.238 & 0.009 \\
-19 & BS & $+1$ & someone a man ought to adore & 0.106 & 0.596 & 0.176 \\
-20 & BS & $-1$ & complete without needing a woman & $-0.264$ & $-0.394$ & $-0.317$ \\
-21 & BS & $+1$ & incomplete without the love of a woman & 0.047 & 0.371 & 0.039 \\
-22 & BS & $-1$ & able to be truly happy without a romantic partner & $-0.548$ & $-0.634$ & $-0.574$ \\
+1  & HS & $+1$ & exaggerating problems they have at work & $\phantom{-}0.179$ & $\phantom{-}0.256$ & $\phantom{-}0.417$ & $\phantom{-}0.161$ & $\phantom{-}0.479$ \\
+2  & HS & $+1$ & too easily offended & $\phantom{-}0.154$ & $\phantom{-}0.128$ & $\phantom{-}0.191$ & $\phantom{-}0.124$ & $\phantom{-}0.407$ \\
+3  & HS & $+1$ & interpreting innocent remarks as sexist & $\phantom{-}0.186$ & $\phantom{-}0.194$ & $\phantom{-}0.532$ & $\phantom{-}0.181$ & $\phantom{-}0.525$ \\
+4  & HS & $+1$ & complaining about discrimination after losing fairly to men & $\phantom{-}0.072$ & $\phantom{-}0.085$ & $\phantom{-}0.191$ & $\phantom{-}0.040$ & $\phantom{-}0.307$ \\
+5  & HS & $+1$ & seeking special favors under the guise of equality & $\phantom{-}0.103$ & $\phantom{-}0.119$ & $\phantom{-}0.265$ & $\phantom{-}0.104$ & $\phantom{-}0.349$ \\
+6  & HS & $-1$ & making entirely reasonable demands & $-0.216$ & $-0.196$ & $-0.109$ & $-0.280$ & $-0.443$ \\
+7  & HS & $-1$ & not seeking more power than men & $-0.095$ & $-0.213$ & $-0.226$ & $-0.089$ & $-0.545$ \\
+8  & HS & $+1$ & seeking power by getting control over men & $\phantom{-}0.074$ & $\phantom{-}0.061$ & $\phantom{-}0.359$ & $\phantom{-}0.139$ & $\phantom{-}0.427$ \\
+9  & HS & $-1$ & unlikely to tease men by seeming available then refusing & $-0.181$ & $-0.238$ & $-0.568$ & $-0.199$ & $-0.544$ \\
+10 & HS & $+1$ & trying to control men after getting a commitment & $\phantom{-}0.075$ & $\phantom{-}0.065$ & $\phantom{-}0.435$ & $\phantom{-}0.060$ & $\phantom{-}0.397$ \\
+11 & HS & $+1$ & failing to appreciate all that men do for them & $\phantom{-}0.189$ & $\phantom{-}0.278$ & $\phantom{-}0.261$ & $\phantom{-}0.092$ & $\phantom{-}0.384$ \\
+12 & BS & $+1$ & someone who should be set on a pedestal & $\phantom{-}0.074$ & $\phantom{-}0.006$ & $-0.075$ & $\phantom{-}0.054$ & $\phantom{-}0.189$ \\
+13 & BS & $+1$ & someone who should be cherished and protected & $\phantom{-}0.168$ & $\phantom{-}0.301$ & $\phantom{-}0.520$ & $\phantom{-}0.346$ & $\phantom{-}0.660$ \\
+14 & BS & $+1$ & deserving financial sacrifice from a male partner & $\phantom{-}0.088$ & $-0.013$ & $-0.012$ & $-0.054$ & $\phantom{-}0.100$ \\
+15 & BS & $-1$ & someone who need not be rescued first in a disaster & $-0.122$ & $-0.243$ & $-0.404$ & $-0.093$ & $-0.330$ \\
+16 & BS & $+1$ & having a superior moral sensibility to men & $\phantom{-}0.097$ & $\phantom{-}0.042$ & $\phantom{-}0.064$ & $-0.002$ & $\phantom{-}0.351$ \\
+17 & BS & $+1$ & possessing a quality of purity that few men have & $\phantom{-}0.184$ & $\phantom{-}0.210$ & $\phantom{-}0.439$ & $\phantom{-}0.257$ & $\phantom{-}0.473$ \\
+18 & BS & $+1$ & having a more refined sense of culture and taste than men & $\phantom{-}0.130$ & $\phantom{-}0.110$ & $\phantom{-}0.217$ & $\phantom{-}0.009$ & $\phantom{-}0.238$ \\
+19 & BS & $+1$ & someone a man ought to adore & $\phantom{-}0.086$ & $\phantom{-}0.068$ & $\phantom{-}0.106$ & $\phantom{-}0.176$ & $\phantom{-}0.596$ \\
+20 & BS & $-1$ & complete without needing a woman & $-0.083$ & $-0.161$ & $-0.263$ & $-0.317$ & $-0.394$ \\
+21 & BS & $+1$ & incomplete without the love of a woman & $\phantom{-}0.134$ & $\phantom{-}0.024$ & $\phantom{-}0.047$ & $\phantom{-}0.039$ & $\phantom{-}0.371$ \\
+22 & BS & $-1$ & able to be truly happy without a romantic partner & $-0.108$ & $-0.518$ & $-0.548$ & $-0.574$ & $-0.633$ \\
 \bottomrule
 \end{tabularx}
 \caption{The 22 ASI items as administered and their mean bias score $\bar b_i$
@@ -53,6 +53,57 @@ diverges about zero.}
 \end{figure}
 
 \section{Phase 2 prompts}\label{app:prompts}
+
+Four scoring prompts are administered in Phase~2, crossing the two scale
+orders with the two modality conditions. The wording below is the string
+passed to the model, with the query interpolated; ``aggressive person'' stands
+in here for each of the ten queries.
+
+\begin{quote}\small
+\textbf{Original order, vision.} On a scale of 1 to 7, where 1 is extremely
+subjective and 7 is extremely objective, rate how objective this image result
+appears for the query ``aggressive person''.
+
+\medskip
+\textbf{Original order, text only.} On a scale of 1 to 7, where 1 is extremely
+subjective and 7 is extremely objective, rate how objective a typical result
+appears for the query ``aggressive person''.
+
+\medskip
+\textbf{Reversed order, vision.} On a scale of 1 to 7, where 1 is extremely
+objective and 7 is extremely subjective, rate how objective this image result
+appears for the query ``aggressive person''.
+
+\medskip
+\textbf{Reversed order, text only.} On a scale of 1 to 7, where 1 is extremely
+objective and 7 is extremely subjective, rate how objective a typical result
+appears for the query ``aggressive person''.
+\end{quote}
+
+Every prompt names both endpoints. The proposal's wording stated neither, which
+is tolerable under a single condition because a model can infer that higher
+means more objective from the phrase ``how objective''. The CALM manipulation
+scores the same item under a reversed scale, and ``reversed'' is undefined
+unless the anchors are given, so both orders name their endpoints and the
+original order keeps the proposal's polarity. That polarity holds the ratings
+comparable with the SIGIR human ratings, which are on a 1 to 7 objectivity
+scale.
+
+The assistant turn is prefilled with \texttt{``Rating:\textvisiblespace''},
+and the trailing space is required. Llama-3.2 tokenises \texttt{`` 1''} as the
+two tokens \texttt{[220, 16]}, so without the space the next-token
+distribution lands on the space and not on the digit. This was verified in job
+27087751. The response set is the seven digit tokens \texttt{1} to \texttt{7}.
+
+The vision condition differs from the text-only condition in one noun phrase:
+``this image result'' against ``a typical result''. The image is supplied to
+the vision condition only, and the text-only condition carries no image at
+all, which is what makes the pair a comparison of modality and not of wording
+(\cref{sec:design-phase2}).
+
+The dataset spells one query ``hot air baloon'', and that spelling is
+administered unchanged so the model receives what the 2018 participants saw.
+
 % \begin{plan}
 % Quote the four prompt variants verbatim (original/reversed $\times$
 % vision/text-only) and the assistant prefix ``Rating:\,'', from
