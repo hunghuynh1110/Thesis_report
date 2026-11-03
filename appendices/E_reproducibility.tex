@@ -24,68 +24,93 @@
 
 \section{Code and data}\label{app:repro-code}
 
-Two repositories hold the work. The audit code is at
-\url{https://github.com/hunghuynh1110/VLM_Audit}, on branch
-\path{fix/multi-gpu-zero-copy}, and this report is at
-\url{https://github.com/hunghuynh1110/Thesis_report}. The analysis state is
-identified by \datagap{commit hash to be recorded on submission}, which is the
-commit that produced every number reported here.
+\begin{sloppypar}
+The audit code and thesis source are maintained in separate repositories:
+\url{https://github.com/hunghuynh1110/VLM_Audit} and
+\url{https://github.com/hunghuynh1110/Thesis_report}, respectively. The audit
+code uses the branch \path{fix/multi-gpu-zero-copy}, although a branch name
+alone does not identify the exact version used for the reported analysis.
+The final analysis commit remains \datagap{commit hash to be recorded on
+submission}, which must be resolved to identify the corresponding code state
+unambiguously.
+\end{sloppypar}
 
-Three bodies of data are used, and two of them are not redistributed with the
-code. The human ratings are the anonymised responses released by Otterbacher
-et al. \cite{otterbacher2018sigir}, held under \path{data/sigir2018}. The
-Chicago Face Database is obtained from its authors under their licence and
-staged on the cluster at \path{/QRISdata/Q9468/cfd/extracted}; it is never
-copied into either repository \cite{ma2015cfd}. The Phase~1A stimuli are
-generated rather than stored, by \path{src/data/image_generators.py}, and
-the Gaussian noise patch is drawn from \texttt{numpy} with seed 42, so the
-same bytes are reproduced on any machine.
+The study uses human ratings, face images and generated stimuli, each with
+different requirements for access and reproduction. The anonymised human
+responses released by Otterbacher et al.\ \cite{otterbacher2018sigir} are held
+under \path{data/sigir2018} for the comparison with model judgements. Images
+from the Chicago Face Database are obtained from its authors under their
+licence and staged on Bunya at \path{/QRISdata/Q9468/cfd/extracted}, without
+being included in either repository \cite{ma2015cfd}.
+
+The Phase~1A stimuli are generated using \path{src/data/image_generators.py}
+instead of being distributed as a separate image collection. The Gaussian
+noise patch uses NumPy with seed 42, allowing the same stimulus to be
+regenerated under a consistent software environment.
 
 \section{Environment}\label{app:repro-env}
 
-Two environments are involved, and they are not the same. Model inference ran
-on UQ Bunya under the module \path{python/3.11.3-gcccore-12.3.0}, with the
-library versions given in \cref{sec:design-impl} and the constraints
-in \path{requirements.txt}, of which \path{transformers>=4.45.0,<5.0} is
-the one that matters: the version 5 release changes the processor API that the
-pooled surface forms depend on. Analysis, the ledger and the figures ran
-locally on a different interpreter, which touches no model weights and affects
-no reported measurement.
+Model inference and subsequent analysis were performed in separate software
+environments, which serve different roles in reproducing the study. Inference
+ran on UQ Bunya using the module \path{python/3.11.3-gcccore-12.3.0}, with
+the library versions described in \cref{sec:design-impl} and dependency
+constraints specified in \path{requirements.txt}.
 
-One limitation of this record should be stated. No environment lockfile was
-captured at run time, so the exact resolved versions on the cluster are not
-recoverable from the outputs; the pins above bound them but do not fix them.
-An audit repeating this work should write \texttt{pip freeze} into the output
-directory of every job.
+The Transformers constraint, \path{transformers>=4.45.0,<5.0}, retains the
+processor interface used by the audit code when constructing inputs for the
+pooled surface forms. Statistical analysis, ledger generation and figure
+production ran locally from the saved outputs, without loading model weights
+or repeating inference.
+
+No environment lockfile was captured during the inference runs, so the
+resolved cluster dependencies cannot be reconstructed fully from the recorded
+outputs. The requirements file specifies acceptable version ranges but does
+not establish which versions were installed for every individual run.
+Future runs should save the output of \texttt{pip freeze} alongside each
+job's results to provide a more complete record of the execution environment.
 
 \section{Commands}\label{app:repro-cmd}
 
-Each phase has one entry point and one SLURM wrapper. Phase~1A runs through
-\path{scripts/run_phase1.py}, submitted by
-\path{scripts/bunya_run_phase1.sh}. Phase~1B runs through
-\path{scripts/run_phase1b.py}, submitted by
-\path{scripts/bunya_run_phase1b.sh}, which takes the model in
-\texttt{P1B\_MODEL}, the faces per cell in \texttt{P1B\_PER\_CELL} and the
-database root in \texttt{P1B\_CFD\_ROOT}, and refuses to start if the database
-is not staged. Phase~2 runs through \path{scripts/run_phase2.py}, submitted
-by \path{scripts/bunya_run_phase2.sh}. Every wrapper stages the weights to
-node local storage before loading them, for the reason given in
-\cref{sec:design-compute}.
+Each experimental phase has a Python entry point and a corresponding SLURM
+wrapper for execution on the Bunya computing cluster. Phase~1A uses
+\path{scripts/run_phase1.py}, submitted through the wrapper
+\path{scripts/bunya_run_phase1.sh} to execute the inventory probes on the
+selected models. Phase~1B uses \path{scripts/run_phase1b.py}, submitted through
+\path{scripts/bunya_run_phase1b.sh}, with configuration supplied through the
+wrapper's environment variables.
 
-Two scripts in this repository turn the outputs into the report. The ledger is
-rebuilt by \path{scripts/build_ledger.py}, which recomputes every statistic
-from the parquet files into \path{planning/ledger_v2.json}. The tables and
-figures are emitted by \path{scripts/make_tables.py},
-\path{scripts/make_items_table.py} and \path{scripts/make_figures.py},
-all of which read that ledger or the parquets directly, so no number in this
-report is transcribed by hand.
+For Phase~1B, \texttt{P1B\_MODEL} selects the model,
+\texttt{P1B\_PER\_CELL} specifies the number of faces per cell and
+\texttt{P1B\_CFD\_ROOT} identifies the database directory. The wrapper checks
+that the database is available before starting the corresponding inference
+process on the allocated compute node. Phase~2 uses
+\path{scripts/run_phase2.py}, submitted through
+\path{scripts/bunya_run_phase2.sh} to evaluate the image search results.
+The wrappers stage model weights on storage local to the compute node before
+loading, following the procedure described in \cref{sec:design-compute}.
+
+The report repository contains scripts that derive the numerical results and
+visualisations from the saved inference outputs. The script
+\path{scripts/build_ledger.py} recomputes the reported statistics from the
+Parquet files and writes the resulting ledger to
+\path{planning/ledger_v2.json}. Tables and figures are generated using
+\path{scripts/make_tables.py}, \path{scripts/make_items_table.py} and
+\path{scripts/make_figures.py}, which read the ledger or the underlying
+Parquet files directly. These scripts provide a reproducible route from the
+saved measurements to the numerical material presented throughout the report.
 
 \section{Tests}\label{app:repro-tests}
 
-The audit code carries 124 tests across ten modules, of which 123 pass and one
-is skipped for want of a GPU. They cover the item table, the stimulus
-generators, the pooling logic, the SIGIR and Chicago Face Database loaders,
-the Phase~1B metrics, the Phase~2 prompts and the cross device workaround of
-\cref{sec:design-faults}. The three lessons that cost this project the most
-time are stated in \cref{sec:disc-lessons}, and the fault that motivated the
-workaround is documented in \cref{app:fault}.
+The recorded audit test suite contains 124 tests across ten modules, with
+123 passing and one skipped because a GPU was unavailable. Coverage includes
+the inventory item table, stimulus generation, response pooling, the SIGIR
+and Chicago Face Database loaders, Phase~1B metrics and Phase~2 prompts.
+The suite also covers the workaround for transfers between devices described
+in \cref{sec:design-faults}, which was introduced following the infrastructure
+fault documented in \cref{app:fault}.
+
+These checks support verification of the implementation but do not replace
+inspection of the measurements produced by each experimental run. Captured
+mass and output diversity provide additional checks for faults that can
+produce plausible aggregate results without raising an execution error, as
+discussed in \cref{sec:disc-lessons}.
