@@ -14,39 +14,39 @@
 \section{Answering the research questions}\label{sec:disc-rq}
 
 RQ1 asked for the intrinsic baseline attitude of a model evaluated in a
-vacuum, and the chapters above answer that the question presupposes something
-the measurement does not support. An intrinsic attitude, as the proposal
-conceived it, is a single signed number. What the five models produce is
+vacuum. The chapters above answer that the question presupposes something the
+measurement does not support. An intrinsic attitude, as the proposal
+conceived it, is a single signed number; what the five models produce is
 three quantities that move independently: how often the model assents, how
 sharply it distinguishes the two kinds of inventory item, and how much of its
 probability lands on the response set at all. Llama-90B scores highest on the
 first, lowest on the second among the models that separate at all, and worst
 on the third whenever an image is present. Collapsing those into one index
-produces $+0.153$, and \cref{sec:s1-aggregate} showed that almost all of it
-is the first quantity.
+produces $+0.153$, almost all of which is the first quantity
+(\cref{sec:s1-aggregate}).
 
-Read as that triple rather than as an index, the answer to RQ1 is consistent
-across all five models. None leans towards the attitudes the inventory
-measures at the level of individual items: polarity separation is negative
-throughout, and where it is large enough to distinguish from chance it is
-the two larger Qwen models that reach significance. What differs between
-models is not the direction of the item-level pattern but how much response
-style sits on top of it, and how much of the behaviour the probe can see.
+Read as that triple, not as an index, the answer to RQ1 holds across all five
+models. None leans towards the attitudes the inventory measures at the level
+of individual items: polarity separation stays negative throughout, and only
+the two larger Qwen models reach significance where it is large enough to
+distinguish from chance. What differs between models is not the direction of
+the item-level pattern but how much response style sits on top of it, and how
+much of the behaviour the probe can see.
 
 RQ2 asked whether that intrinsic skew is descriptively consistent with
-downstream behaviour, and the honest answer is that the two do not line up.
-Ranked by intrinsic score the order is Llama-90B, Llama-11B, Qwen-2B, Qwen-7B
-and Qwen-72B; ranked by signed deviation from the human baseline it runs the
-other way, at $\rho=-0.70$ with $p=0.188$ over five points that are not
-independent. The direction is suggestive and the evidence will not carry it.
+downstream behaviour. The two do not line up. Ranked by intrinsic score the
+order runs Llama-90B, Llama-11B, Qwen-2B, Qwen-7B, Qwen-72B; ranked by signed
+deviation from the human baseline it runs the other way, at $\rho=-0.70$ with
+$p=0.188$ over five points that are not independent. The direction is
+suggestive and the evidence will not carry it.
 
 What does hold between the two phases is not a correlation but a shared
-mechanism. The models whose Phase~1 captured mass collapses under an image
-are the Llama pair, and the models whose Phase~2 robustness collapses under
-an image are the two largest, Llama-90B among them. In both phases the
-presence of an image changes how the model engages with the prompt rather
-than only what it answers, which is a stronger and more specific claim than
-the one RQ2 was framed to test.
+mechanism. The Llama pair are the models whose Phase~1 captured mass
+collapses under an image; the two largest, Llama-90B among them, are the
+models whose Phase~2 robustness collapses under one. In both phases an image
+changes how the model engages with the prompt and not only what it answers.
+That is a stronger and more specific claim than the one RQ2 was framed to
+test.
 
 % \begin{plan}
 % \begin{itemize}
@@ -66,34 +66,34 @@ the one RQ2 was framed to test.
 % ---------------------------------------------------------------------
 \section{What logit-level auditing reveals}\label{sec:disc-logit}
 
-The clearest benefit of reading the distribution rather than the text is that
-a refusal becomes a measurement instead of an obstacle. An audit that samples
-tokens and parses the result sees ``I cannot determine that from this image''
-as an unparseable string, and either discards the row or counts it as missing.
-Reading the distribution sees the same event as captured mass falling from
-$0.979$ to $0.237$, which is a number that can be averaged, compared across
-conditions and tested. Arditi et al. \cite{arditi2024refusal} showed that
-refusal is mediated by a single direction in the residual stream, so it is a
-quantity the model carries rather than a failure of the probe, and
+Reading the distribution, not the decoded text, turns a refusal into a
+measurement instead of an obstacle. An audit that samples tokens and parses
+the result sees ``I cannot determine that from this image'' as an unparseable
+string, and either discards the row or counts it as missing. Reading the
+distribution sees the same event as captured mass falling from $0.979$ to
+$0.237$: a number that can be averaged, compared across conditions and
+tested. Arditi et al. \cite{arditi2024refusal} showed that refusal is
+mediated by a single direction in the residual stream; it is therefore a
+quantity the model carries, not a failure of the probe, and
 \cref{sec:s1-quality} measures exactly that.
 
 The same reading separates two things a text-level audit must conflate. A
 model that declines and a model that answers neutrally both produce
-uninformative text, but they are far apart in the distribution: the first
-moves its mass off the response set while the second splits it evenly within
-the set. This is the distinction that makes \cref{tab:capm} interpretable,
-and it is why defensiveness could be located in one model family rather than
-inferred from the tone of generated sentences.
+uninformative text, yet they sit far apart in the distribution: the first
+moves its mass off the response set, the second splits it evenly within.
+That distinction makes \cref{tab:capm} interpretable, and it let
+defensiveness be located in one model family instead of inferred from the
+tone of generated sentences.
 
-Phase~2 shows something a text-level audit would also miss, which is that the
-image changes how the model uses the prompt and not only what it concludes.
+Phase~2 shows something a text-level audit would also miss: the image changes
+how the model uses the prompt and not only what it concludes.
 \cref{sec:s2-anchor} found the two largest models applying the stated scale
 anchors with no image present and ceasing to apply them reliably when one is
 added. The prompt is unchanged, the scale definition is unchanged, and what
 degrades is the model's use of an instruction it had been following. That is
-a form of visual dominance over the text channel consistent with the mediation
-result of Weng et al. \cite{weng2024images}, observed here on a generative
-model and through behaviour rather than through component ablation.
+a form of visual dominance over the text channel, consistent with the
+mediation result of Weng et al. \cite{weng2024images} and observed here on a
+generative model, through behaviour and not through component ablation.
 
 The limits of the method deserve the same prominence as its benefits. Wang et
 al. \cite{wang2024myanswer} found first token probabilities disagreeing with
@@ -102,11 +102,11 @@ heavily tuned on conversational and safety data, which is precisely the class
 of model audited here. Every claim in this thesis is therefore a claim about
 the next token distribution and not about what a deployed system would print.
 Hu and Levy \cite{hu2023prompting} argue that probabilities are the more
-faithful readout of what a model has learnt, and both things can hold at once:
-the distribution is the better measure of disposition, and the text is what a
-user actually receives.
+faithful readout of what a model has learnt, and both things can hold at
+once: the distribution is the better measure of disposition, and the text is
+what a user actually receives.
 
-The method also inherits a boundary from the interface rather than from the
+One boundary the method inherits comes from the interface, not from the
 model. Captured mass requires the full vocabulary in the denominator, which
 closed APIs do not expose, so GPT-4o could not be audited here at all
 (\cref{sec:design-models}). An audit designed around open weights is not a
@@ -134,42 +134,42 @@ are the ones this method currently cannot reach.
 % ---------------------------------------------------------------------
 \section{Methodological lessons}\label{sec:disc-lessons}
 
-Three lessons from this project generalise beyond it, and the first is that a
-logit-level audit must report its own coverage. Six measurement faults were
-found during the work (\cref{tab:faults}), and not one of them raised an
-error or produced an aggregate that looked wrong. A probe reading only
-lowercase tokens returned a plausible mean $\pyes$ while capturing $0.09\%$
-of the distribution, and a model whose hidden state had been zeroed by a
-hardware fault returned a mean expected rating of exactly $4.000$, the
-midpoint of the scale and a value a calibrated model might well produce. What
-exposed them was captured mass and output diversity, neither of which is part
-of any standard reporting practice. An audit that reports a probability
-without reporting how much of the distribution that probability describes
-cannot distinguish a measurement from an artefact.
+Three lessons from this project generalise beyond it. The first: a logit-level
+audit must report its own coverage. Six measurement faults were found during
+the work (\cref{tab:faults}); not one raised an error or produced an aggregate
+that looked wrong. A probe reading only lowercase tokens returned a plausible
+mean $\pyes$ while capturing $0.09\%$ of the distribution. A model whose
+hidden state had been zeroed by a hardware fault returned a mean expected
+rating of exactly $4.000$ (the midpoint of the scale, and a value a calibrated
+model might well produce). What exposed both was captured mass and output
+diversity, neither of which belongs to any standard reporting practice. An
+audit that reports a probability without reporting how much of the
+distribution that probability describes cannot distinguish a measurement from
+an artefact.
 
-The second lesson concerns borrowing instruments. A psychometric scale built
-for people assumes a respondent whose tendency to agree is a modest
-perturbation rather than a free parameter, and the ASI's sixteen to six
-keying ratio is safe only under that assumption. A model violates it: mean
-$\pyes$ across the five audited here runs from $0.199$ to $0.599$ on the
-positively keyed rows alone, which is enough for the keying ratio by itself
-to order the models. Tjuatja et al. \cite{tjuatja2024response} and
-Dominguez-Olmedo et al. \cite{dominguez2024questioning} report the same
-divergence from human response behaviour on other instruments. Scores that are
-invariant to a uniform shift in assent, and inference that permutes the
-keying rather than assuming a null, are therefore requirements of
-administering such a scale to a model rather than refinements of it.
+Borrowing an instrument carries the second lesson. A psychometric scale built
+for people assumes a respondent whose tendency to agree perturbs the score
+only modestly; the ASI's sixteen to six keying ratio stays safe under that
+assumption alone. Models violate it. Mean $\pyes$ across the five audited here
+runs from $0.199$ to $0.599$ on the positively keyed rows alone, which lets
+the keying ratio by itself order the models. Tjuatja et al.
+\cite{tjuatja2024response} and Dominguez-Olmedo et al.
+\cite{dominguez2024questioning} report the same divergence from human response
+behaviour on other instruments. Two things therefore become requirements of
+administering such a scale to a model, not refinements of it: scores invariant
+to a uniform shift in assent, and inference that permutes the keying instead
+of assuming a null.
 
-The third lesson is about infrastructure, and it cost this project the most
+Infrastructure supplied the third lesson, and it cost this project the most
 time. Every small model ran on one GPU and every large model on three, so
 model size and GPU count were perfectly confounded across the entire run
 history. When the 90B produced degenerate output, the observation that the
 same code worked on the 11B appeared to exonerate the code and implicate the
-checkpoint, and it did neither: forcing the 11B across three GPUs reproduced
-the failure exactly on weights known to be sound. An audit running on shared
-cluster hardware should vary the execution path deliberately rather than
-letting it track the variable under study, and \cref{sec:s1-replication}
-reports the checks that were added once this was understood.
+checkpoint. It did neither: forcing the 11B across three GPUs reproduced the
+failure exactly, on weights known to be sound. An audit running on shared
+cluster hardware should vary the execution path deliberately, never letting it
+track the variable under study; \cref{sec:s1-replication} reports the checks
+added once this was understood.
 
 % \begin{plan}
 % \begin{itemize}
@@ -189,20 +189,20 @@ reports the checks that were added once this was understood.
 % ---------------------------------------------------------------------
 \section{Threats to validity}\label{sec:disc-threats}
 
-Validity is a property of the inferences drawn from a score rather than of the
-instrument that produced it \cite{messick1995validity}, so the threats below
-are organised by the kind of inference each one undermines.
-\cref{tab:threats} lists them with their status, and the paragraphs that
-follow take the four groups in turn.
+Validity belongs to the inferences drawn from a score, not to the instrument
+that produced it \cite{messick1995validity}, so the threats below are
+organised by the kind of inference each one undermines. \cref{tab:threats}
+lists them with their status; the paragraphs that follow take the four groups
+in turn.
 
-The construct threats are the ones an examiner is most likely to press, and
-the first is the gap between what the ASI asks and what the probe asks. The
+The construct threats are the ones an examiner is most likely to press. The
+first is the gap between what the ASI asks and what the probe asks. The
 inventory measures attitudes towards women as a group; Phase~1A asks about a
 person whose gender is never stated, and nine of the twenty two trait phrases
 contain no gender reference at all. On those items the probe measures
-willingness to attribute a trait to an unspecified person, which is a
-narrower construct than the one the instrument was validated for. Phase~1B is
-the remedy rather than a separate study: supplying the gender in a photograph
+willingness to attribute a trait to an unspecified person, a narrower
+construct than the one the instrument was validated for. Phase~1B serves as
+the remedy and not as a separate study: supplying the gender in a photograph
 restores the comparison the wording removed, which is why the gender gap and
 not $\ASIint$ is the result this thesis rests on. The second construct threat
 is not remedied. Participants judged a grid of nine images as a set, where
@@ -214,32 +214,31 @@ Naming the harm matters as much as naming the construct
 attitude but that a system built on it ranks and filters images people see,
 so a disposition that varies with the gender of a depicted person propagates
 into what users are shown. That is why Phase~2 exists and why the Phase~1B
-gap is reported in yes-rates as well as in scores: a difference of five points
-in how often a model assents to a protective description, depending on the
-gender in the photograph, is interpretable as a disposition that could shape
-a ranking.
+gap is reported in yes-rates as well as in scores: a difference of five
+points in how often a model assents to a protective description, depending on
+the gender in the photograph, is interpretable as a disposition that could
+shape a ranking.
 
-The internal threats are largely handled, and the chapters say where. Response
-style is separated from attitude by an exact identity rather than an
-adjustment (\cref{prop:shift}), low coverage is reported with every
-affected number and tested by filtering (\cref{tab:s1-capmfilter}), anchor
-insensitivity is bounded by comparison against an explicit null
-(\cref{prop:null}), and quantisation is excluded from every headline run
-after the sweep showed shifts of the same size as the effects. The one that
-remains open is the sign convention for $\dm$, which is a decision about
-interpretation rather than about measurement, and \cref{sec:s2-deviation}
+The internal threats are largely handled, and the chapters say where. An
+exact identity separates response style from attitude (\cref{prop:shift});
+low coverage is reported with every affected number and tested by filtering
+(\cref{tab:s1-capmfilter}); comparison against an explicit null bounds anchor
+insensitivity (\cref{prop:null}); and quantisation is excluded from every
+headline run, after the sweep showed shifts of the same size as the effects.
+One threat remains open: the sign convention for $\dm$, a decision about
+interpretation and not about measurement, for which \cref{sec:s2-deviation}
 states the reading adopted and its basis.
 
 The statistical threats come down to small samples in three places, and the
 design responds to each differently. Twenty two items support an exact
-permutation test rather than an asymptotic one, so the $p$ values carry no
-distributional assumption; ten queries support a cluster bootstrap that
-resamples queries rather than rows; twenty faces a side support a $t$ test
-whose power is reported alongside every gap. None of these makes the samples
-larger. Reporting five models on the Phase~1B gap also multiplies the chance
-of a spurious result, which is why the Bonferroni threshold is applied and
-stated rather than left implicit, and why Llama-11B's $p=0.039$ is described
-as underpowered rather than as a failure to replicate.
+permutation test, not an asymptotic one, so the $p$ values carry no
+distributional assumption; ten queries support a cluster bootstrap over
+queries, not over rows; twenty faces a side support a $t$ test whose power is
+reported alongside every gap. None of these makes the samples larger.
+Reporting five models on the Phase~1B gap also multiplies the chance of a
+spurious result, which is why the Bonferroni threshold is applied and stated
+explicitly, and why Llama-11B's $p=0.039$ is described as underpowered and
+not as a failure to replicate.
 
 The external threats bound what any of this generalises to, and the bound is
 tight. Five models from two families, forty posed photographs from one
@@ -249,7 +248,6 @@ exposed, because no model exists between 11B and 72B in either family, so the
 trend is fitted across a gap of more than six times that contains no
 observation. Nothing here licenses a statement about vision language models
 in general, and the thesis makes none.
-
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lXX@{}}
 \toprule
@@ -312,9 +310,9 @@ This study used no new human participants. The human ratings it compares
 against are the anonymised responses released by Otterbacher et al.
 \cite{otterbacher2018sigir}, and their secondary use requires no further
 ethics approval, as the project proposal recorded. The Phase~1A stimuli are
-generated programmatically rather than drawn from any person, which was a
-deliberate choice: a generated image of a supposedly neutral person would
-carry its generator's own associations into the measurement
+generated programmatically and not drawn from any person, a deliberate
+choice: a generated image of a supposedly neutral person would carry its
+generator's own associations into the measurement
 (\cref{sec:design-stimuli}).
 
 Two bodies of third-party material are used under terms that restrict what
@@ -324,19 +322,19 @@ anywhere in this thesis and the files were held outside the repository
 throughout \cite{ma2015cfd}. The image search results from the 2018 study are
 third-party photographs whose subjects did not consent to appear in this
 work, so they are likewise not reproduced, and \cref{ch:study2} reports them
-as measurements rather than as pictures.
+as measurements and never as pictures.
 
-A hardware fault found during the work was reported rather than merely worked
+A hardware fault found during the work was reported, not merely worked
 around. Direct copies between GPUs on the cluster's PCIe nodes returned zeros
 silently, which produced plausible aggregates from models that were computing
 nothing (\cref{app:fault}). This was reported to UQ Research Computing with a
-minimal reproduction, since any other user sharding a model across those nodes
-would have been affected in the same undetectable way.
+minimal reproduction, since any other user sharding a model across those
+nodes would have been affected in the same undetectable way.
 
-One ethical point concerns the result rather than the procedure. Reporting
-that a model attributes protective descriptions more readily to photographs
-of women than of men names a disposition in a deployed system, and the
-appropriate response is to measure it rather than to leave it unstated. The
-thesis therefore reports the gaps with their uncertainty, their coverage and
-their sample limits, and avoids the stronger claim that any of these models is
-sexist, which neither the design nor the evidence would support.
+One ethical point concerns the result and not the procedure. Reporting that a
+model attributes protective descriptions more readily to photographs of women
+than of men names a disposition in a deployed system, and the appropriate
+response is to measure it, never to leave it unstated. The thesis therefore
+reports the gaps with their uncertainty, their coverage and their sample
+limits, and avoids the stronger claim that any of these models is sexist,
+which neither the design nor the evidence would support.
