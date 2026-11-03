@@ -82,39 +82,27 @@
 % \textbf{Check before submitting.} Read it aloud and time it.
 % \end{plan}
 
-Vision language models are increasingly used to judge images, raising questions
-about gender bias and the reliability of their evaluations. This thesis
-examines gender-related responses in five models from the Qwen2-VL and
-Llama-3.2-Vision families and their relationship with downstream image search
-judgements.
-
-The audit reads next-token probabilities without generating text and reports
-captured mass, the proportion assigned to the intended response set.
-Three experimental phases produced 25,450 measurements using the Ambivalent
-Sexism Inventory, 40 face photographs and image search results evaluated
-under original and reversed rating scales. Downstream judgements were
-compared with ratings from the low-scoring inventory group in a 2018 human
-study. That study associated higher benevolent sexism with reduced recognition
-of bias in particular search results. The model evaluation found partial
-query-level correspondence but did not establish that this relationship
-repeated across models.
+Vision language models are increasingly used to judge images, raising concerns
+about gender bias and evaluation reliability. This thesis examines
+gender-related responses in five Qwen2-VL and Llama-3.2-Vision models through
+25,450 measurements across inventory probes, face photographs and image search
+judgements. The audit reads next-token probabilities without generating text
+and reports captured mass, the probability assigned to the intended responses.
 
 The conventional inventory score is sensitive to a model's general tendency
-to agree. Polarity separation, which compares agreement between positively
-keyed and reverse-keyed items, distinguishes item discrimination from uniform
-shifts in assent. Face images revealed differences in the attribution of
-benevolent sexist traits, with four of five gender gaps reaching the
-corrected significance threshold; combining subscales partly obscured these
-differences. Both Llama models assigned substantially less probability to
-binary responses when images were present, including a featureless grey
-patch. Scale reversal robustness fell from $0.900$ without images to $0.044$
-for Llama-90B and $0.156$ for Qwen-72B in the image condition. Concurrent
-wording changes prevent attributing this contrast solely to visual input.
+to agree. Polarity separation distinguishes item discrimination from uniform
+shifts in assent, providing a complementary measure. Face experiments revealed
+gender differences in benevolent trait attribution, with four of five gaps
+reaching the corrected significance threshold. Both Llama models showed
+reduced response coverage with images, while the two largest models showed
+substantially lower scale reversal robustness in the image condition.
+Wording differences prevent attributing the latter contrast solely to visual
+input.
 
-The contribution is a reproducible probability-based audit that checks response
-coverage, response style and rating robustness before interpreting model
-scores. Interpretation remains limited by the five-model sample, one face
-database and the comparison between individual-image model ratings and human
-grid ratings. Next-token measurements also need not correspond to the text
-produced during generation.
+The 2018 human study associated higher benevolent sexism with reduced
+recognition of bias in particular search results. The model evaluation found
+partial query-level correspondence without establishing that this relationship
+repeated across models. The contribution is a reproducible audit that checks
+coverage, response style and robustness, with interpretation limited by the
+model sample and differences between human and model tasks.
 \clearpage
