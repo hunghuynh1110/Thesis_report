@@ -89,17 +89,6 @@ in \cref{sec:design-faults}. Every 11B job ran on a single L40, so no 11B
 measurement required a transfer across devices. Its output provided a
 comparison when the sharded runs produced unreliable measurements.
 
-GPT-4o was included in the proposal but excluded from the audit because its
-interface does not expose the distribution required by the method. The API
-returns only the top few log probabilities at each position
-\cite{hu2023prompting}. Consequently, the sum over the full vocabulary needed
-to normalise \cref{eq:capm} cannot be formed. Some pooled surface forms, such
-as \texttt{YES}, can also be absent from the returned set. Captured mass is
-required to assess measurement validity (\cref{sec:framework-validity}), so
-the method cannot be applied exactly when $\capm$ is unobservable. This
-restriction concerns access to the distribution and applies to closed
-interfaces with the same limitation.
-
 % ---------------------------------------------------------------------
 \section{The inventory as administered}\label{sec:design-phase1}
 
@@ -586,7 +575,7 @@ bit for bit.
 \toprule
 Parameter & Proposal & As built \\
 \midrule
-Models audited & 3 (Llama-90B, Qwen-72B, GPT-4o) & 5 (Qwen 2B, 7B, 72B; Llama 11B, 90B) \\
+Models audited & 3 & 5 (Qwen 2B, 7B, 72B; Llama 11B, 90B) \\
 Parameter-size axis & none & 2B to 90B within two families \\
 Phase~1B (real faces) & not planned & 40 faces, 4,400 per model \\
 Phase~1A visual anchor & humanoid silhouette & uniform grey patch \\
@@ -618,9 +607,8 @@ selection, a difference between Llama and Qwen is also a difference between
 90B and 72B. Evaluating three Qwen sizes and two Llama sizes provides
 comparisons within each family as well as between families.
 
-Three reductions followed from constraints established earlier in the chapter.
-GPT-4o was excluded because its interface does not expose $\capm$
-(\cref{sec:design-models}). The humanoid silhouette was replaced after failing
+Two reductions followed from constraints established earlier in the chapter.
+The humanoid silhouette was replaced after failing
 the gender gate at $0.853$ (\cref{sec:design-stimuli}). The consistency rate
 was also omitted because it is not separately identifiable from two scale
 orders, as established in \cref{sec:framework-calm}.

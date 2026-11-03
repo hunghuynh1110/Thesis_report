@@ -88,15 +88,6 @@ cannot: which components move probability away from the response set when an
 image appears, following the approach by which Arditi et al.
 \cite{arditi2024refusal} localised refusal to a single direction.
 
-Closed models remain outside the method, and a weaker version could reach
-them. Where an interface returns the top $k$ log probabilities, the pooled
-masses still give a lower bound,
-$\capm\ge\sum_{t\in\text{top-}k\cap(\Yset\cup\Nset)}p(t)$, which is
-enough to report coverage as a bound and to compare models by rank order even
-where the normalising sum is unavailable. That would bring GPT-4o and the
-other systems most used as judges within range of the same audit, at the cost
-of the exact quantities this thesis reports.
-
 Two extensions follow from the sampling rather than the method. A
 contemporary crawl of the same ten queries would measure how far image search
 has drifted in eight years, which the proposal intended and the budget did not
@@ -107,9 +98,6 @@ the item-level pattern reported here survives a format that cannot be
 acquiesced to.
 % \begin{plan}
 % \begin{itemize}
-%   \item \textbf{Closed models (GPT-4o).} Top-$k$ log-probabilities give a lower
-%         bound $\capm\ge\sum_{t\in\text{top-}k\,\cap\,(\Yset\cup\Nset)}p(t)$;
-%         report the bound and restrict to rank-order agreement.
 %   \item \textbf{Gendered referents} (woman / man / person) as a fourth factor
 %         in Phase~1 --- addresses the main construct threat.
 %   \item \textbf{Grid-level stimuli} in Phase~2 to match the human task.

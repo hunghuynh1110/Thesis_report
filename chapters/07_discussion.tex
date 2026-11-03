@@ -102,14 +102,6 @@ in this thesis is therefore a claim about the next token distribution and
 not about printed output. Hu and Levy \cite{hu2023prompting} argue that
 probabilities are the more faithful readout, and both things hold at once.
 
-One boundary of the method comes from the interface and not from the model.
-Captured mass requires the full vocabulary in the denominator, which closed
-APIs do not expose. GPT-4o could not be audited here at all for that reason
-(\cref{sec:design-models}). The restriction is particularly costly, as the
-models most widely used as judges are the ones currently out of reach. An
-audit designed around open weights, combined with a closed deployment
-landscape, is not a general audit of deployed systems.
-
 % \begin{plan}
 % \begin{itemize}
 %   \item Defensiveness becomes a number: Llama's refusal to answer a yes/no

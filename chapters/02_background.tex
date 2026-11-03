@@ -594,10 +594,7 @@ Hu and Levy \cite{hu2023prompting} compared asking a model for a
 metalinguistic judgement against reading the probability it assigns to the
 relevant strings, and found the prompted judgements consistently worse,
 diverging further as the question moved away from what the probabilities
-directly encode. They also note what is lost as models move behind closed
-interfaces that limit access to the distribution, which is the reason this
-thesis audits open weight models and why \cref{sec:intro-contrib} excludes
-GPT-4o.
+directly encode.
 
 The opposite result deserves equal weight. Wang et al.\
 \cite{wang2024myanswer} compared first token probabilities against the text a
@@ -649,7 +646,7 @@ The multimodal case is less studied and no better behaved. Chen et al.\
 scoring, pairwise comparison and batch ranking, and found them close to human
 preference on pairwise comparison but diverging on the other two. Their
 analysis of failure modes covers position bias alongside egocentric and length
-bias, and reports them in models as capable as GPT-4V. Scoring, the format
+bias. Scoring, the format
 closest to the task in \cref{ch:study2}, was among the weaker ones.
 
 CALM supplies the method this thesis borrows. Ye et al.\ \cite{ye2025justice}

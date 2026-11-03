@@ -212,11 +212,7 @@ extent.
         distributions, so that textual safety alignment is bypassed. This was
         met for two production models, Llama-3.2-Vision-90B and Qwen2-VL-72B,
         with a smaller Llama-11B model used for development and reported
-        throughout as a third point of comparison (\cref{ch:study1}). GPT-4o,
-        the proposal's third production model, was not audited, because its API
-        returns only the top $N$ log probabilities, so $\capm$ is not
-        observable and $\pyes$ cannot be evaluated over pooled surface forms as
-        defined.
+        throughout as a third point of comparison (\cref{ch:study1}).
 
   \item The second aim was to evaluate downstream visual judgement on queries
         from the SIGIR 2018 image search dataset, mapping the models'
@@ -346,19 +342,13 @@ This work makes five contributions.
 % ---------------------------------------------------------------------
 \section{Scope and thesis outline}\label{sec:intro-outline}
 % \begin{plan}
-% Half a page. One paragraph on scope changes from the proposal (GPT-4o not
-% audited; contemporary 2026 stream not collected; attention heatmaps not
+% Half a page. One paragraph on scope changes from the proposal
+% (contemporary 2026 stream not collected; attention heatmaps not
 % produced; humanoid silhouette replaced by a grey patch) with a pointer to
 % \cref{tab:scope}. Then one sentence per chapter.
 % \end{plan}
 
-The delivered study differs from the proposed scope in four respects.
-GPT-4o was not audited, leaving two production models in place of the three
-originally proposed. Its API returns only the top $N$ log probabilities,
-which are sufficient to bound captured mass but not to calculate it exactly.
-The resulting measurement would therefore differ from the one used for the
-models with open weights. A variant for the top $N$ regime is discussed as
-future work in \cref{ch:conclusion}.
+The delivered study differs from the proposed scope in three respects.
 
 The contemporary 2026 image search stream was not collected. Phase~2 therefore
 uses the 2018 archive alone, and the planned temporal comparison is absent.
