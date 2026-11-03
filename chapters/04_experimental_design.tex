@@ -15,8 +15,7 @@ table.
 
 Five open weight models are audited, drawn from two families at five
 parameter counts. Llama-3.2-Vision contributes its 11B and 90B variants and
-Qwen2-VL its 2B, 7B and 72B, which are every size the two families ship. The
-design has two axes rather than one. Across families it contrasts two ways of
+Qwen2-VL its 2B, 7B and 72B, which are every size the two families ship. Across families it contrasts two ways of
 joining vision to language: Llama inserts gated cross-attention adapters into a
 frozen language model, whereas Qwen projects the image into the token stream
 that self-attention already reads (\cref{sec:bg-vlm}). Within a family it
@@ -24,14 +23,7 @@ varies parameter count while holding the fusion design, the prompts and the
 stimuli fixed, so a trend across sizes can be told apart from a property of one
 model.
 
-The small models were added after the two large ones, at the supervisor's
-suggestion, to turn two isolated points into a trend that can be read. They
-cost little, because a 2B or 7B model runs on one GPU in under an hour. They
-also changed what the project can claim, since a result holding at both 2B and
-72B is a property of a family rather than of a checkpoint. One gap in the
-ladder cannot be closed. Qwen2-VL ships nothing between 7B and 72B and
-Llama-3.2-Vision nothing between 11B and 90B, so there is no observation
-between 11B and 72B, a span of more than six times.
+The minor models were incorporated subsequent to the two larger ones, following the supervisor's recommendation, to transform two disparate points into a coherent trend. They are inexpensive, as a 2B or 7B model operates on a single GPU in less than an hour. They also modified the project's claims, as a result that is valid at both 2B and 72B pertains to a family rather than a specific checkpoint. A single void in the ladder remains unsealed. Qwen2-VL does not release any models between 7B and 72B, while Llama-3.2-Vision has no offerings between 11B and 90B, resulting in a gap of over six times between 11B and 72B.
 \cref{sec:disc-threats} states what that costs.
 
 \begin{table}[htbp]\centering\small
