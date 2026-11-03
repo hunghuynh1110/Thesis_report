@@ -35,13 +35,17 @@ Job & Run & Status & Used in \\
 27113674 & three-arm workaround validation & VALID & \cref{tab:app-fault} \\
 27113679, 27113680 & Phase 1/2, 90B, bf16, 3$\times$H100, workaround & VALID & \cref{ch:study1,ch:study2} \\
 27114730 & Phase 1, 90B, 4-bit, 1 GPU & VALID (cross-check) & \cref{tab:s1-replication} \\
-\datagap{job id not recorded} & Phase 1, 90B, rerun on repaired hardware & VALID & \cref{tab:s1-replication} \\
-\datagap{job id not recorded} & Phase 1/2, Qwen2-VL-72B, bf16 & VALID & \cref{ch:study1,ch:study2} \\
+\datagap{job id not recorded}, 14 Aug 2026 & Phase 1, 90B, rerun on repaired hardware & VALID & \cref{tab:s1-replication} \\
+\datagap{job id not recorded}, 14 Aug 2026 & Phase 1/2, Qwen2-VL-72B, bf16 & VALID & \cref{ch:study1,ch:study2} \\
 27546008 & Phase 1/2, Qwen2-VL-7B, bf16, 1$\times$L40S & VALID & \cref{ch:study1,ch:study2} \\
 27546075 & Phase 1/2, Qwen2-VL-2B, bf16, 1$\times$L40S & VALID & \cref{ch:study1,ch:study2} \\
-\datagap{job ids not recorded} & Phase 1B, all five models, 4,400 rows each & VALID & \cref{sec:s1b-gap} \\
+\datagap{job ids not recorded}, 22 to 25 Sep 2026 & Phase 1B, all five models, 4,400 rows each & VALID & \cref{sec:s1b-gap} \\
 \bottomrule
 \end{tabularx}
-\caption{All runs referred to in this thesis. Phase~1A is listed as Phase~1, the name it carried when the runs were made.}
+\caption{All runs referred to in this thesis. Phase~1A is listed as
+Phase~1, the name it carried when the runs were made. Three entries carry a
+date instead of an identifier. The cluster logs were not retained for those
+runs and the outputs record no job identifier, so the dates are taken from the
+output file timestamps and bound the search in the scheduler accounting log.}
 \label{tab:app-runs}
 \end{table}
