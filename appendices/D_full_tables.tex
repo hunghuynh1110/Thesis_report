@@ -32,3 +32,26 @@ hot air baloon (control) & 6.365 & $+0.333$ & $-0.036$ & $+0.507$ & $+0.386$ & $
 \caption{Per-query deviation from the low-ASI baseline (vision rows).}
 \label{tab:app-queries}
 \end{table}
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+& \multicolumn{3}{c}{$\RR_{\text{vision}}(\tau)$ / $\RR_{\text{text}}(\tau)$} & $\dRR(0.5)$ & 95\% CI \\
+\cmidrule(lr){2-4}
+Model & $\tau=0.25$ & $\tau=0.5$ & $\tau=1$ & & \\
+\midrule
+Qwen-2B & 0.111 / 0.20 & 0.189 / 0.20 & 0.400 / 0.70 & $-0.011$ & $[-0.30,+0.27]$ \\
+Qwen-7B & 0.022 / 0.10 & 0.156 / 0.20 & 0.267 / 0.60 & $-0.044$ & $[-0.38,+0.22]$ \\
+Llama-11B & 0.022 / 0.00 & 0.022 / 0.00 & 0.078 / 0.00 & $+0.022$ & $[+0.00,+0.06]$ \\
+Qwen-72B & 0.089 / 0.80 & 0.156 / 0.90 & 0.267 / 1.00 & $-0.744$ & $[-0.98,-0.50]$ \\
+Llama-90B & 0.000 / 0.90 & 0.044 / 0.90 & 0.300 / 1.00 & $-0.856$ & $[-0.98,-0.66]$ \\
+\bottomrule
+\end{tabular}
+\caption{Robustness rate at three tolerances. \cref{tab:s2-rr} reports the
+$\tau=0.5$ column alone. The ordering is unchanged at every tolerance, and the
+collapse under an image is visible at all three: the two largest models hold
+$\RR_{\text{text}}\ge0.80$ with no image at $\tau=0.25$ and reach $0.089$ and
+$0.000$ with one. Confidence intervals are cluster bootstrap over the ten
+queries, $B=10{,}000$.}
+\label{tab:app-rr-full}
+\end{table}
