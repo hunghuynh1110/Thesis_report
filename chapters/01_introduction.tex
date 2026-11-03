@@ -352,33 +352,40 @@ This work makes five contributions.
 % \cref{tab:scope}. Then one sentence per chapter.
 % \end{plan}
 
-Four departures from the proposed scope should be stated at the outset. GPT-4o
-was not audited, which leaves two production models rather than three; its API
-returns only the top $N$ log probabilities, enough to bound captured mass but
-not to compute it, so the measurement would not be the one taken on the open
-weights models (\cref{ch:conclusion} treats a variant for the top $N$ regime as
-future work). The contemporary 2026 image search stream was not collected, so
-Phase~2 runs on the 2018 archive alone and the planned temporal comparison is
-absent. Cross attention heatmaps were not produced, so the claim that visual
-input drives the observed effects rests on behavioural contrasts between
-conditions rather than on attribution inside the model. The humanoid silhouette
-intended as the Phase~1 visual anchor was replaced by a uniform grey patch
-after it failed stimulus validation, where the 11B model read a gender gap of
-$0.853$ against a threshold of $0.20$. \cref{tab:scope} sets out each change
-with its reason and the as built measurement counts, and
-\cref{sec:disc-threats} carries the consequences through to the limitations.
+The delivered study differs from the proposed scope in four respects.
+GPT-4o was not audited, leaving two production models in place of the three
+originally proposed. Its API returns only the top $N$ log probabilities,
+which are sufficient to bound captured mass but not to calculate it exactly.
+The resulting measurement would therefore differ from the one used for the
+models with open weights. A variant for the top $N$ regime is discussed as
+future work in \cref{ch:conclusion}.
 
-The remainder of the thesis proceeds as follows. \cref{ch:background} reviews
-bias in vision encoders, the vulnerabilities of automated judges, the evidence
-for defensiveness induced by alignment, and the human baselines this thesis
-relies on, and it states the gap precisely. \cref{ch:framework} develops the
-measurement framework: logit extraction, captured mass, the intrinsic and
-extrinsic metrics, and the propositions that establish their invariance
-properties. \cref{ch:design} describes the system as built, covering models,
-instruments, stimulus construction and validation, the CALM design, and a
-register of the measurement faults encountered. \cref{ch:study1} reports the
-intrinsic study and answers RQ1, and \cref{ch:study2} reports the downstream
-study and addresses RQ2. \cref{ch:discussion} draws the two together, states
-what measurement at the level of logits does and does not reveal, and tabulates
-the threats to validity. \cref{ch:conclusion} concludes and identifies the
-measurements that would settle the questions this thesis can only pose.
+The contemporary 2026 image search stream was not collected. Phase~2 therefore
+uses the 2018 archive alone, and the planned temporal comparison is absent.
+Cross attention heatmaps were also not produced. The assessment of how visual
+input affects the models consequently rests on behavioural comparisons
+between conditions, without attribution to components within the model.
+Finally, a uniform grey patch replaced the humanoid silhouette intended as
+the Phase~1 visual anchor. The silhouette failed stimulus validation because
+the 11B model returned a gender gap of $0.853$, above the threshold of $0.20$.
+\cref{tab:scope} records each change, its rationale and the delivered
+measurement counts. The consequences for interpretation and generalisation
+are discussed in \cref{sec:disc-threats}.
+
+The remaining chapters develop the background, measurement framework and
+experimental evaluation. \cref{ch:background} reviews bias in vision
+encoders, the limitations of automated judges, evidence for defensiveness
+induced by alignment, and the human baselines used in this thesis. It then
+identifies the research gap. \cref{ch:framework} defines logit extraction,
+captured mass, and the intrinsic and extrinsic metrics, together with the
+propositions that establish their invariance properties.
+\cref{ch:design} describes the models, instruments, stimulus construction
+and validation, and the CALM design. It also documents the measurement
+faults encountered during implementation.
+
+\cref{ch:study1} reports the intrinsic study and answers RQ1, while
+\cref{ch:study2} presents the downstream evaluation and addresses RQ2.
+\cref{ch:discussion} brings the results together, explains the capabilities
+and limitations of auditing at the level of logits, and tabulates the
+threats to validity. \cref{ch:conclusion} summarises the contributions and
+identifies further measurements needed to address the remaining questions.
