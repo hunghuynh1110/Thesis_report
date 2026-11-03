@@ -110,8 +110,9 @@ it is low for a reason. The probability that leaves $\Yset\cup\Nset$ goes to
 first tokens that begin some other kind of reply. In the same diagnostic the
 largest competitor was the token \texttt{I}, which took $0.4149$ on the first
 inventory item, and which is the model beginning ``I cannot determine\ldots''.
-A low $\capm$ thus records a refusal to answer in the requested form, read off
-the distribution rather than inferred from a string. The quantity does two jobs
+A low $\capm$ directly records probability outside the requested response
+set. This can reflect refusal, explanatory text or another response format;
+captured mass alone does not distinguish these continuations. The quantity does two jobs
 at once: it is a validity statistic that bounds how much of the model's
 behaviour $\pyes$ describes, and it is an outcome in its own right
 (\cref{sec:s1-quality}).
@@ -232,7 +233,8 @@ item was asked. Because the decomposition is an identity and every run has a
 complete set of 330 cells with no missing $\pyes$, $D$ follows from two ledger
 quantities by subtraction.
 
-Separating the two terms changes how the three models rank. For Llama-90B,
+Separating the two terms changes the comparison among the three models
+discussed here. For Llama-90B,
 $\tfrac{3}{11}$ of its mean $\pyes$ of $0.585$ gives $0.160$ against an
 observed $\ASIint$ of $0.153$, so $D=-0.007$ and the headline score is its yes
 rate almost exactly. Qwen-72B gives $0.068$ against $0.008$, and Llama-11B
@@ -295,7 +297,8 @@ $-0.188$, while over all five it is $-0.150$. This thesis takes
 the version over all five structures, and a variant that scores inversion rows
 as $1-\pyes$, as sensitivity checks in \cref{ch:study1}.
 
-All three models separate the two kinds of item in the same direction and none
+All three models in this comparison separate the two kinds of item in the
+same direction and none
 separates them towards sexism. The measured values are $-0.110$ on Llama-11B,
 $-0.097$ on Llama-90B and $-0.188$ on Qwen-72B, so each agrees more readily
 with the six reverse items than with the sixteen keyed towards sexism. Qwen
@@ -323,8 +326,8 @@ the model agrees with it, so any assignment of six reverse labels to the twenty
 two items is as likely as the observed one \cite{ernst2004permutation}.
 Enumerating all of them gives $\binom{22}{6}=74{,}613$ values of the test
 statistic, few enough to compute in full. The $p$ value is then a count over
-that set, with no Monte Carlo error and no assumption about how $\pyes$ is
-distributed.
+that set, with no Monte Carlo error. It requires the stated exchangeability
+assumption, but not a parametric distribution for $\pyes$.
 
 \begin{equation}
   T(\bm\ell) = \frac{1}{16}\sum_{i:\ell_i=+1}\bar p_i - \frac{1}{6}\sum_{i:\ell_i=-1}\bar p_i,
@@ -342,8 +345,9 @@ informative about the inventory's structure as one that agreed more with the
 others, and the sign is read off $T(\bm\ell_{\text{obs}})$ separately. The unit
 of permutation is the item, so the test has twenty two units of information
 however many prompts were run. Collapsing each item to its mean $\bar p_i$ over
-twelve cells is what makes the labels exchangeable, and it is also what stops
-the design inflating its own significance. This is the test promised in
+twelve cells avoids treating repeated measurements as independent items.
+Exchangeability of the keying labels remains an assumption of the null model.
+This is the test promised in
 \S3.2.5 of the proposal, and it is the inferential basis for every claim
 \cref{ch:study1} makes about keying.
 
@@ -529,9 +533,10 @@ study does not support.
 
 \cref{eq:lambda} is the most direct form RQ2 can take: it places a model on the
 axis between the two human groups instead of measuring its distance from one of
-them. The index is not computed in this thesis, because $\rhigh$ requires the raw
-SIGIR responses of individual participants rather than the published group
-means, and that file was not obtained in time. Two properties of \cref{eq:lambda} also
+them. The index is not computed in the delivered analysis. The raw SIGIR
+participant responses used for the low ASI baseline also permit construction
+of the high ASI baseline, but that comparison was not included. Two properties
+of \cref{eq:lambda} also
 need guarding before it is used. The denominator $\rhigh-\rlow$ is small for
 queries on which the two human groups agreed, which makes $\lambda$ unstable
 there. The index is also unbounded, so a model outside the human range returns
@@ -578,18 +583,19 @@ normalised rating either way.
 % \end{itemize}
 % \end{plan}
 
-The primary tolerance is $\tau=0.5$, which counts a pair as robust when both
-readings round to the same point on the scale. Values of $0.25$ and $1$ are
+The primary tolerance is $\tau=0.5$, which counts a pair as robust when its
+normalised ratings differ by at most half a scale point. Values of $0.25$ and $1$ are
 reported as a sensitivity table in \cref{ch:study2}, since the choice of
 $\tau$ fixes how much drift counts as agreement and no single value is
 principled.
 
-The proposal also defined a consistency rate against a randomly drawn option
-order. With only two orders in the design a random draw coincides with one of
-them, so $\CR$ carries no information that $\RR$ does not already carry and is
-not separately identifiable here. It is dropped for that reason, stated rather
-than quietly omitted, and recovering it would need a design with at least three
-orderings.
+CALM distinguishes robustness rate from consistency rate $\CR$. Robustness
+compares judgements before and after a perturbation, while consistency compares
+repeated judgements under identical, unperturbed conditions. This thesis
+reports robustness under scale reversal and does not separately report
+consistency rate. With deterministic forward passes, repeated identical
+inputs primarily check execution reproducibility. The number of scale orders
+does not prevent such a consistency check.
 
 Where there is no image the input is fixed by the query and the order alone. The
 90 pairs in that condition are 10 distinct pairs each measured nine times, so
@@ -602,14 +608,17 @@ queries rather than rows: the cluster bootstrap
 of the ten queries, recomputes $\dRR$ on each, and reports the 2.5th and 97.5th
 percentiles.
 
-$\RR$ says how often a model is robust but not what it does instead, so a
-second statistic describes the mechanism. Let $\beta_1$ be the slope of
+$\RR$ measures pairwise agreement under scale reversal. A regression of the
+raw ratings provides a complementary description of their relationship. Let
+$\beta_1$ be the slope of
 $\rexp^{\,\text{rev}}$ on $\rexp^{\,\text{orig}}$ across pairs. A model that
 follows the reversed anchors as instructed gives $\beta_1=-1$, because
 reversing the scale should reverse the raw digit; a model that ignores the
-anchors and answers the same digit regardless gives $\beta_1=+1$. The slope
-separates two causes of a low $\RR$ that \cref{eq:rr} cannot distinguish, and
-\cref{sec:s2-calm} uses it to say which one each model exhibits.
+anchors and answers the same digit regardless gives $\beta_1=+1$. These slopes
+describe ideal relationships only when their intercepts also
+match the corresponding transformations. The slope alone does not establish
+exact anchor following or ignoring. \cref{eq:rr} measures agreement directly,
+while \cref{sec:s2-calm} uses the regression as a descriptive diagnostic.
 
 % ---------------------------------------------------------------------
 \section{Validity statistics and degeneracy}\label{sec:framework-validity}

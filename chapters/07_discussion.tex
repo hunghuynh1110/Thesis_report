@@ -68,30 +68,31 @@ claim than RQ2 was framed to test.
 
 In this thesis, the distribution over the next token is read in place of the
 text decoded from it. The gain in coverage is due to the fact that sampling
-and parsing are not required for measurement. Instead, a refusal becomes a
-measurement, which is recorded as captured mass falling from $0.979$ to
-$0.237$. The reading is particularly useful here, as Arditi et al.
+and parsing are not required for measurement. Instead, reduced response coverage becomes a
+measurement, recorded as captured mass falling from $0.979$ to $0.237$. The
+reading is particularly useful here, as Arditi et al.
 \cite{arditi2024refusal} localised refusal to a single direction in the
-residual stream. Refusal is therefore a quantity the model carries, and
-\cref{sec:s1-quality} measures it.
+residual stream. This establishes an internal representation of refusal, but does not make
+captured mass a universal refusal detector. \cref{sec:s1-quality} separates
+the observed coverage reduction from its interpretation.
 
-The same reading separates two events that any text-level audit must
-conflate into one. A model that declines and a model that answers neutrally
-both produce uninformative text. The separation is due to the fact that the
-two sit far apart in the distribution. Instead of one undifferentiated
-outcome, the first moves its mass off the response set and the second splits
-it evenly within. That distinction makes \cref{tab:capm} interpretable, and
-it located defensiveness in one model family.
+The reading distinguishes probability outside the response set from
+probability divided evenly between the permitted responses. These are
+different measurement outcomes even when an aggregate bias score is similar.
+The first can reflect refusal, explanation or another response format; the
+second describes a balanced conditional response. This distinction supports
+the coverage comparison in \cref{tab:capm}, without treating every low
+coverage measurement as a demonstrated refusal.
 
 Phase~2 shows a second thing a text-level audit would miss, which is how the
-model uses the prompt. \cref{sec:s2-anchor} found the two largest models
-applying the stated scale anchors with no image and ceasing to apply them
-with one. The prompt is unchanged and the scale definition is unchanged, and
-what degrades is the model's use of an instruction. The effect is a form of
-visual dominance over the text channel, consistent with the mediation result
-of Weng et al. \cite{weng2024images}. Behavioural contrast, combined with a
-fixed prompt, locates that dominance on a generative model without component
-ablation.
+model uses the prompt. \cref{sec:s2-anchor} found lower scale robustness in the two largest
+models when images were supplied. The scale anchors are retained, but the
+referent also changes from ``a typical result'' to ``this image result''.
+The contrast therefore combines visual input with a wording change and does
+not isolate a component of the model. It is consistent with visual influence
+on judgement, which Weng et al. \cite{weng2024images} examine through causal
+mediation in a different architecture. Component attribution in the present
+models would require additional interventions.
 
 The limits of the method deserve the same prominence in this chapter as its
 benefits. Wang et al. \cite{wang2024myanswer} found first token
@@ -144,8 +145,9 @@ the keying, are requirements of administering such a scale and not
 refinements of it.
 
 Infrastructure supplied the third lesson, and it cost this project the most
-time. Every small model ran on one GPU and every large model on three, so
-size and GPU count were perfectly confounded. When the 90B produced
+time. The small models used single GPU execution, while the large models used
+multiple GPUs. Model size was therefore associated with exposure to
+transfers between devices. When the 90B produced
 degenerate output, the same code working on the 11B appeared to exonerate
 the code. The inference was wrong due to the fact that forcing the 11B
 across three GPUs reproduced the failure exactly. Deliberate variation of
@@ -206,8 +208,9 @@ measurement. \cref{sec:s2-deviation} states the reading adopted, combined
 with the basis on which it was adopted.
 
 The statistical threats in this thesis come down to small samples in three
-separate places. Twenty two items support an exact permutation test, so the
-$p$ values carry no distributional assumption. Ten queries support a cluster
+separate places. Twenty two items support a fully enumerated permutation test under the
+stated exchangeability assumption. Its $p$ values require no parametric
+distribution for item means. Ten queries support a cluster
 bootstrap over queries, and twenty faces a side support a $t$ test with
 reported power. None of this is particularly reassuring, as the design
 responds to each sample without making any of them larger. Five models on
@@ -292,7 +295,8 @@ Programmatic generation, combined with the controls in
 
 Two bodies of third-party material are used under terms that restrict what
 may be reproduced. The Chicago Face Database permits non commercial academic
-use and forbids redistributing the images \cite{ma2015cfd}. No face appears
+use and prohibits redistribution; publication requires permission
+\cite{ma2015cfd}. No face appears
 anywhere in this thesis, and the files were held outside the repository
 throughout. The 2018 image search results are particularly restricted, as
 their subjects did not consent to appear in this work. \cref{ch:study2}

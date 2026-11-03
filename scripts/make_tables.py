@@ -134,8 +134,10 @@ def t_gap() -> str:
                       ("gender_gap_HS", "Hostile")):
         out.append(f"{name} $G_m$ & " + " & ".join(
             sgn(LEDGER["phase1b"][m][key]["gap"], 4) for m in ORDER) + r" \\")
-        out.append(r"\quad exact $p$ & " + " & ".join(
-            f"{LEDGER['phase1b'][m][key]['p']:.3f}" for m in ORDER) + r" \\")
+        out.append(r"\quad $t$ test $p$ & " + " & ".join(
+            "$<0.001$" if LEDGER["phase1b"][m][key]["p"] < 0.001
+            else f"{LEDGER['phase1b'][m][key]['p']:.3f}"
+            for m in ORDER) + r" \\")
     out.append(r"\midrule")
     out.append(r"Cohen's $d$ (benevolent) & " + " & ".join(
         sgn(LEDGER["phase1b"][m]["gender_gap_BS"]["cohens_d"], 2) for m in ORDER) + r" \\")

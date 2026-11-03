@@ -1,0 +1,158 @@
+[
+  {
+    "figure": "app-heatmap",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1191,
+      1200
+    ],
+    "regenerated_size": [
+      1191,
+      1200
+    ]
+  },
+  {
+    "figure": "capm-dist",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      589
+    ],
+    "regenerated_size": [
+      1200,
+      589
+    ]
+  },
+  {
+    "figure": "capm-fixes",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      457
+    ],
+    "regenerated_size": [
+      1200,
+      457
+    ]
+  },
+  {
+    "figure": "gap",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      721
+    ],
+    "regenerated_size": [
+      1200,
+      721
+    ]
+  },
+  {
+    "figure": "gate1",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      449
+    ],
+    "regenerated_size": [
+      1200,
+      449
+    ]
+  },
+  {
+    "figure": "s1-items",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      813
+    ],
+    "regenerated_size": [
+      1200,
+      813
+    ]
+  },
+  {
+    "figure": "s1-perm",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      532
+    ],
+    "regenerated_size": [
+      1200,
+      532
+    ]
+  },
+  {
+    "figure": "s1-replication",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      646
+    ],
+    "regenerated_size": [
+      1200,
+      646
+    ]
+  },
+  {
+    "figure": "s1-structure",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      528
+    ],
+    "regenerated_size": [
+      1200,
+      528
+    ]
+  },
+  {
+    "figure": "s2-anchor",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      665
+    ],
+    "regenerated_size": [
+      1200,
+      665
+    ]
+  },
+  {
+    "figure": "s2-queries",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      655
+    ],
+    "regenerated_size": [
+      1200,
+      655
+    ]
+  },
+  {
+    "figure": "s2-rr",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      625
+    ],
+    "regenerated_size": [
+      1200,
+      625
+    ]
+  },
+  {
+    "figure": "stimuli",
+    "status": "pixel identical at 1200px",
+    "original_size": [
+      1200,
+      443
+    ],
+    "regenerated_size": [
+      1200,
+      443
+    ]
+  }
+]

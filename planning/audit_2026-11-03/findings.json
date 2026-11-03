@@ -1,0 +1,241 @@
+[
+  {
+    "id": "A01",
+    "title": "The headline gender gap is not positive in all five models",
+    "locations": [
+      "[frontmatter/abstract.tex:47](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/frontmatter/abstract.tex:47>)",
+      "[chapters/05_study1_intrinsic.tex:604](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/05_study1_intrinsic.tex:604>)",
+      "[chapters/05_study1_intrinsic.tex:691](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/05_study1_intrinsic.tex:691>)",
+      "[chapters/08_conclusion.tex:53](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/08_conclusion.tex:53>)"
+    ],
+    "evidence": "The regenerated ledger gives Qwen-2B a benevolent gap of -0.0071 (p=0.00403). Four model gaps are positive; one is negative. Llama-11B p=0.03894 does not meet the stated Bonferroni threshold p<0.01. The figure caption incorrectly says every gap is positive and significant.",
+    "action": "Correct the abstract, Chapter 5 caption and summary, and conclusion together. Retain every measured value. Distinguish direction from significance.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A02",
+    "title": "CALM consistency rate is misdefined and the omission rationale is unsupported",
+    "locations": [
+      "[chapters/03_measurement_framework.tex:587](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:587>)",
+      "[chapters/01_introduction.tex:238](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/01_introduction.tex:238>)",
+      "[chapters/04_experimental_design.tex:586](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/04_experimental_design.tex:586>)"
+    ],
+    "evidence": "The CALM paper defines CR from two judgements under identical, unperturbed conditions. It does not require a third option order. See its Metrics section, PDF page 6, https://proceedings.iclr.cc/paper_files/paper/2025/file/fdca08d371e4b6c031397909e20043bd-Paper-Conference.pdf . If the proposal used a different definition, it must be labelled as a proposal-specific metric rather than attributed to CALM. Deterministic repeated passes would make conventional CR an execution reproducibility check, not an unavailable third-order statistic.",
+    "action": "Separate the original CALM definition from any proposal adaptation and state the actual reason it is not separately reported. Update the scope table and linked explanations.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A03",
+    "title": "The anchor figure caption gives the wrong slope sign",
+    "locations": [
+      "[chapters/06_study2_extrinsic.tex:196](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/06_study2_extrinsic.tex:196>)"
+    ],
+    "evidence": "Independent regression of the original stored ratings gives Llama-90B slopes -0.96790 without an image and -0.87079 with an image. The plotted figure regenerates identically and the chapter body reports -0.97 and -0.87. Its caption instead says the slope becomes positive. The same caption still describes three models although the figure has five.",
+    "action": "Rewrite the caption to match the negative slope and the five plotted models. Explain pairwise agreement loss without claiming complete anchor ignoring.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A04",
+    "title": "Reading logits does not establish a bypass of safety alignment",
+    "locations": [
+      "[chapters/01_introduction.tex:138](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/01_introduction.tex:138>)",
+      "[chapters/01_introduction.tex:212](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/01_introduction.tex:212>)",
+      "[frontmatter/abstract.tex:91](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/frontmatter/abstract.tex:91>)"
+    ],
+    "evidence": "The forward pass is performed on instruction-tuned weights. Reading before sampling avoids sampling and text parsing; it does not remove the effects of alignment from the distribution. Arditi et al. show refusal is represented within model activations: https://proceedings.neurips.cc/paper_files/paper/2024/hash/f545448535dfde4f9786555403ab7c49-Abstract-Conference.html . This audit performs no corresponding intervention. The cited alignment papers do not establish that alignment changes only expression and never representations.",
+    "action": "Describe the method as observing probabilities before decoding. Remove or qualify the safety-bypass and latent-attitude claims without changing the measurement protocol.",
+    "kind": "Unsupported interpretation"
+  },
+  {
+    "id": "A05",
+    "title": "Visual token bounds are described as a fixed token count",
+    "locations": [
+      "[chapters/04_experimental_design.tex:420](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/04_experimental_design.tex:420>)",
+      "[chapters/04_experimental_design.tex:258](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/04_experimental_design.tex:258>)"
+    ],
+    "evidence": "The code sets min_pixels=256*28^2 and max_pixels=1280*28^2. These are a range, not equality constraints. The official documentation explains that such settings encode images to a number of tokens within the interval: https://huggingface.co/docs/transformers/v4.57.1/en/model_doc/qwen2_vl#image-resolution-trade-off . Actual equality across different images is not demonstrated by these settings alone.",
+    "action": "State that the pixel/token range is bounded. Claim equal sequence lengths only if image_grid_thw or equivalent run evidence establishes them. Review related Chapter 2 and Appendix A claims.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A06",
+    "title": "The stimulus validation statistic is described as the wrong quantity",
+    "locations": [
+      "[chapters/04_experimental_design.tex:181](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/04_experimental_design.tex:181>)"
+    ],
+    "evidence": "The stimulus validation summary and figure-generation code define 0.853 and 0.062 as |P(male)-P(female)|. The prose describes 0.853 as probability assigned to one side of the pooled pair. A gap and a one-sided conditional probability are different quantities.",
+    "action": "Call the statistic the absolute gender probability gap and retain 0.853, 0.062 and threshold 0.20.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A07",
+    "title": "Production measurements do not retain the raw top ten vocabulary tokens",
+    "locations": [
+      "[chapters/04_experimental_design.tex:354](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/04_experimental_design.tex:354>)"
+    ],
+    "evidence": "The production runner calls extract_probs for specified target strings. HFVisionExtractor.extract_probs returns a dictionary for those targets, and the stored rows contain target token probabilities, not a full-vocabulary top-ten dump. Chapter 5 explicitly says production runs stored target tokens alone. Top-ten diagnostics exist in the diagnostic sweep.",
+    "action": "Limit the claim to the diagnostic sweep and state accurately what production rows retain.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A08",
+    "title": "The stated unavailability of high-ASI raw data conflicts with the analysis inputs",
+    "locations": [
+      "[chapters/03_measurement_framework.tex:534](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:534>)",
+      "[chapters/06_study2_extrinsic.tex:279](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/06_study2_extrinsic.tex:279>)"
+    ],
+    "evidence": "The current loader successfully reads final_anonymised.csv with 281 rows and 172 columns. It uses asi_score and per-query ratings to compute the low-ASI baseline. The same file supports identifying participants above the median; a different raw file is not intrinsically needed for the high group. The median is 2.8181818 and the low group has 148 participants. No high-group baseline was inserted into the manuscript during this audit.",
+    "action": "Describe the comparison as not computed within the delivered analysis, unless there is documented evidence of a more specific historical access problem. Do not retain the generic missing-raw-file explanation.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A09",
+    "title": "Claims that the prompt is unchanged contradict the administered prompts",
+    "locations": [
+      "[chapters/07_discussion.tex:89](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/07_discussion.tex:89>)",
+      "[appendices/A_instruments.tex:101](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/appendices/A_instruments.tex:101>)"
+    ],
+    "evidence": "Phase 2 changes both image presence and the referent: \"this image result\" versus \"a typical result\". Appendix A quotes both and Chapter 4 acknowledges the difference. The comparison therefore does not hold all wording fixed.",
+    "action": "Acknowledge the wording change and its potential contribution to the modality contrast; retain the actual prompts.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A10",
+    "title": "Older model counts conflict with the delivered five-model scope",
+    "locations": [
+      "[chapters/01_introduction.tex:230](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/01_introduction.tex:230>)",
+      "[chapters/03_measurement_framework.tex:235](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:235>)",
+      "[chapters/05_study1_intrinsic.tex:324](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/05_study1_intrinsic.tex:324>)"
+    ],
+    "evidence": "The abstract, data and Chapter 4 cover five models. Parts of the introduction still discuss correlation at n=2, while Chapters 6 and 7 report rho=-0.70 for five models. Some three-model descriptions are legitimate subsets, but they are not identified as such; a five-column table caption says all three models.",
+    "action": "Update scope descriptions or explicitly label subsets. The independently recalculated five-model Spearman statistic is -0.70, p=0.1881204.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A11",
+    "title": "The discussion incorrectly assigns three GPUs to every large model",
+    "locations": [
+      "[chapters/07_discussion.tex:147](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/07_discussion.tex:147>)"
+    ],
+    "evidence": "Chapter 4 model specifications give Qwen-72B two H100 GPUs and Llama-90B three H100 GPUs. The discussion says every large model ran on three. Its associated perfectly-confounded argument must distinguish single-device from multi-device execution, rather than an exact shared GPU count.",
+    "action": "Correct the hardware description while preserving the demonstrated transfer fault and its controls.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A12",
+    "title": "A half-point tolerance is not equivalent to rounding to the same integer",
+    "locations": [
+      "[chapters/03_measurement_framework.tex:582](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:582>)"
+    ],
+    "evidence": "The implementation tests abs(r_original-r_reversed_normalised)<=0.5. For example, 3.49 and 3.51 pass that test but round to different integers. Conversely, two values can round to the same integer while differing by more than 0.5. These examples are mathematical checks, not new experimental observations.",
+    "action": "Define the tolerance as an absolute difference of at most 0.5. Retain all computed robustness rates.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A13",
+    "title": "The Phase 1B table mislabels t-test p values as exact and rounds some to zero",
+    "locations": [
+      "[chapters/05_study1_intrinsic.tex:583](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/05_study1_intrinsic.tex:583>)"
+    ],
+    "evidence": "scripts/build_ledger.py calls scipy.stats.ttest_ind on face means. These are t-test p values, not the exact keying permutation test from Phase 1A. Displayed 0.000 values reflect rounding, not zero probability.",
+    "action": "Label the test accurately and use a bound such as p<0.001 when a nonzero value rounds below display precision. This changes reporting notation, not the stored results.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A14",
+    "title": "The maximum Qwen coverage change is understated",
+    "locations": [
+      "[chapters/05_study1_intrinsic.tex:110](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/05_study1_intrinsic.tex:110>)"
+    ],
+    "evidence": "For Qwen-2B, the ledger gives text-only captured mass 0.9102 and noise captured mass 0.8758, a difference of 0.0344. The text says all three Qwen variants change by at most 0.027. The table itself matches the ledger.",
+    "action": "Correct the prose maximum while retaining the table. This is one numerical claim that cannot be repaired merely through stylistic wording.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A15",
+    "title": "Results are generalised beyond the evaluated architectures",
+    "locations": [
+      "[chapters/06_study2_extrinsic.tex:91](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/06_study2_extrinsic.tex:91>)",
+      "[chapters/07_discussion.tex:222](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/07_discussion.tex:222>)"
+    ],
+    "evidence": "Chapter 6 treats a shared pattern in two models as a property of current visual grounding generally. Chapter 7 correctly limits external validity to five models in two families. Similar passages equate conditional responses with psychological attitudes or declare an entire family unaffected.",
+    "action": "State that the pattern occurs in both evaluated large models. Describe architecture mechanisms as interpretations unless tested through an intervention.",
+    "kind": "Unsupported interpretation"
+  },
+  {
+    "id": "A16",
+    "title": "The slope alone cannot diagnose exact scale following or anchor ignoring",
+    "locations": [
+      "[chapters/06_study2_extrinsic.tex:210](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/06_study2_extrinsic.tex:210>)",
+      "[chapters/03_measurement_framework.tex:606](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:606>)"
+    ],
+    "evidence": "Ideal following requires both slope -1 and intercept 8; identical raw responses require slope +1 and intercept 0. Llama-11B without images has slope -1.11850 but intercept 5.96071 and robustness 0.000. This explains why direction and pairwise agreement differ; it contradicts an unqualified claim that all smaller models never respond to the scale definition.",
+    "action": "Describe slopes with their intercepts or use them as descriptive diagnostics. Retain the robustness result and avoid inferring an internal reading process from slope alone.",
+    "kind": "Unsupported interpretation"
+  },
+  {
+    "id": "A17",
+    "title": "Low captured mass is not a validated refusal detector across all models",
+    "locations": [
+      "[chapters/03_measurement_framework.tex:113](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:113>)",
+      "[chapters/07_discussion.tex:71](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/07_discussion.tex:71>)"
+    ],
+    "evidence": "Mass outside a chosen response set can start a refusal, explanation, different formatting, or another continuation. The recorded diagnostic gives evidence for one Llama prompt, while Chapter 5 correctly distinguishes that observation from inference about production models.",
+    "action": "Use low response coverage as the direct observation and treat refusal as a supported but limited interpretation. Do not turn the diagnostic into a universal equivalence.",
+    "kind": "Unsupported interpretation"
+  },
+  {
+    "id": "A18",
+    "title": "Permutation inference and multiple-testing assumptions need precise scope",
+    "locations": [
+      "[chapters/03_measurement_framework.tex:345](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/03_measurement_framework.tex:345>)",
+      "[chapters/07_discussion.tex:210](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/07_discussion.tex:210>)"
+    ],
+    "evidence": "Enumerating every keying assignment eliminates Monte Carlo error but still requires an exchangeability/null argument. Averaging items does not itself establish exchangeability. The Bonferroni threshold is explicitly applied across five Phase 1B models, while combined, hostile and benevolent outcomes and five Phase 1A polarity tests are also discussed. Qwen-72B polarity p=0.01037 exceeds 0.01 before rounding; no correction across these five polarity tests is stated.",
+    "action": "State the assumptions and the intended testing families. Distinguish unadjusted Phase 1A results from the corrected Phase 1B results. Do not silently change which results count as significant.",
+    "kind": "Statistical interpretation requiring a decision"
+  },
+  {
+    "id": "A19",
+    "title": "CFD publication restrictions are stated too absolutely",
+    "locations": [
+      "[chapters/04_experimental_design.tex:267](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/chapters/04_experimental_design.tex:267>)"
+    ],
+    "evidence": "The official terms require written consent for publication and prohibit redistribution; the FAQ expressly allows publication of a limited sample and describes requesting permission. Thus \"forbids republishing images\" omits the permission condition. Source: https://www.chicagofaces.org/ . The decision not to reproduce faces remains consistent with a conservative presentation choice.",
+    "action": "Describe the actual permission restriction or state simply that the thesis does not reproduce the images. No face images need to be added.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A20",
+    "title": "Appendix D caption describes a superseded table layout",
+    "locations": [
+      "[appendices/D_full_tables.tex:51](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/appendices/D_full_tables.tex:51>)"
+    ],
+    "evidence": "The caption says the main robustness table reports only tau=0.5, but the current Chapter 6 table contains all three tolerances. Both tables reproduce the same numerical cells.",
+    "action": "Correct the cross-description of the two tables without changing their values.",
+    "kind": "Confirmed error"
+  },
+  {
+    "id": "A21",
+    "title": "Reproducibility statements overstate the committed and recorded state",
+    "locations": [
+      "[appendices/E_reproducibility.tex:31](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/appendices/E_reproducibility.tex:31>)",
+      "[appendices/E_reproducibility.tex:80](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/appendices/E_reproducibility.tex:80>)"
+    ],
+    "evidence": "The final audit state is not identified by a commit, and the external audit repository contains uncommitted code and untracked Phase 1B and small-model outputs. No cluster lockfile is available, despite precise software versions being stated in Chapter 4. scripts/make_tables.py prints fragments and includes an older t_s2_rr layout; the source was checked against the corresponding full-layout generator. Appendix B is currently a validation table without its planned diagnosis prose or minimal reproduction. Three registry rows lack job identifiers, including the grouped Phase 1B jobs.",
+    "action": "Complete the provenance record and qualify exact environment claims. Keep missing identifiers explicit. Do not claim that every prose number is automatically generated merely because table/figure generators exist.",
+    "kind": "Incomplete provenance"
+  },
+  {
+    "id": "A22",
+    "title": "Submission placeholders and layout defects remain",
+    "locations": [
+      "[frontmatter/declaration.tex:12](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/frontmatter/declaration.tex:12>)",
+      "[frontmatter/ai_statement.tex:27](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/frontmatter/ai_statement.tex:27>)",
+      "[frontmatter/acknowledgements.tex:15](</Users/hunghuynh/Library/UQ /UQ Semester 4/REIT4841/Thesis_report/frontmatter/acknowledgements.tex:15>)"
+    ],
+    "evidence": "The compiled report still contains these three placeholders. The build has seven overfull boxes, including a Chapter 5 table overrun of 179.54002 pt. It also reports the known duplicate front-matter page destination warning. The body otherwise builds without errors or undefined references.",
+    "action": "The author should complete the declarations. Repair table layout and front-matter numbering separately from prose editing.",
+    "kind": "Submission completeness"
+  }
+]

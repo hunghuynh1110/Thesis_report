@@ -96,14 +96,14 @@ the inventory sees it, or as one who scores low does?
 % \end{itemize}
 % \end{plan}
 
-A deployed model cannot usefully be asked what it thinks about women, because
-instruction tuning and reinforcement learning from human feedback train it to
-decline or deflect requests that look like solicitations of prejudice
-\cite{ouyang2022training}, and explicit constitutional objectives make that
-refusal behaviour a stated training target \cite{bai2022constitutional}. These
-procedures change what a model says.
-Whether they change what it represents is a separate question, and several
-studies now show that the two come apart.
+Direct questions about gender attitudes require care because alignment
+training shapes the responses a model produces. Instruction tuning and
+reinforcement learning from human feedback modify response behaviour
+\cite{ouyang2022training}, while constitutional objectives train responses
+against explicit principles \cite{bai2022constitutional}. Whether these
+procedures also change the social associations measured by an audit is a
+separate empirical question. Several studies distinguish explicit responses
+from indirectly elicited associations.
 
 Hofmann et al.\ \cite{hofmann2024covert} found that in models trained with
 human feedback, overtly elicited stereotypes became markedly more favourable
@@ -112,8 +112,8 @@ report rather than the underlying association. Models that describe themselves
 as unbiased still form associations consistent with stereotypes when probed
 indirectly \cite{bai2025explicitly}. Gao and Kreiss \cite{gao2025measuring}
 showed that measured gender bias in large language models is brittle with
-respect to framing: the same underlying disposition yields different bias
-scores depending on whether the prompt reads as a test. Work on persona framing
+respect to framing: measured bias scores differ depending on whether the
+prompt reads as a test. Work on persona framing
 reports the same sensitivity in social reasoning tasks \cite{yang2026persona}.
 Taken together, these results mean that an audit which reads generated text
 cannot separate a model that has been debiased from one that has learnt to
@@ -121,8 +121,8 @@ recognise an audit.
 
 This thesis calls that failure mode algorithmic defensiveness: a sanitised
 response triggered by cues that the model is being evaluated rather than by the
-content of the question. In one of the two production models audited here the
-trigger is weaker still, since the mere presence of an image is enough,
+content of the question. In the evaluated Llama models, reduced response coverage
+also occurs when an image is supplied,
 including a featureless grey patch that carries no social content
 (\cref{sec:s1-quality}).
 
@@ -134,13 +134,13 @@ presentation of the options they are given \cite{wang2024fair}, and these
 effects are systematic and quantifiable rather than incidental
 \cite{ye2025justice}. An audit built on a judge inherits the judge's artefacts.
 
-The gap this thesis addresses is therefore specific: no existing audit measures
-a multimodal model's disposition before the sampling step that the safety
-overlay acts upon and anchors that measurement to a validated human scale with
-published baselines on the same task. Reading the distribution over the next
-token from a single forward pass, rather than the text decoded from it,
-addresses the first requirement. Administering the ASI and comparing against
-the SIGIR human baselines addresses the second. \cref{fig:where-measured} shows
+The gap addressed by this thesis concerns the combination of probability
+measurements, a human questionnaire and image search judgements. The audit
+reads the distribution over the next token in a single forward pass and
+compares the resulting measurements with the ASI and SIGIR human baselines.
+This avoids sampling and text parsing; it does not remove the effects of
+alignment training from the model weights or their output distribution.
+\cref{fig:where-measured} shows
 where in the pipeline each kind of audit takes its reading.
 
 \begin{figure}[htbp]\centering
@@ -197,8 +197,8 @@ in the project proposal.
 \end{description}
 
 RQ2 asks about descriptive consistency by design. The proposal asked whether
-the intrinsic attitude predicts downstream behaviour, but with two production
-models successfully audited no inferential claim of prediction is defensible,
+the intrinsic attitude predicts downstream behaviour, but the five evaluated
+models share two families and do not support a general predictive claim,
 and \cref{ch:discussion} reports the comparison as a description rather than as
 a test.
 
@@ -209,10 +209,9 @@ extent.
   \item The first aim was to measure the intrinsic psychological baseline by
         administering the ASI through implicit prompt structures adapted from
         Gao and Kreiss \cite{gao2025measuring} and extracting raw logit
-        distributions, so that textual safety alignment is bypassed. This was
-        met for two production models, Llama-3.2-Vision-90B and Qwen2-VL-72B,
-        with a smaller Llama-11B model used for development and reported
-        throughout as a third point of comparison (\cref{ch:study1}).
+        distributions before decoding. This was implemented for the production
+        models Llama-3.2-Vision-90B and Qwen2-VL-72B, the development model
+        Llama-11B and two smaller Qwen variants. All five models are reported (\cref{ch:study1}).
 
   \item The second aim was to evaluate downstream visual judgement on queries
         from the SIGIR 2018 image search dataset, mapping the models'
@@ -220,24 +219,27 @@ extent.
         scorers on the inventory. This was met on the historical stream only.
         The planned 2026 recrawl was not collected, so the temporal comparison
         is absent, and $\dm$ is reported against the low scoring baseline
-        alone, since the high scoring baseline needs data at item level that
-        the published tables do not contain (\cref{ch:study2}).
+        alone because the high scoring comparison was not included in the
+        delivered analysis (\cref{ch:study2}).
 
   \item The third aim was to characterise the consistency between each model's
         $\ASIint$ score and its extrinsic deviation from the human baseline.
         This is descriptive only. The proposal already treated it as a case
         study at $n=3$ and reported Spearman's $\rho$ as a descriptive
-        statistic; at $n=2$ even that is not meaningful, and
-        \cref{sec:s2-deviation} presents the comparison for each model
-        separately.
+        statistic. The delivered comparison uses $n=5$, with dependence
+        between variants from the same family. \cref{sec:s2-deviation}
+        therefore reports the correlation descriptively alongside the
+        individual model comparisons.
 
   \item The fourth aim was to confirm that the measured signal comes from the
         visual pathway rather than from linguistic artefacts, using the CALM
-        positional perturbation framework \cite{ye2025justice}. This was met
-        through $\dRR$ rather than through the consistency rate of the
-        proposal, which is not identifiable with only two option orders
-        (\cref{sec:framework-calm}). The check returned a stronger result than
-        expected: with an image present, robustness collapses outright
+        positional perturbation framework \cite{ye2025justice}. This was
+        addressed through $\dRR$, which compares scale robustness between
+        image conditions. CALM consistency rate instead concerns repeated
+        judgements under identical conditions and is not separately reported
+        (\cref{sec:framework-calm}). The behavioural comparison does not
+        isolate the vision encoder. With an image present, robustness falls
+        substantially in the two largest models
         (\cref{sec:s2-calm}).
 \end{enumerate}
 
@@ -296,8 +298,8 @@ This work makes five contributions.
         which identifies a limitation shared by both evaluated models in
         using visual information when making judgements.
 
-  \item The results also show that algorithmic defensiveness varies between
-        models and is not a general property of VLMs aligned for safety.
+  \item The results also show that the response coverage associated with
+        algorithmic defensiveness differs between the evaluated model families.
         When an image is present, the Llama models lose much of their yes and
         no probability mass. For the 90B, $\capm$ drops from $0.951$ without
         an image to $0.467$ with a grey patch and $0.329$ with visual noise.

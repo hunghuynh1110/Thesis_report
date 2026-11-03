@@ -1,0 +1,4797 @@
+[
+  {
+    "key": "glick1996asi",
+    "title": "The Ambivalent Sexism Inventory: Differentiating Hostile and Benevolent Sexism",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0022-3514.70.3.491",
+    "doi_record": {
+      "key": "glick1996asi",
+      "url": "https://api.crossref.org/works/10.1037%2F0022-3514.70.3.491",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "The Ambivalent Sexism Inventory: Differentiating hostile and benevolent sexism."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Peter",
+          "family": "Glick",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Susan T.",
+          "family": "Fiske",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            1996,
+            3
+          ]
+        ]
+      },
+      "page": "491-512",
+      "volume": "70",
+      "issue": "3",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://doi.apa.org/doi/10.1037/0022-3514.70.3.491"
+        }
+      }
+    }
+  },
+  {
+    "key": "glick2000beyond",
+    "title": "Beyond Prejudice as Simple Antipathy: Hostile and Benevolent Sexism Across Cultures",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0022-3514.79.5.763",
+    "doi_record": {
+      "key": "glick2000beyond",
+      "url": "https://api.crossref.org/works/10.1037%2F0022-3514.79.5.763",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Beyond prejudice as simple antipathy: Hostile and benevolent sexism across cultures."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Peter",
+          "family": "Glick",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Susan T.",
+          "family": "Fiske",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Antonio",
+          "family": "Mladinic",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jos\u00e9 L.",
+          "family": "Saiz",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Dominic",
+          "family": "Abrams",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Barbara",
+          "family": "Masser",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Bolanle",
+          "family": "Adetoun",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Johnstone E.",
+          "family": "Osagie",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Adebowale",
+          "family": "Akande",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Amos",
+          "family": "Alao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Barbara",
+          "family": "Annetje",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tineke M.",
+          "family": "Willemsen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Kettie",
+          "family": "Chipeta",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Benoit",
+          "family": "Dardenne",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Ap",
+          "family": "Dijksterhuis",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Daniel",
+          "family": "Wigboldus",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Thomas",
+          "family": "Eckes",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Iris",
+          "family": "Six-Materna",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Francisca",
+          "family": "Exp\u00f3sito",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Miguel",
+          "family": "Moya",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Margaret",
+          "family": "Foddy",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hyun-Jeong",
+          "family": "Kim",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Maria",
+          "family": "Lameiras",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Maria Jos\u00e9",
+          "family": "Sotelo",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Angelica",
+          "family": "Mucchi-Faina",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Myrna",
+          "family": "Romani",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Nuray",
+          "family": "Sakalli",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Bola",
+          "family": "Udegbe",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Mariko",
+          "family": "Yamamoto",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Miyoko",
+          "family": "Ui",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Maria Cristina",
+          "family": "Ferreira",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Wilson L\u00f3pez",
+          "family": "L\u00f3pez",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2000
+          ]
+        ]
+      },
+      "page": "763-775",
+      "volume": "79",
+      "issue": "5",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://doi.apa.org/doi/10.1037/0022-3514.79.5.763"
+        }
+      }
+    }
+  },
+  {
+    "key": "glick2001alliance",
+    "title": "An Ambivalent Alliance: Hostile and Benevolent Sexism as Complementary Justifications for Gender Inequality",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0003-066X.56.2.109",
+    "doi_record": {
+      "key": "glick2001alliance",
+      "url": "https://api.crossref.org/works/10.1037%2F0003-066X.56.2.109",
+      "title": [
+        "An ambivalent alliance: Hostile and benevolent sexism as complementary justifications for gender inequality."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Peter",
+          "family": "Glick",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Susan T.",
+          "family": "Fiske",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2001,
+            2
+          ]
+        ]
+      },
+      "container": [
+        "American Psychologist"
+      ],
+      "page": "109-118",
+      "volume": "56",
+      "issue": "2",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://doi.apa.org/doi/10.1037/0003-066X.56.2.109"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "fiske2002scm",
+    "title": "A Model of (Often Mixed) Stereotype Content: Competence and Warmth Respectively Follow from Perceived Status and Competition",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0022-3514.82.6.878",
+    "doi_record": {
+      "key": "fiske2002scm",
+      "url": "https://api.crossref.org/works/10.1037%2F0022-3514.82.6.878",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "A model of (often mixed) stereotype content: Competence and warmth respectively follow from perceived status and competition."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Susan T.",
+          "family": "Fiske",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Amy J. C.",
+          "family": "Cuddy",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Peter",
+          "family": "Glick",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jun",
+          "family": "Xu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2002,
+            6
+          ]
+        ]
+      },
+      "page": "878-902",
+      "volume": "82",
+      "issue": "6",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://doi.apa.org/doi/10.1037/0022-3514.82.6.878"
+        }
+      }
+    }
+  },
+  {
+    "key": "dardenne2007insidious",
+    "title": "Insidious Dangers of Benevolent Sexism: Consequences for Women's Performance",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0022-3514.93.5.764",
+    "doi_record": {
+      "key": "dardenne2007insidious",
+      "url": "https://api.crossref.org/works/10.1037%2F0022-3514.93.5.764",
+      "title": [
+        "Insidious dangers of benevolent sexism: Consequences for women's performance."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Benoit",
+          "family": "Dardenne",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Muriel",
+          "family": "Dumont",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Thierry",
+          "family": "Bollier",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2007
+          ]
+        ]
+      },
+      "container": [
+        "Journal of Personality and Social Psychology"
+      ],
+      "page": "764-779",
+      "volume": "93",
+      "issue": "5",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "http://doi.apa.org/getdoi.cfm?doi=10.1037/0022-3514.93.5.764"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "greenwald1998iat",
+    "title": "Measuring Individual Differences in Implicit Cognition: The Implicit Association Test",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0022-3514.74.6.1464",
+    "doi_record": {
+      "key": "greenwald1998iat",
+      "url": "https://api.crossref.org/works/10.1037%2F0022-3514.74.6.1464",
+      "title": [
+        "Measuring individual differences in implicit cognition: The implicit association test."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Anthony G.",
+          "family": "Greenwald",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Debbie E.",
+          "family": "McGhee",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jordan L. K.",
+          "family": "Schwartz",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            1998
+          ]
+        ]
+      },
+      "container": [
+        "Journal of Personality and Social Psychology"
+      ],
+      "page": "1464-1480",
+      "volume": "74",
+      "issue": "6",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://doi.apa.org/doi/10.1037/0022-3514.74.6.1464"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "baumgartner2001response",
+    "title": "Response Styles in Marketing Research: A Cross-National Investigation",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex",
+      "chapters/05_study1_intrinsic.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1509/jmkr.38.2.143.18840",
+    "doi_record": {
+      "key": "baumgartner2001response",
+      "url": "https://api.crossref.org/works/10.1509%2Fjmkr.38.2.143.18840",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Response Styles in Marketing Research: A Cross-National Investigation"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Hans",
+          "family": "Baumgartner",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "The Mary Jean and Frank P. Smeal College of Business Administration, Pennsylvania State University"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jan-Benedict E.M.",
+          "family": "Steenkamp",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "International Marketing Research, Tilburg University"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2001,
+            5
+          ]
+        ]
+      },
+      "page": "143-156",
+      "volume": "38",
+      "issue": "2",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://journals.sagepub.com/doi/10.1509/jmkr.38.2.143.18840"
+        }
+      }
+    }
+  },
+  {
+    "key": "weijters2013reversed",
+    "title": "Reversed Item Bias: An Integrative Model",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex",
+      "chapters/05_study1_intrinsic.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/a0032121",
+    "doi_record": {
+      "key": "weijters2013reversed",
+      "url": "https://api.crossref.org/works/10.1037%2Fa0032121",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Reversed item bias: An integrative model."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Bert",
+          "family": "Weijters",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hans",
+          "family": "Baumgartner",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Niels",
+          "family": "Schillewaert",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2013
+          ]
+        ]
+      },
+      "page": "320-334",
+      "volume": "18",
+      "issue": "3",
+      "publisher_url": {
+        "primary": {
+          "URL": "http://doi.apa.org/getdoi.cfm?doi=10.1037/a0032121"
+        }
+      }
+    }
+  },
+  {
+    "key": "messick1995validity",
+    "title": "Validity of Psychological Assessment: Validation of Inferences from Persons' Responses and Performances as Scientific Inquiry into Score Meaning",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1037/0003-066X.50.9.741",
+    "doi_record": {
+      "key": "messick1995validity",
+      "url": "https://api.crossref.org/works/10.1037%2F0003-066X.50.9.741",
+      "title": [
+        "Validity of psychological assessment: Validation of inferences from persons' responses and performances as scientific inquiry into score meaning."
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Samuel",
+          "family": "Messick",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            1995,
+            9
+          ]
+        ]
+      },
+      "container": [
+        "American Psychologist"
+      ],
+      "page": "741-749",
+      "volume": "50",
+      "issue": "9",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://doi.apa.org/doi/10.1037/0003-066X.50.9.741"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "otterbacher2018sigir",
+    "title": "Investigating User Perception of Gender Bias in Image Search: The Role of Sexism",
+    "cited": true,
+    "used_in": [
+      "appendices/E_reproducibility.tex",
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex",
+      "chapters/04_experimental_design.tex",
+      "chapters/06_study2_extrinsic.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1145/3209978.3210094",
+    "doi_record": {
+      "key": "otterbacher2018sigir",
+      "url": "https://api.crossref.org/works/10.1145%2F3209978.3210094",
+      "title": [
+        "Investigating User Perception of Gender Bias in Image Search"
+      ],
+      "subtitle": [
+        "The Role of Sexism"
+      ],
+      "authors": [
+        {
+          "given": "Jahna",
+          "family": "Otterbacher",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Open University of Cyprus, Nicosia, Cyprus"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Alessandro",
+          "family": "Checco",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Sheffield, Sheffield, United Kingdom"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Gianluca",
+          "family": "Demartini",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Queensland, Brisbane, Australia"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Paul",
+          "family": "Clough",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Sheffield, Sheffield, United Kingdom"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2018,
+            6,
+            27
+          ]
+        ]
+      },
+      "container": [
+        "The 41st International ACM SIGIR Conference on Research &amp; Development in Information Retrieval"
+      ],
+      "page": "933-936",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://dl.acm.org/doi/10.1145/3209978.3210094"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "kay2015unequal",
+    "title": "Unequal Representation and Gender Stereotypes in Image Search Results for Occupations",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1145/2702123.2702520",
+    "doi_record": {
+      "key": "kay2015unequal",
+      "url": "https://api.crossref.org/works/10.1145%2F2702123.2702520",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Unequal Representation and Gender Stereotypes in Image Search Results for Occupations"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Matthew",
+          "family": "Kay",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "University of Washington, Seattle, WA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Cynthia",
+          "family": "Matuszek",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Maryland, Baltimore County, Baltimore, MD, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Sean A.",
+          "family": "Munson",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "University of Washington, Seattle, WA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2015,
+            4,
+            18
+          ]
+        ]
+      },
+      "page": "3819-3828",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://dl.acm.org/doi/10.1145/2702123.2702520"
+        }
+      }
+    }
+  },
+  {
+    "key": "otterbacher2017competent",
+    "title": "Competent Men and Warm Women: Gender Stereotypes and Backlash in Image Search Results",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1145/3025453.3025727",
+    "doi_record": {
+      "key": "otterbacher2017competent",
+      "url": "https://api.crossref.org/works/10.1145%2F3025453.3025727",
+      "title": [
+        "Competent Men and Warm Women"
+      ],
+      "subtitle": [
+        "Gender Stereotypes and Backlash in Image Search Results"
+      ],
+      "authors": [
+        {
+          "given": "Jahna",
+          "family": "Otterbacher",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Open University of Cyprus, Nicosia, Cyprus"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jo",
+          "family": "Bates",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "The University of Sheffield, Sheffield, United Kingdom"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Paul",
+          "family": "Clough",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "The University of Sheffield, Sheffield, United Kingdom"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2017,
+            5,
+            2
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems"
+      ],
+      "page": "6620-6631",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://dl.acm.org/doi/10.1145/3025453.3025727"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "metaxa2021image",
+    "title": "An Image of Society: Gender and Racial Representation and Impact in Image Search Results for Occupations",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1145/3449100",
+    "doi_record": {
+      "key": "metaxa2021image",
+      "url": "https://api.crossref.org/works/10.1145%2F3449100",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "An Image of Society"
+      ],
+      "subtitle": [
+        "Gender and Racial Representation and Impact in Image Search Results for Occupations"
+      ],
+      "authors": [
+        {
+          "given": "Dana\u00eb",
+          "family": "Metaxa",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Stanford University, Stanford, CA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Michelle A.",
+          "family": "Gan",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Stanford University, Stanford, CA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Su",
+          "family": "Goh",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "McGill University, Montreal, Canada"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jeff",
+          "family": "Hancock",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Stanford University, Stanford, CA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "James A.",
+          "family": "Landay",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Stanford University, Stanford, CA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2021,
+            4,
+            13
+          ]
+        ]
+      },
+      "page": "1-23",
+      "volume": "5",
+      "issue": "CSCW1",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://dl.acm.org/doi/10.1145/3449100"
+        }
+      }
+    }
+  },
+  {
+    "key": "caliskan2017semantics",
+    "title": "Semantics Derived Automatically from Language Corpora Contain Human-Like Biases",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1126/science.aal4230",
+    "doi_record": {
+      "key": "caliskan2017semantics",
+      "url": "https://api.crossref.org/works/10.1126%2Fscience.aal4230",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Semantics derived automatically from language corpora contain human-like biases"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "ORCID": "https://orcid.org/0000-0001-7154-8629",
+          "authenticated-orcid": false,
+          "given": "Aylin",
+          "family": "Caliskan",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Center for Information Technology Policy, Princeton University, Princeton, NJ, USA."
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-0021-0801",
+          "authenticated-orcid": false,
+          "given": "Joanna J.",
+          "family": "Bryson",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Center for Information Technology Policy, Princeton University, Princeton, NJ, USA."
+            },
+            {
+              "name": "Department of Computer Science, University of Bath, Bath BA2 7AY, UK."
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-7176-4479",
+          "authenticated-orcid": false,
+          "given": "Arvind",
+          "family": "Narayanan",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Center for Information Technology Policy, Princeton University, Princeton, NJ, USA."
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2017,
+            4,
+            14
+          ]
+        ]
+      },
+      "page": "183-186",
+      "volume": "356",
+      "issue": "6334",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://www.science.org/doi/10.1126/science.aal4230"
+        }
+      }
+    }
+  },
+  {
+    "key": "bolukbasi2016man",
+    "title": "Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper_files/paper/2016/hash/a486cd07e4ac3d270571622f4f316ec5-Abstract.html",
+    "doi_record": null
+  },
+  {
+    "key": "buolamwini2018gender",
+    "title": "Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.mlr.press/v81/buolamwini18a.html",
+    "doi_record": null
+  },
+  {
+    "key": "hendricks2018women",
+    "title": "Women Also Snowboard: Overcoming Bias in Captioning Models",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1007/978-3-030-01219-9_47",
+    "doi_record": {
+      "key": "hendricks2018women",
+      "url": "https://api.crossref.org/works/10.1007%2F978-3-030-01219-9_47",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Women Also Snowboard: Overcoming Bias in Captioning Models"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "ORCID": "https://orcid.org/0000-0001-9340-5143",
+          "authenticated-orcid": false,
+          "given": "Lisa Anne",
+          "family": "Hendricks",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-5713-2774",
+          "authenticated-orcid": false,
+          "given": "Kaylee",
+          "family": "Burns",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-5704-7614",
+          "authenticated-orcid": false,
+          "given": "Kate",
+          "family": "Saenko",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-5453-8533",
+          "authenticated-orcid": false,
+          "given": "Trevor",
+          "family": "Darrell",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-1161-6006",
+          "authenticated-orcid": false,
+          "given": "Anna",
+          "family": "Rohrbach",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2018
+          ]
+        ]
+      },
+      "page": "793-811",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://link.springer.com/10.1007/978-3-030-01219-9_47"
+        }
+      }
+    }
+  },
+  {
+    "key": "hall2023visogender",
+    "title": "VisoGender: A Dataset for Benchmarking Gender Bias in Image-Text Pronoun Resolution",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/c93f26b1381b17693055a611a513f1e9-Abstract-Datasets_and_Benchmarks.html",
+    "doi_record": null
+  },
+  {
+    "key": "jiang2024modscan",
+    "title": "{ModSCAN}: Measuring Stereotypical Bias in Large Vision-Language Models from Vision and Language Modalities",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2024.emnlp-main.713",
+    "doi_record": {
+      "key": "jiang2024modscan",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2024.emnlp-main.713",
+      "title": [
+        "ModSCAN: Measuring Stereotypical Bias in Large Vision-Language Models from Vision and Language Modalities"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Yukun",
+          "family": "Jiang",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Zheng",
+          "family": "Li",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Xinyue",
+          "family": "Shen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yugeng",
+          "family": "Liu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Michael",
+          "family": "Backes",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yang",
+          "family": "Zhang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing"
+      ],
+      "page": "12814-12845",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2024.emnlp-main.713"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "weng2024images",
+    "title": "Images Speak Louder than Words: Understanding and Mitigating Bias in Vision-Language Model from a Causal Mediation Perspective",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2024.emnlp-main.878",
+    "doi_record": {
+      "key": "weng2024images",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2024.emnlp-main.878",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Images Speak Louder than Words: Understanding and Mitigating Bias in Vision-Language Model from a Causal Mediation Perspective"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Zhaotian",
+          "family": "Weng",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Zijun",
+          "family": "Gao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jerone",
+          "family": "Andrews",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jieyu",
+          "family": "Zhao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "page": "15669-15680",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2024.emnlp-main.878"
+        }
+      }
+    }
+  },
+  {
+    "key": "ghate2025biases",
+    "title": "Biases Propagate in Encoder-based Vision-Language Models: A Systematic Analysis From Intrinsic Measures to Zero-shot Retrieval Outcomes",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2025.findings-acl.955",
+    "doi_record": {
+      "key": "ghate2025biases",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2025.findings-acl.955",
+      "title": [
+        "Biases Propagate in Encoder-based Vision-Language Models: A Systematic Analysis From Intrinsic Measures to Zero-shot Retrieval Outcomes"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Kshitish",
+          "family": "Ghate",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tessa",
+          "family": "Charlesworth",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Mona T.",
+          "family": "Diab",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Aylin",
+          "family": "Caliskan",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2025
+          ]
+        ]
+      },
+      "container": [
+        "Findings of the Association for Computational Linguistics: ACL 2025"
+      ],
+      "page": "18562-18580",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2025.findings-acl.955"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "blodgett2020language",
+    "title": "Language (Technology) is Power: A Critical Survey of ``Bias'' in {NLP}",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2020.acl-main.485",
+    "doi_record": {
+      "key": "blodgett2020language",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2020.acl-main.485",
+      "title": [
+        "Language (Technology) is Power: A Critical Survey of \u201cBias\u201d in NLP"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Su Lin",
+          "family": "Blodgett",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Solon",
+          "family": "Barocas",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hal",
+          "family": "Daum\u00e9 III",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hanna",
+          "family": "Wallach",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics"
+      ],
+      "page": "5454-5476",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://www.aclweb.org/anthology/2020.acl-main.485"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "gallegos2024bias",
+    "title": "Bias and Fairness in Large Language Models: A Survey",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1162/coli_a_00524",
+    "doi_record": {
+      "key": "gallegos2024bias",
+      "url": "https://api.crossref.org/works/10.1162%2Fcoli_a_00524",
+      "title": [
+        "Bias and Fairness in Large Language Models: A Survey"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Isabel O.",
+          "family": "Gallegos",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Department of Computer Science, Stanford University. iogalle@stanford.edu"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Ryan A.",
+          "family": "Rossi",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Adobe Research. ryrossi@adobe.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Joe",
+          "family": "Barrow",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Pattern Data. joe.barrow@patterndataworks.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Md Mehrab",
+          "family": "Tanjim",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Adobe Research. tanjim@adobe.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Sungchul",
+          "family": "Kim",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Adobe Research. sukim@adobe.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Franck",
+          "family": "Dernoncourt",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Adobe Research. dernonco@adobe.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tong",
+          "family": "Yu",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Adobe Research. tyu@adobe.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Ruiyi",
+          "family": "Zhang",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Adobe Research. ruizhang@adobe.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Nesreen K.",
+          "family": "Ahmed",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Intel Labs. nesreen.k.ahmed@intel.com"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Computational Linguistics"
+      ],
+      "page": "1097-1179",
+      "volume": "50",
+      "issue": "3",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://direct.mit.edu/coli/article/50/3/1097/121961/Bias-and-Fairness-in-Large-Language-Models-A"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "lee2024vhelm",
+    "title": "{VHELM}: A Holistic Evaluation of Vision Language Models",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.52202/079017-4464",
+    "doi_record": {
+      "key": "lee2024vhelm",
+      "url": "https://api.crossref.org/works/10.52202%2F079017-4464",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "VHELM: A Holistic Evaluation of Vision Language Models"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Tony",
+          "family": "Lee",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Haoqin",
+          "family": "Tu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Chi",
+          "family": "Wong",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Wenhao",
+          "family": "Zheng",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yiyang",
+          "family": "Zhou",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yifan",
+          "family": "Mai",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Josselin",
+          "family": "Roberts",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Michihiro",
+          "family": "Yasunaga",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Huaxiu",
+          "family": "Yao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Cihang",
+          "family": "Xie",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Percy",
+          "family": "Liang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "page": "140632-140666",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "http://www.proceedings.com/079017-4464.html"
+        }
+      }
+    }
+  },
+  {
+    "key": "vaswani2017attention",
+    "title": "Attention is All You Need",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html",
+    "doi_record": null
+  },
+  {
+    "key": "dosovitskiy2021vit",
+    "title": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://openreview.net/pdf?id=YicbFdNTTy",
+    "doi_record": null
+  },
+  {
+    "key": "radford2021clip",
+    "title": "Learning Transferable Visual Models From Natural Language Supervision",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.mlr.press/v139/radford21a.html",
+    "doi_record": null
+  },
+  {
+    "key": "alayrac2022flamingo",
+    "title": "Flamingo: a Visual Language Model for Few-Shot Learning",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper_files/paper/2022/hash/960a172bc7fbf0177ccccbb411a7d800-Abstract-Conference.html",
+    "doi_record": null
+  },
+  {
+    "key": "zhang2019rmsnorm",
+    "title": "Root Mean Square Layer Normalization",
+    "cited": true,
+    "used_in": [
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper/2019/hash/1e8a19426224ca89e83cef47f1e7f53b-Abstract.html",
+    "doi_record": null
+  },
+  {
+    "key": "grattafiori2024llama3",
+    "title": "The Llama 3 Herd of Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "technical report; no peer-reviewed version identified",
+    "primary_record": "https://arxiv.org/abs/2407.21783",
+    "doi_record": null
+  },
+  {
+    "key": "wang2024qwen2vl",
+    "title": "{Qwen2-VL}: Enhancing Vision-Language Model's Perception of the World at Any Resolution",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "technical report; no peer-reviewed version identified",
+    "primary_record": "https://arxiv.org/abs/2409.12191",
+    "doi_record": null
+  },
+  {
+    "key": "ouyang2022training",
+    "title": "Training Language Models to Follow Instructions with Human Feedback",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html",
+    "doi_record": null
+  },
+  {
+    "key": "bai2022constitutional",
+    "title": "Constitutional {AI}: Harmlessness from {AI} Feedback",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "technical report; no peer-reviewed version identified",
+    "primary_record": "https://arxiv.org/abs/2212.08073",
+    "doi_record": null
+  },
+  {
+    "key": "sun2024aligning",
+    "title": "Aligning Large Multimodal Models with Factually Augmented {RLHF}",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://aclanthology.org/2024.findings-acl.775/",
+    "doi_record": null
+  },
+  {
+    "key": "rottger2024xstest",
+    "title": "{XSTest}: A Test Suite for Identifying Exaggerated Safety Behaviours in Large Language Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/05_study1_intrinsic.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2024.naacl-long.301",
+    "doi_record": {
+      "key": "rottger2024xstest",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2024.naacl-long.301",
+      "title": [
+        "XSTest: A Test Suite for Identifying Exaggerated Safety Behaviours in Large Language Models"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Paul",
+          "family": "R\u00f6ttger",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hannah",
+          "family": "Kirk",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Bertie",
+          "family": "Vidgen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Giuseppe",
+          "family": "Attanasio",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Federico",
+          "family": "Bianchi",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Dirk",
+          "family": "Hovy",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2024 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)"
+      ],
+      "page": "5377-5400",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2024.naacl-long.301"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "arditi2024refusal",
+    "title": "Refusal in Language Models Is Mediated by a Single Direction",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/07_discussion.tex",
+      "chapters/08_conclusion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.52202/079017-4322",
+    "doi_record": {
+      "key": "arditi2024refusal",
+      "url": "https://api.crossref.org/works/10.52202%2F079017-4322",
+      "title": [
+        "Refusal in Language Models Is Mediated by a Single Direction"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Andy",
+          "family": "Arditi",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Oscar",
+          "family": "Obeso",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Aaquib",
+          "family": "Syed",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Daniel",
+          "family": "Paleka",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Nina",
+          "family": "Panickssery",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Wes",
+          "family": "Gurnee",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Neel",
+          "family": "Nanda",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Advances in Neural Information Processing Systems 37"
+      ],
+      "page": "136037-136083",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "http://www.proceedings.com/079017-4322.html"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "sharma2024sycophancy",
+    "title": "Towards Understanding Sycophancy in Language Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/0105f7972202c1d4fb817da9f21a9663-Abstract-Conference.html",
+    "doi_record": null
+  },
+  {
+    "key": "hofmann2024covert",
+    "title": "{AI} Generates Covertly Racist Decisions about People Based on Their Dialect",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1038/s41586-024-07856-5",
+    "doi_record": {
+      "key": "hofmann2024covert",
+      "url": "https://api.crossref.org/works/10.1038%2Fs41586-024-07856-5",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "AI generates covertly racist decisions about people based on their dialect"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "ORCID": "https://orcid.org/0000-0001-6603-3428",
+          "authenticated-orcid": false,
+          "given": "Valentin",
+          "family": "Hofmann",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Pratyusha Ria",
+          "family": "Kalluri",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-6459-7745",
+          "authenticated-orcid": false,
+          "given": "Dan",
+          "family": "Jurafsky",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Sharese",
+          "family": "King",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024,
+            8,
+            28
+          ]
+        ]
+      },
+      "page": "147-154",
+      "volume": "633",
+      "issue": "8028",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://www.nature.com/articles/s41586-024-07856-5"
+        }
+      }
+    }
+  },
+  {
+    "key": "bai2025explicitly",
+    "title": "Explicitly Unbiased Large Language Models Still Form Biased Associations",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1073/pnas.2416228122",
+    "doi_record": {
+      "key": "bai2025explicitly",
+      "url": "https://api.crossref.org/works/10.1073%2Fpnas.2416228122",
+      "title": [
+        "Explicitly unbiased large language models still form biased associations"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "ORCID": "https://orcid.org/0000-0002-2277-5451",
+          "authenticated-orcid": false,
+          "given": "Xuechunzi",
+          "family": "Bai",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Department of Psychology",
+              "place": [
+                "Chicago"
+              ]
+            },
+            {
+              "name": "The University of Chicago",
+              "place": [
+                "Chicago"
+              ]
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-9140-3523",
+          "authenticated-orcid": false,
+          "given": "Angelina",
+          "family": "Wang",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Department of Computer Science",
+              "place": [
+                "Palo Alto"
+              ]
+            },
+            {
+              "name": "Stanford University",
+              "place": [
+                "Palo Alto"
+              ]
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-4121-7479",
+          "authenticated-orcid": false,
+          "given": "Ilia",
+          "family": "Sucholutsky",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Center for Data Science",
+              "place": [
+                "New York"
+              ]
+            },
+            {
+              "name": "New York University",
+              "place": [
+                "New York"
+              ]
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Thomas L.",
+          "family": "Griffiths",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Departments of Psychology and Computer Science",
+              "place": [
+                "Princeton"
+              ]
+            },
+            {
+              "name": "Princeton University",
+              "place": [
+                "Princeton"
+              ]
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2025,
+            2,
+            20
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the National Academy of Sciences"
+      ],
+      "page": null,
+      "volume": "122",
+      "issue": "8",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://pnas.org/doi/10.1073/pnas.2416228122"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "gao2025measuring",
+    "title": "Measuring Bias or Measuring the Task: Understanding the Brittle Nature of {LLM} Gender Biases",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex",
+      "chapters/04_experimental_design.tex",
+      "chapters/05_study1_intrinsic.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2025.emnlp-main.342",
+    "doi_record": {
+      "key": "gao2025measuring",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2025.emnlp-main.342",
+      "title": [
+        "Measuring Bias or Measuring the Task: Understanding the Brittle Nature of LLM Gender Biases"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Bufan",
+          "family": "Gao",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Elisa",
+          "family": "Kreiss",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2025
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing"
+      ],
+      "page": "6745-6761",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2025.emnlp-main.342"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "yang2026persona",
+    "title": "Persona Prompting as a Lens on {LLM} Social Reasoning",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2026.eacl-long.52",
+    "doi_record": {
+      "key": "yang2026persona",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2026.eacl-long.52",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Persona Prompting as a Lens on LLM Social Reasoning"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Jing",
+          "family": "Yang",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Moritz",
+          "family": "Hechtbauer",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Elisabeth",
+          "family": "Khalilov",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Evelyn Luise",
+          "family": "Brinkmann",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Vera",
+          "family": "Schmitt",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Nils",
+          "family": "Feldhus",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2026
+          ]
+        ]
+      },
+      "page": "1152-1170",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2026.eacl-long.52"
+        }
+      }
+    }
+  },
+  {
+    "key": "holtzman2021surface",
+    "title": "Surface Form Competition: Why the Highest Probability Answer Isn't Always Right",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2021.emnlp-main.564",
+    "doi_record": {
+      "key": "holtzman2021surface",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2021.emnlp-main.564",
+      "title": [
+        "Surface Form Competition: Why the Highest Probability Answer Isn\u2019t Always Right"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Ari",
+          "family": "Holtzman",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Peter",
+          "family": "West",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Vered",
+          "family": "Shwartz",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yejin",
+          "family": "Choi",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Luke",
+          "family": "Zettlemoyer",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2021
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing"
+      ],
+      "page": "7038-7051",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2021.emnlp-main.564"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "zhao2021calibrate",
+    "title": "Calibrate Before Use: Improving Few-shot Performance of Language Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex",
+      "chapters/04_experimental_design.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.mlr.press/v139/zhao21c.html",
+    "doi_record": null
+  },
+  {
+    "key": "hu2023prompting",
+    "title": "Prompting is not a Substitute for Probability Measurements in Large Language Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2023.emnlp-main.306",
+    "doi_record": {
+      "key": "hu2023prompting",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2023.emnlp-main.306",
+      "title": [
+        "Prompting is not a substitute for probability measurements in large language models"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Jennifer",
+          "family": "Hu",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Roger",
+          "family": "Levy",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2023
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing"
+      ],
+      "page": "5040-5060",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2023.emnlp-main.306"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "wang2024myanswer",
+    "title": "``My Answer is {C}'': First-Token Probabilities Do Not Match Text Answers in Instruction-Tuned Language Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2024.findings-acl.441",
+    "doi_record": {
+      "key": "wang2024myanswer",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2024.findings-acl.441",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "\u201cMy Answer is C\u201d: First-Token Probabilities Do Not Match Text Answers in Instruction-Tuned Language Models"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Xinpeng",
+          "family": "Wang",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Bolei",
+          "family": "Ma",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Chengzhi",
+          "family": "Hu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Leon",
+          "family": "Weber-Genzel",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Paul",
+          "family": "R\u00f6ttger",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Frauke",
+          "family": "Kreuter",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Dirk",
+          "family": "Hovy",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Barbara",
+          "family": "Plank",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "page": "7407-7416",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2024.findings-acl.441"
+        }
+      }
+    }
+  },
+  {
+    "key": "zheng2024robust",
+    "title": "Large Language Models Are Not Robust Multiple Choice Selectors",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/54dd9e0cff6d9214e20d97eb2a3bae49-Abstract-Conference.html",
+    "doi_record": null
+  },
+  {
+    "key": "santurkar2023opinions",
+    "title": "Whose Opinions Do Language Models Reflect?",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.mlr.press/v202/santurkar23a.html",
+    "doi_record": null
+  },
+  {
+    "key": "dominguez2024questioning",
+    "title": "Questioning the Survey Responses of Large Language Models",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/05_study1_intrinsic.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.52202/079017-1458",
+    "doi_record": {
+      "key": "dominguez2024questioning",
+      "url": "https://api.crossref.org/works/10.52202%2F079017-1458",
+      "title": [
+        "Questioning the Survey Responses of Large Language Models"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Ricardo",
+          "family": "Dominguez-Olmedo",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Moritz",
+          "family": "Hardt",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Celestine",
+          "family": "Mendler-D\u00fcnner",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Advances in Neural Information Processing Systems 37"
+      ],
+      "page": "45850-45878",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "http://www.proceedings.com/079017-1458.html"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "tjuatja2024response",
+    "title": "Do {LLMs} Exhibit Human-like Response Biases? A Case Study in Survey Design",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/05_study1_intrinsic.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1162/tacl_a_00685",
+    "doi_record": {
+      "key": "tjuatja2024response",
+      "url": "https://api.crossref.org/works/10.1162%2Ftacl_a_00685",
+      "title": [
+        "Do LLMs Exhibit Human-like Response Biases? A Case Study in Survey Design"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Lindia",
+          "family": "Tjuatja",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Carnegie Mellon University, USA. lindiat@andrew.cmu.edu"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Valerie",
+          "family": "Chen",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Carnegie Mellon University, USA. vchen2@andrew.cmu.edu"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tongshuang",
+          "family": "Wu",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Carnegie Mellon University, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Ameet",
+          "family": "Talwalkwar",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Carnegie Mellon University, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Graham",
+          "family": "Neubig",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Carnegie Mellon University, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Transactions of the Association for Computational Linguistics"
+      ],
+      "page": "1011-1026",
+      "volume": "12",
+      "issue": null,
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00685/124261/Do-LLMs-Exhibit-Human-like-Response-Biases-A-Case"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "zheng2023judging",
+    "title": "Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/91f18a1287b398d378ef22505bf41832-Abstract-Datasets_and_Benchmarks.html",
+    "doi_record": null
+  },
+  {
+    "key": "wang2024fair",
+    "title": "Large Language Models are not Fair Evaluators",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2024.acl-long.511",
+    "doi_record": {
+      "key": "wang2024fair",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2024.acl-long.511",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Large Language Models are not Fair Evaluators"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Peiyi",
+          "family": "Wang",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Lei",
+          "family": "Li",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Liang",
+          "family": "Chen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Zefan",
+          "family": "Cai",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Dawei",
+          "family": "Zhu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Binghuai",
+          "family": "Lin",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yunbo",
+          "family": "Cao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Lingpeng",
+          "family": "Kong",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Qi",
+          "family": "Liu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tianyu",
+          "family": "Liu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Zhifang",
+          "family": "Sui",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "page": "9440-9450",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2024.acl-long.511"
+        }
+      }
+    }
+  },
+  {
+    "key": "chen2024humans",
+    "title": "Humans or {LLMs} as the Judge? A Study on Judgement Bias",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2024.emnlp-main.474",
+    "doi_record": {
+      "key": "chen2024humans",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2024.emnlp-main.474",
+      "title": [
+        "Humans or LLMs as the Judge? A Study on Judgement Bias"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Guiming Hardy",
+          "family": "Chen",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Shunian",
+          "family": "Chen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Ziche",
+          "family": "Liu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Feng",
+          "family": "Jiang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Benyou",
+          "family": "Wang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2024
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing"
+      ],
+      "page": "8301-8327",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2024.emnlp-main.474"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "chen2024mllmjudge",
+    "title": "{MLLM}-as-a-Judge: Assessing Multimodal {LLM}-as-a-Judge with Vision-Language Benchmark",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.mlr.press/v235/chen24h.html",
+    "doi_record": null
+  },
+  {
+    "key": "ye2025justice",
+    "title": "Justice or Prejudice? Quantifying Biases in {LLM}-as-a-Judge",
+    "cited": true,
+    "used_in": [
+      "chapters/01_introduction.tex",
+      "chapters/02_background.tex",
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/fdca08d371e4b6c031397909e20043bd-Abstract-Conference.html",
+    "doi_record": null
+  },
+  {
+    "key": "li2026scoring",
+    "title": "Evaluating Scoring Bias in {LLM}-as-a-Judge",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1007/978-981-92-0372-7_2",
+    "doi_record": {
+      "key": "li2026scoring",
+      "url": "https://api.crossref.org/works/10.1007%2F978-981-92-0372-7_2",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Evaluating Scoring Bias in\u00a0LLM-as-a-Judge"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "ORCID": "https://orcid.org/0009-0005-7605-1247",
+          "authenticated-orcid": false,
+          "given": "Qingquan",
+          "family": "Li",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-8899-4788",
+          "authenticated-orcid": false,
+          "given": "Shaoyu",
+          "family": "Dou",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Kailai",
+          "family": "Shao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Chao",
+          "family": "Chen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Haixiang",
+          "family": "Hu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2026
+          ]
+        ]
+      },
+      "page": "19-34",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://link.springer.com/10.1007/978-981-92-0372-7_2"
+        }
+      }
+    }
+  },
+  {
+    "key": "raji2019actionable",
+    "title": "Actionable Auditing: Investigating the Impact of Publicly Naming Biased Performance Results of Commercial {AI} Products",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1145/3306618.3314244",
+    "doi_record": {
+      "key": "raji2019actionable",
+      "url": "https://api.crossref.org/works/10.1145%2F3306618.3314244",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "Actionable Auditing"
+      ],
+      "subtitle": [
+        "Investigating the Impact of Publicly Naming Biased Performance Results of Commercial AI Products"
+      ],
+      "authors": [
+        {
+          "given": "Inioluwa Deborah",
+          "family": "Raji",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "University of Toronto, Toronto, ON, Canada"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Joy",
+          "family": "Buolamwini",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Massachusetts Institute of Technology, Cambridge, MA, USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2019,
+            1,
+            27
+          ]
+        ]
+      },
+      "page": "429-435",
+      "volume": null,
+      "issue": null,
+      "publisher_url": {
+        "primary": {
+          "URL": "https://dl.acm.org/doi/10.1145/3306618.3314244"
+        }
+      }
+    }
+  },
+  {
+    "key": "dettmers2022int8",
+    "title": "{LLM.int8()}: 8-bit Matrix Multiplication for Transformers at Scale",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.52202/068431-2198",
+    "doi_record": {
+      "key": "dettmers2022int8",
+      "url": "https://api.crossref.org/works/10.52202%2F068431-2198",
+      "title": [
+        "LLM.int8(): 8-Bit Matrix Multiplication for Transformers at Scale"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Tim",
+          "family": "Dettmers",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Mike",
+          "family": "Lewis",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Younes",
+          "family": "Belkada",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Luke",
+          "family": "Zettlemoyer",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2022
+          ]
+        ]
+      },
+      "container": [
+        "Advances in Neural Information Processing Systems 35"
+      ],
+      "page": "30318-30332",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "http://www.proceedings.com/068431-2198.html"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "dettmers2023qlora",
+    "title": "{QLoRA}: Efficient Finetuning of Quantized {LLMs}",
+    "cited": false,
+    "used_in": [],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/1feb87871436031bdc0f2beaa62a049b-Abstract-Conference.html",
+    "doi_record": null
+  },
+  {
+    "key": "wolf2020transformers",
+    "title": "Transformers: State-of-the-Art Natural Language Processing",
+    "cited": true,
+    "used_in": [
+      "chapters/02_background.tex",
+      "chapters/04_experimental_design.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.18653/v1/2020.emnlp-demos.6",
+    "doi_record": {
+      "key": "wolf2020transformers",
+      "url": "https://api.crossref.org/works/10.18653%2Fv1%2F2020.emnlp-demos.6",
+      "title": [
+        "Transformers: State-of-the-Art Natural Language Processing"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Thomas",
+          "family": "Wolf",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Lysandre",
+          "family": "Debut",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Victor",
+          "family": "Sanh",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Julien",
+          "family": "Chaumond",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Clement",
+          "family": "Delangue",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Anthony",
+          "family": "Moi",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Pierric",
+          "family": "Cistac",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tim",
+          "family": "Rault",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Remi",
+          "family": "Louf",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Morgan",
+          "family": "Funtowicz",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Joe",
+          "family": "Davison",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Sam",
+          "family": "Shleifer",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Patrick",
+          "family": "von Platen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Clara",
+          "family": "Ma",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yacine",
+          "family": "Jernite",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Julien",
+          "family": "Plu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Canwen",
+          "family": "Xu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Teven",
+          "family": "Le Scao",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Sylvain",
+          "family": "Gugger",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Mariama",
+          "family": "Drame",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Quentin",
+          "family": "Lhoest",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Alexander",
+          "family": "Rush",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      },
+      "container": [
+        "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing: System Demonstrations"
+      ],
+      "page": "38-45",
+      "volume": null,
+      "issue": null,
+      "type": "proceedings-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://aclanthology.org/2020.emnlp-demos.6"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "efron1993bootstrap",
+    "title": "An Introduction to the Bootstrap",
+    "cited": true,
+    "used_in": [
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "book; edition/year clarification noted below",
+    "primary_record": "https://www.routledge.com/An-Introduction-to-the-Bootstrap/Efron-Tibshirani/p/book/9780429246593",
+    "doi_record": null
+  },
+  {
+    "key": "ernst2004permutation",
+    "title": "Permutation Methods: A Basis for Exact Inference",
+    "cited": true,
+    "used_in": [
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1214/088342304000000396",
+    "doi_record": {
+      "key": "ernst2004permutation",
+      "url": "https://api.crossref.org/works/10.1214%2F088342304000000396",
+      "title": [
+        "Permutation Methods: A Basis for Exact Inference"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Michael D.",
+          "family": "Ernst",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2004,
+            11,
+            1
+          ]
+        ]
+      },
+      "container": [
+        "Statistical Science"
+      ],
+      "page": "676-685",
+      "volume": "19",
+      "issue": "4",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://projecteuclid.org/journals/statistical-science/volume-19/issue-4/Permutation-Methods-A-Basis-for-Exact-Inference/10.1214/088342304000000396.full"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "field2007bootstrapping",
+    "title": "Bootstrapping Clustered Data",
+    "cited": true,
+    "used_in": [
+      "chapters/03_measurement_framework.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.1111/j.1467-9868.2007.00593.x",
+    "doi_record": {
+      "key": "field2007bootstrapping",
+      "url": "https://api.crossref.org/works/10.1111%2Fj.1467-9868.2007.00593.x",
+      "title": [
+        "Bootstrapping Clustered Data"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "C. A.",
+          "family": "Field",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Dalhousie University , Halifax , Canada"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "A. H.",
+          "family": "Welsh",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Australian National University , Canberra , Australia"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2007,
+            5,
+            22
+          ]
+        ]
+      },
+      "container": [
+        "Journal of the Royal Statistical Society Series B: Statistical Methodology"
+      ],
+      "page": "369-390",
+      "volume": "69",
+      "issue": "3",
+      "type": "journal-article",
+      "publisher_url": {
+        "primary": {
+          "URL": "https://academic.oup.com/jrsssb/article/69/3/369/7109361"
+        }
+      },
+      "status": "resolved",
+      "title_similarity": 1.0
+    }
+  },
+  {
+    "key": "ma2015cfd",
+    "title": "The {Chicago} face database: A free stimulus set of faces and norming data",
+    "cited": true,
+    "used_in": [
+      "appendices/E_reproducibility.tex",
+      "chapters/04_experimental_design.tex",
+      "chapters/07_discussion.tex"
+    ],
+    "classification": "published journal/conference work verified",
+    "primary_record": "https://doi.org/10.3758/s13428-014-0532-5",
+    "doi_record": {
+      "key": "ma2015cfd",
+      "url": "https://api.crossref.org/works/10.3758%2Fs13428-014-0532-5",
+      "status": "resolved",
+      "error": "HTTP Error 429: Too Many Requests",
+      "title": [
+        "The Chicago face database: A free stimulus set of faces and norming data"
+      ],
+      "subtitle": [],
+      "authors": [
+        {
+          "given": "Debbie S.",
+          "family": "Ma",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Joshua",
+          "family": "Correll",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Bernd",
+          "family": "Wittenbrink",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2015,
+            1,
+            13
+          ]
+        ]
+      },
+      "page": "1122-1135",
+      "volume": "47",
+      "issue": "4",
+      "publisher_url": {
+        "primary": {
+          "URL": "http://link.springer.com/10.3758/s13428-014-0532-5"
+        }
+      }
+    }
+  }
+]

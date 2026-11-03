@@ -118,7 +118,8 @@ for measuring here instead.
 \begin{figure}[htbp]\centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=5mm and 7mm,
-  box/.style={draw,rounded corners,align=center,font=\footnotesize,minimum height=7mm,inner sep=3pt},
+  box/.style={draw,rounded corners,align=center,font=\footnotesize,minimum
+height=7mm,inner sep=3pt},
   tok/.style={draw,align=center,font=\scriptsize,minimum height=5.5mm,inner sep=2.5pt},
   arr/.style={-{Stealth[length=2mm]},semithick},
   hdr/.style={font=\footnotesize\itshape}]
@@ -464,7 +465,8 @@ Two related results describe the direction a model's answers tend to move.
 Santurkar et al.\ \cite{santurkar2023opinions} read opinions from the
 probabilities assigned to answer options rather than from generated text, which
 is methodologically close to what this thesis does. The opinion distributions
-they recovered matched no American demographic group well. Sharma et al.\ \cite{sharma2024sycophancy} traced a
+they recovered matched no American demographic group well. Sharma et al.\
+\cite{sharma2024sycophancy} traced a
 tendency to agree with whatever the user appears to believe back to the human
 preference data itself, since human raters reward responses that match their
 stated view. That tendency is the closest model analogue of acquiescence, and
@@ -497,13 +499,14 @@ reports the general tendency to agree alongside every score that depends on it.
 % \end{plan}
 
 The models audited here have been trained to be careful. Instruction tuning
-followed by reinforcement learning from human preferences changed what models
-produce far more than it changed what they know \cite{ouyang2022training}.
+and reinforcement learning from human preferences modify model behaviour
+through training \cite{ouyang2022training}.
 Later methods replace part of that human feedback with a written set of
 principles the model critiques itself against \cite{bai2022constitutional}.
-Both shape the text that emerges from the distribution. Neither claims to
-remove whatever produced the distribution, and the distinction is the opening
-the rest of this section widens.
+Both methods update the model that produces the response distribution.
+Differences between explicit responses and indirectly measured associations
+therefore require empirical evaluation; they cannot be inferred from the
+measurement position alone.
 
 Careful training overshoots in a measurable way. R\"ottger et al.\
 \cite{rottger2024xstest} built a test suite of prompts that are entirely safe
@@ -696,15 +699,15 @@ reported. Checked against each source in November 2026.}
 \label{tab:gap}
 \end{table}
 
-\cref{tab:gap} sets this thesis against the work it draws on, and the gap is a
-pattern of absences rather than a missing experiment. Work that measures at the
-probability level is text only, so nothing is known about what an image does to
-a measurement taken there. Work on images measures generated outputs or
-embedding geometry, both of which sit on the far side of the decision this
-thesis wants to observe. The one study carrying a validated human anchor on
-this task measured humans rather than models \cite{otterbacher2018sigir}, and
-the one study applying systematic order perturbation to judges does so on text
-\cite{ye2025justice}.
+The studies in \cref{tab:gap} address different parts of the measurement
+problem. The probability based audits listed there examine text, while the
+image studies examine outputs, representations or component interventions.
+The human study supplies the ASI and image search comparison
+\cite{otterbacher2018sigir}, and CALM supplies a framework for systematic
+perturbations of model judgements \cite{ye2025justice}. This thesis combines
+these elements in a multimodal audit with explicit response coverage. The
+comparison concerns the reviewed studies and does not establish an exhaustive
+absence of related methods.
 
 The last column is the absence that matters most. No prior work in the table
 reports what fraction of the model's output distribution its measurement

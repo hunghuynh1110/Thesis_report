@@ -1,0 +1,51 @@
+[
+  {
+    "table": "tab:capm",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s1-aggregate",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s1-structure",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s1-ps",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s1-perm",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s1b-gap",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s2-rr",
+    "matches_generator": true,
+    "generator": "t_s2_rr_full; t_s2_rr is an unused older layout"
+  },
+  {
+    "table": "tab:app-rr-full",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s2-anchor",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s2-deltam",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s2-person",
+    "matches_generator": true
+  },
+  {
+    "table": "tab:s1-capmfilter",
+    "matches_generator": true
+  }
+]

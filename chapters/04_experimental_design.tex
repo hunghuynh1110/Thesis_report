@@ -178,8 +178,8 @@ The proposal specified a humanoid silhouette as the visual anchor. Its
 intended purpose was to engage the model's representation of a person without
 specifying an identity. However, validation on the 11B rejected the
 silhouette. When asked to choose between \texttt{male} and \texttt{female},
-the model assigned $0.853$ of the pooled mass to one side, exceeding the pass
-threshold of $0.20$. The silhouette therefore supplied a gender cue through
+the model returned an absolute gender probability gap of $0.853$, exceeding
+the pass threshold of $0.20$. The silhouette therefore supplied a gender cue through
 its body geometry. The grey patch returned $0.062$ on the same probe and was
 adopted as the replacement. The four images appear in \cref{fig:stimuli}, and
 the two validation metrics appear in \cref{fig:gate1}.
@@ -259,13 +259,12 @@ statistic is defined in \cref{sec:framework-gap} and reported in
 
 The visual token budget for Qwen is fixed as described in
 \cref{sec:design-impl}. Its token count varies with image resolution, and the
-face photographs differ slightly in size. Fixing the budget controls the
-association between the identity of a face and the length of its visual
-representation.
+face photographs differ slightly in size. These settings bound the visual
+token count, but do not establish identical sequence lengths across images.
 
 The database licence also constrains how the stimuli are presented. It permits
-non commercial academic use but prohibits redistribution or republication of
-the images. The photographs were therefore stored outside the repository and
+non commercial academic use, prohibits redistribution and requires written
+permission to publish the images. The photographs were therefore stored outside the repository and
 are not reproduced in the thesis. Accordingly, \cref{fig:stimuli} contains
 only the Phase~1A stimuli, while \cref{fig:gap} presents the Phase~1B
 measurements without the photographs.
@@ -351,8 +350,9 @@ interface is not used. Since no sampling occurs, temperature, top $p$ and beam
 width do not affect the measurement. The result is determined by the model
 weights, input and numerical arithmetic. The quantities defined in
 \cref{sec:framework-probe,sec:framework-ratings} are calculated from this
-distribution. The raw top ten tokens are retained with each row to support
-inspection of the surface forms associated with unexpected probabilities.
+distribution. Production rows retain probabilities for the specified response tokens.
+The diagnostic sweep additionally records the top ten vocabulary tokens to
+support inspection of unexpected continuations.
 
 \begin{figure}[htbp]\centering
 \resizebox{\linewidth}{!}{%
@@ -417,8 +417,8 @@ vocabulary. The equivalent check was repeated for Qwen.
 The implementation also includes settings specific to each architecture.
 Qwen2-VL varies its number of visual tokens with image resolution. The budget
 is fixed at $\texttt{min\_pixels}=256\cdot28^2$ and
-$\texttt{max\_pixels}=1280\cdot28^2$ to hold the visual token count equal
-across conditions and control variation in context length (\cref{sec:bg-vlm}).
+$\texttt{max\_pixels}=1280\cdot28^2$ to bound the visual token count
+across conditions. These bounds do not by themselves fix context length (\cref{sec:bg-vlm}).
 For Llama, the pooled sets $\Yset$ and $\Nset$ are resolved against the
 tokeniser when the model is loaded. Fixed token identifiers are not used
 because a vocabulary change could otherwise alter the response set without an
@@ -583,7 +583,7 @@ Phase~2 streams & 2 (2018 archive, 2026 re-crawl) & 1 (2018 archive) \\
 Measurements per model & 330 + 720 & 330 + 4,400 + 360 \\
 Total measurements & 3,150 & 25,450 \\
 Cross-attention heatmaps & planned & not produced \\
-Consistency rate & planned & not identifiable (\cref{sec:framework-calm}) \\
+Consistency rate & planned & not separately reported (\cref{sec:framework-calm}) \\
 Spearman $\rho$ across models & descriptive, $n=3$ & descriptive, $n=5$ \\
 \bottomrule
 \end{tabularx}
@@ -607,11 +607,11 @@ selection, a difference between Llama and Qwen is also a difference between
 90B and 72B. Evaluating three Qwen sizes and two Llama sizes provides
 comparisons within each family as well as between families.
 
-Two reductions followed from constraints established earlier in the chapter.
-The humanoid silhouette was replaced after failing
-the gender gate at $0.853$ (\cref{sec:design-stimuli}). The consistency rate
-was also omitted because it is not separately identifiable from two scale
-orders, as established in \cref{sec:framework-calm}.
+Two changes concern stimulus validation and metric reporting. The humanoid
+silhouette was replaced after failing the gender gate at $0.853$ (\cref{sec:design-stimuli}). Consistency rate
+was not separately reported; it concerns repeated judgements under identical
+conditions, independently of the two scale orders
+(\cref{sec:framework-calm}).
 
 The contemporary image search stream was omitted to prioritise other
 measurements within the available budget. The proposal specified a fresh crawl
