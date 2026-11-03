@@ -2,28 +2,28 @@
 \chapter{Experimental Design and System}\label{ch:design}
 % =====================================================================
 
-This chapter describes the audit as it was built. \cref{ch:framework} defined
-what is measured; the sections below state on which models, with which
-instruments, under which conditions and on which machines. The audit covers
-five models over three phases, which is 25,450 measurements in all. Where the
-delivered design differs from the project proposal, the difference is given
-with its reason, and \cref{sec:design-scope} collects all such changes in one
-table.
+This chapter describes the implementation of the audit. The measurement
+framework in \cref{ch:framework} defines the quantities of interest; this
+chapter specifies the models, instruments, stimuli and computing environment
+used to obtain them. The audit covers five models across three phases, with
+25,450 measurements in total. Changes from the project proposal are explained
+alongside the relevant design decisions and collected in
+\cref{sec:design-scope}.
 
 % ---------------------------------------------------------------------
 \section{Models under audit}\label{sec:design-models}
 
-Five open weight models are audited, drawn from two families at five
-parameter counts: Llama-3.2-Vision contributes its 11B and 90B variants, and
-Qwen2-VL its 2B, 7B and 72B, which between them are every size the two families
-ship. Because the sample spans both families and five sizes, it separates two
-questions that a single model from each family would leave confounded. Across
-families it contrasts two ways of joining vision to language, since Llama
-inserts gated cross-attention adapters into a frozen language model whereas
-Qwen projects the image into the token stream that self-attention already reads
-(\cref{sec:bg-vlm}). Within a family it varies parameter count while holding
-the fusion design, the prompts and the stimuli fixed, so that a trend across
-sizes can be distinguished from a property of one model.
+The audit evaluates five models with open weights from two model families.
+Llama-3.2-Vision contributes its 11B and 90B variants, while Qwen2-VL
+contributes its 2B, 7B and 72B variants. Together, these cover every parameter
+size available within the two families. The selection supports comparisons
+both between architectures and across parameter counts. Llama incorporates
+visual information through gated cross attention adapters within a frozen
+language model, whereas Qwen places visual representations in the token
+sequence processed by self attention (\cref{sec:bg-vlm}). Within each family,
+the fusion architecture, prompts and stimuli remain fixed as parameter count
+changes. This allows patterns across sizes to be distinguished from behaviour
+observed in a single model.
 
 The minor models were incorporated subsequent to the two larger ones, following the supervisor's recommendation, to transform two disparate points into a coherent trend. They are inexpensive, as a 2B or 7B model operates on a single GPU in less than an hour. They also modified the project's claims, as a result that is valid at both 2B and 72B pertains to a family rather than a specific checkpoint. A single void in the ladder remains unsealed. Qwen2-VL does not release any models between 7B and 72B, while Llama-3.2-Vision has no offerings between 11B and 90B, resulting in a gap of over six times between 11B and 72B.
 \cref{sec:disc-threats} states what that costs.
@@ -69,48 +69,49 @@ image.}
 \label{tab:phases}
 \end{table}
 
-Phase~1B was added during the work rather than planned from the outset, and
-it bears more directly than either other phase on the question the project sets
-out to answer. Phase~1A shows the model no person at all, which was deliberate,
-because the humanoid silhouette intended as the visual anchor failed its
-neutrality gate (\cref{sec:design-stimuli}). That decision carries a cost,
-since nothing in Phase~1A can show whether a model treats photographs of women
-differently from photographs of men, and it is this gap that
-\cref{sec:design-phase1b} was built to close.
+Phase~1B was added during the project to examine whether models respond
+differently to photographs of women and men. Phase~1A contains no depicted
+person because the humanoid silhouette proposed as its visual anchor failed
+the neutrality gate (\cref{sec:design-stimuli}). This Phase~1A design isolates
+the effect of supplying visual input, but it cannot establish whether
+responses vary with the gender of a depicted person. The real face comparison
+described in \cref{sec:design-phase1b} addresses that limitation.
 
-The order in which the runs were made follows from what a large job costs on
-a shared cluster. A 90B job holds three H100 cards for hours and waits in the
-queue before it starts, so a prompt defect found in its output costs a day
-rather than a minute. Every instrument described below was therefore exercised
-on the 11B first, and Phase~1B was smoke tested on two faces with one small
-model from each family before any full run was queued.
+The instruments were tested on smaller models before the larger runs were
+submitted. A 90B job occupies three H100 cards for hours and also incurs queue
+time, so a prompt defect discovered after execution can delay the work by a
+day. Each instrument was therefore tested on the 11B first. Phase~1B was also
+smoke tested on two faces using one small model from each family before the
+full runs were queued.
 
-Beyond its development role, the 11B also supplied the reference against which
-the fault of \cref{sec:design-faults} was identified. Every 11B job ran on a
-single L40, so no 11B measurement ever crossed a device boundary, and its
-output remained trustworthy when that of the sharded runs did not.
+The 11B additionally provided a reference for diagnosing the fault described
+in \cref{sec:design-faults}. Every 11B job ran on a single L40, so no 11B
+measurement required a transfer across devices. Its output provided a
+comparison when the sharded runs produced unreliable measurements.
 
-GPT-4o was named in the proposal and is not audited here, because its interface
-does not return the quantity the method depends on. The API exposes at most the
-top few log probabilities at each position \cite{hu2023prompting}, so the sum
-over the full vocabulary that normalises \cref{eq:capm} cannot be formed. A
-pooled surface form such as \texttt{YES} may also be absent from the returned
-set altogether. Captured mass is what separates a measurement from a degenerate one
-(\cref{sec:framework-validity}), and a model whose $\capm$ is not observable
-cannot be audited by this method at all. This is a limitation of access rather
-than of the model, and it applies to every closed interface of the same shape.
+GPT-4o was included in the proposal but excluded from the audit because its
+interface does not expose the distribution required by the method. The API
+returns only the top few log probabilities at each position
+\cite{hu2023prompting}. Consequently, the sum over the full vocabulary needed
+to normalise \cref{eq:capm} cannot be formed. Some pooled surface forms, such
+as \texttt{YES}, can also be absent from the returned set. Captured mass is
+required to assess measurement validity (\cref{sec:framework-validity}), so
+the method cannot be applied exactly when $\capm$ is unobservable. This
+restriction concerns access to the distribution and applies to closed
+interfaces with the same limitation.
 
 % ---------------------------------------------------------------------
 \section{The inventory as administered}\label{sec:design-phase1}
 
 Phases~1A and 1B administer the 22 items of the Ambivalent Sexism Inventory
-(\cref{sec:bg-asi}) as trait phrases rather than as the original statements.
-Each item is put in five prompt structures, and the two phases differ only in
-what the model is shown alongside the question. Phase~1A crosses the items
-with three image conditions, giving $22\times5\times3=330$ measurements per
-model; Phase~1B crosses the same items with 40 photographs, giving
-$22\times5\times40=4{,}400$. Six items are reverse keyed, and \cref{tab:items}
-lists all 22 phrases with their subscale and polarity as administered.
+(\cref{sec:bg-asi}) as trait phrases in place of the original statements. Each
+item appears in five prompt structures, and the phases differ in the
+accompanying visual input. Phase~1A crosses the items with three image
+conditions, producing $22\times5\times3=330$ measurements per model. Phase~1B
+crosses the same items with 40 photographs, producing
+$22\times5\times40=4{,}400$. Six items are reverse keyed. The complete set of
+22 administered phrases, together with their subscales and polarities, appears
+in \cref{tab:items}.
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lX@{}}
@@ -130,47 +131,50 @@ becomes ``a person''.}
 \label{tab:structures}
 \end{table}
 
-\cref{tab:structures} gives the five templates with one item substituted in.
-The structures are adapted from the syntactic perturbations of Gao et al.
-\cite{gao2025measuring}, and they vary how the question is put while holding
-the proposition fixed. Inversion is the only structure that negates the
-proposition, so it alone carries $s_t=-1$ in \cref{eq:bias}. The remaining four
-differ in whose judgement is solicited and in how hedged the frame is, which
-makes the spread across them a measure of the model's sensitivity to phrasing
-rather than to content.
+The templates in \cref{tab:structures} are adapted from the syntactic
+perturbations of Gao et al. \cite{gao2025measuring}. They vary the framing of
+the question while retaining the underlying proposition. Inversion is the only
+structure that negates the proposition and therefore the only one assigned
+$s_t=-1$ in \cref{eq:bias}. The other four structures vary whose judgement is
+requested and how directly the question is framed. Differences across these
+structures measure sensitivity to phrasing independently of changes to the
+item content.
 
-One feature of the instrument needs stating plainly, because it bounds what
-either phase can claim. The ASI asks respondents to agree or disagree with
-statements about women as a group, whereas the probe asks about a person whose
-gender is never named. That substitution is deliberate, since naming the group
-is what triggers the refusal behaviour this thesis is built to avoid
-(\cref{sec:intro-problem}), but it is not free. Nine of the 22 trait phrases
-contain no gender reference at all: items 1, 2, 3, 5, 6, 12, 13, 15 and 22. On
-those items the probe measures willingness to attribute a trait to an
-unspecified person rather than agreement with a claim about women. Items 20 and
-21 shift the referent further, because the original statements concern a man's
-need for a woman and the administered phrases apply that condition to the
-ungendered person in the prompt. The resulting construct is therefore narrower
-than the ASI, and \cref{sec:disc-threats} treats the gap as a threat to
-validity rather than as a detail of wording.
+The adaptation changes the construct being measured. The ASI asks respondents
+to evaluate statements about women as a group, whereas the probe asks about a
+person whose gender is not stated. This substitution is intended to avoid the
+refusal behaviour associated with explicit questions about the group
+(\cref{sec:intro-problem}). However, it also limits the interpretation of the
+responses. Nine of the 22 trait phrases contain no gender reference: items 1,
+2, 3, 5, 6, 12, 13, 15 and 22. These items measure willingness to attribute a
+trait to an unspecified person, without directly asking for agreement with a
+statement about women.
 
-Phase~1B narrows the gap from the other side, because a photograph supplies the
-gender the wording withholds.
+Items 20 and 21 introduce a further change in referent. The original
+statements concern a man's need for a woman, while the adapted phrases apply
+that condition to the unspecified person in the prompt. The administered
+instrument therefore measures a narrower construct than the original ASI. This
+difference is treated as a threat to validity in \cref{sec:disc-threats}.
+
+Phase~1B addresses part of this limitation by supplying a photograph from
+which the model can infer the gender left unspecified in the wording.
 
 % ---------------------------------------------------------------------
 \section{Phase 1A stimuli and stimulus validation}\label{sec:design-stimuli}
 
-The three Phase~1A conditions are a Gaussian noise image, a uniform grey patch
-and no image at all. Both images are $1024\times1024$ RGB and are produced by a
-few lines of code at fixed parameters. Noise is drawn per channel from
-$\mathcal N(128,50^2)$ at seed 42 and clipped to $[0,255]$; the patch is
-uniform RGB $(150,150,150)$. Neither was produced by a generative model. A
-generated image of a supposedly neutral person would import whatever
-associations its generator holds into the measurement, and those associations
-would then be indistinguishable from the ones under audit. Both images are
-content free inputs in the sense of Zhao et al. \cite{zhao2021calibrate}: they
-occupy the vision pathway without supplying anything about a person for the
-model to read.
+Phase~1A uses three conditions: a Gaussian noise image, a uniform grey patch
+and no image. Both images are generated programmatically at a fixed resolution
+of $1024\times1024$ RGB. Noise is sampled independently for each channel from
+$\mathcal N(128,50^2)$ using seed 42 and clipped to $[0,255]$. The grey patch
+has uniform RGB values of $(150,150,150)$.
+
+Programmatic generation avoids introducing the associations of an image
+generation model into the audit. An image generated to represent a neutral
+person could contain social cues that would be difficult to distinguish from
+the associations being measured. The selected stimuli instead serve as content
+free inputs in the sense of Zhao et al. \cite{zhao2021calibrate}. They
+activate the visual pathway without depicting a person or supplying
+information about personal attributes.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=\linewidth]{stimuli.pdf}
@@ -181,15 +185,15 @@ regenerated here by the same procedure that produced the run stimuli.}
 \label{fig:stimuli}
 \end{figure}
 
-The proposal specified a humanoid silhouette as the visual anchor, on the
-reasoning that a human outline would engage the model's person representation
-without specifying who the person is. A validation gate on the 11B rejected it.
-Asked to choose between \texttt{male} and \texttt{female}, the model put
-$0.853$ of the pooled mass on one side when shown the silhouette, against a
-pass threshold of $0.20$, so body geometry alone was enough to fix a gender.
-The grey patch gave $0.062$ on the same probe and was adopted in its place.
-\cref{fig:stimuli} shows all four images and \cref{fig:gate1} the two gate
-metrics.
+The proposal specified a humanoid silhouette as the visual anchor. Its
+intended purpose was to engage the model's representation of a person without
+specifying an identity. However, validation on the 11B rejected the
+silhouette. When asked to choose between \texttt{male} and \texttt{female},
+the model assigned $0.853$ of the pooled mass to one side, exceeding the pass
+threshold of $0.20$. The silhouette therefore supplied a gender cue through
+its body geometry. The grey patch returned $0.062$ on the same probe and was
+adopted as the replacement. The four images appear in \cref{fig:stimuli}, and
+the two validation metrics appear in \cref{fig:gate1}.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=\linewidth]{gate1.pdf}
@@ -202,32 +206,35 @@ rather than anything read out of the image.}
 \label{fig:gate1}
 \end{figure}
 
-A second gate asked the same question about race, and both images failed it.
-The reading that matters is the direction of the failure. The grey patch
-returned $P(\texttt{white})=0.710$ while the silhouette returned $0.547$, so
-the featureless image drew the stronger answer. A signal that grows when visual
-structure is removed is not being read out of the image. It is the prior the
-language model brings to a question about an unseen person, and it sits at the
-same value in every condition. The grey patch was accepted on that basis. The
-prior is not removed by this argument, only located, and it is one reason the
-Phase~1A analysis compares conditions against each other rather than against an
+Both images failed the second validation gate, which tested race associations.
+The grey patch returned $P(\texttt{white})=0.710$, compared with $0.547$ for
+the silhouette. The stronger response to an image without visual structure was
+interpreted as a linguistic prior associated with a question about an unseen
+person. On this interpretation, the signal was not evidence of a racial
+attribute depicted in the image, and the prior remained at the same value
+across conditions.
+
+The grey patch was accepted on that basis. This decision did not remove the
+prior from the measurement. It identified a reason to compare Phase~1A
+conditions with one another instead of interpreting their scores against an
 absolute zero.
 
 % ---------------------------------------------------------------------
 \section{Phase 1B: real faces}\label{sec:design-phase1b}
 
-A grey patch shows the model nothing about a person, which is what makes
-Phase~1A a clean reading of the answer prior and also what limits it. Agreement
-measured against an unspecified person cannot distinguish a model that treats
-women and men alike from one that was never given a gender to respond to.
-Phase~1B supplies that gender visually: the same 22 items in the same five
-phrasings, with a photograph of a real face in place of the patch.
+Phase~1A measures responses without depicting a person. This isolates the
+answer prior, but it cannot establish whether the model responds differently
+to women and men. Phase~1B introduces that comparison through photographs of
+real faces. It administers the same 22 items in the same five prompt
+structures, with a face photograph replacing the synthetic stimulus.
 
-The faces are the neutral expression subset of the Chicago Face Database
-\cite{ma2015cfd}, 40 in all, stratified five to a cell across four races and
-two genders. Gender is the axis the design is powered for, at 20 faces a side.
-Race is a secondary stratification at five faces a cell, which is too thin to
-support a claim and is reported as exploratory in \cref{sec:s1b-race}.
+The sample contains neutral expression photographs from the Chicago Face
+Database \cite{ma2015cfd}. The 40 faces are stratified across four races and
+two genders, with five faces in each cell. The primary comparison concerns
+gender, with 20 faces in each group. Race provides a secondary stratification,
+but five faces per cell are insufficient to support a firm conclusion. The
+corresponding analysis is therefore reported as exploratory in
+\cref{sec:s1b-race}.
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
@@ -244,50 +251,52 @@ structures, so one face contributes 110 measurements and the phase contributes
 \label{tab:faces}
 \end{table}
 
-Which five faces fill a cell is not arbitrary, because an uncontrolled
-selection would confound the very result it is meant to measure. The database
-ships norming ratings alongside the photographs, and were the female sample
-rated more attractive than the male sample, any difference in how the models
-responded could be read as an attractiveness effect wearing the name of gender.
-Within each cell the five faces nearest the overall median on the Attractive
-norm are therefore taken, a rule that is deterministic and uses no random seed.
-The achieved balance is reported at the start of every run: the eight cell
-means span 0.087 on the database's Attractive norm, which is rated from 1 to
-7.
+Face selection controls for attractiveness because differences in this
+attribute could confound the gender comparison. The database provides norming
+ratings for each photograph. Within each cell, the five faces closest to the
+overall median on the Attractive norm are selected. This rule is deterministic
+and requires no random seed. The achieved balance is recorded at the start of
+every run. Across the eight cells, the mean ratings span 0.087 on the
+Attractive norm, which uses a scale from 1 to 7.
 
-The unit of analysis follows from the design rather than from the row count,
-since each face contributes 110 measurements and those are averaged to a single
-number per face before anything is tested. The gender comparison is therefore
-20 numbers against 20, not 2,200 against 2,200. Treating the measurements as
-independent would overstate the precision by more than an order of magnitude,
-because the 110 rows behind a face all share that face. The statistic that
-follows from this choice is defined in \cref{sec:framework-gap} and reported in
+The face is the unit of analysis. Each face contributes 110 measurements,
+which are averaged to obtain a single value before statistical comparison. The
+gender comparison therefore consists of 20 face means against 20 face means,
+instead of 2,200 against 2,200. Treating the measurements as independent would
+overstate precision by more than an order of magnitude because the 110
+responses associated with each face share the same visual input. The resulting
+statistic is defined in \cref{sec:framework-gap} and reported in
 \cref{sec:s1b-gap}.
 
-The visual token budget is pinned for Qwen exactly as in
-\cref{sec:design-impl}, because that model varies its token count with
-resolution and the faces differ slightly in size. Without pinning, a face
-would be confounded with the length of the sequence describing it. A
-second constraint is legal rather than technical: the database's licence
-permits non commercial academic use and forbids redistributing or republishing
-the images, so no face appears anywhere in this thesis and the images were held
-outside the repository throughout. For that reason \cref{fig:stimuli} shows the
-Phase~1A stimuli alone, and \cref{fig:gap} reports Phase~1B as measurements
-rather than as pictures.
+The visual token budget for Qwen is fixed as described in
+\cref{sec:design-impl}. Its token count varies with image resolution, and the
+face photographs differ slightly in size. Fixing the budget controls the
+association between the identity of a face and the length of its visual
+representation.
+
+The database licence also constrains how the stimuli are presented. It permits
+non commercial academic use but prohibits redistribution or republication of
+the images. The photographs were therefore stored outside the repository and
+are not reproduced in the thesis. Accordingly, \cref{fig:stimuli} contains
+only the Phase~1A stimuli, while \cref{fig:gap} presents the Phase~1B
+measurements without the photographs.
 
 % ---------------------------------------------------------------------
 \section{Phase 2: SIGIR 2018 queries and the CALM design}\label{sec:design-phase2}
 
-Phase~2 reuses the stimuli and the human ratings of Otterbacher et al.
-\cite{otterbacher2018sigir}. Ten queries are available, of which nine name a
-person trait and one names an object, and \cref{tab:sigir-queries} lists them
-with the baselines they supply. Each query carries 38 ranked images, and the
-first nine are the $3\times3$ grid that every participant saw, so $k=9$ fixes
-the images to those the human ratings cover. The low ASI baseline $\rlow$
-averages the per query objectivity ratings of participants at or below the
-median ASI score, which falls at about $2.82$ on the dataset's scale from 0 to
-5. Each image is then rated under two scale orders and two image conditions,
-giving $10\times9\times2\times2=360$ measurements per model.
+Phase~2 uses the stimuli and human ratings from Otterbacher et al.
+\cite{otterbacher2018sigir}. The dataset contains ten queries: nine describing
+a person trait and one describing an object. These queries and their human
+baselines are listed in \cref{tab:sigir-queries}. Each query has 38 ranked
+images. The first nine form the $3\times3$ grid presented to the human
+participants, so $k=9$ restricts the model evaluation to images covered by
+those judgements.
+
+The low ASI baseline $\rlow$ is the mean objectivity rating for each query
+among participants at or below the median ASI score. The median is
+approximately $2.82$ on the dataset's scale from 0 to 5. Each image is
+evaluated under two scale orders and two image conditions, producing
+$10\times9\times2\times2=360$ measurements per model.
 
 The administered prompt states both endpoints of the scale:
 \begin{quote}\small
@@ -322,36 +331,39 @@ in the prompt changes.}
 \label{tab:calm}
 \end{table}
 
-Naming the anchors is a change from the proposal, whose prompt asked how
-objective the result appeared without saying which end of the scale meant
-what. A single condition tolerates that omission, because the phrase ``how
-objective'' implies that higher is more objective. CALM does not, since
-reversing a scale whose endpoints were never stated is undefined. Both orders
-therefore name their endpoints and the original order keeps the polarity of
-the human instrument, where 7 means objective, so model ratings and the
-baselines of \cref{tab:sigir-queries} remain on one axis.
-\cref{tab:calm} sets out the two factors and the four runs they generate.
+Explicit scale anchors were added to the prompt used in the proposal. The
+proposed wording asked how objective the result appeared without defining the
+direction of the scale. This leaves the interpretation of higher ratings
+implicit. The CALM manipulation requires both endpoints to be stated because
+scale reversal depends on changing their assigned meanings. The original order
+retains the orientation of the human instrument, where 7 means objective.
+Model ratings and the baselines in \cref{tab:sigir-queries} therefore share
+the same orientation. The factors and their four combinations are shown in
+\cref{tab:calm}.
 
-Two features of the design depart from the human task. Participants rated the
-$3\times3$ grid as a whole, whereas the model rates each of the nine images
-separately, so the model's quantity is an average over images and the human's
-is a single judgement of a set. The second is the no image condition, in which
-the referent becomes ``a typical result'' and no image is passed at all. That
-condition has no counterpart among the participants and exists to isolate how
-much of a rating survives when the thing being rated is absent.
-\cref{sec:disc-threats} returns to both.
+The model task differs from the human task in two respects. Human participants
+rated the $3\times3$ grid as a whole, while the model rates each of the nine
+images separately. The model result is therefore an average of individual
+image ratings, while the human baseline represents a judgement of the complete
+set.
+
+The no image condition introduces a further difference. Its prompt refers to
+``a typical result'', and no image is supplied. This condition has no
+counterpart in the human study. It measures the rating produced when the
+visual evidence is absent. Both differences are discussed as threats to
+validity in \cref{sec:disc-threats}.
 
 % ---------------------------------------------------------------------
 \section{Implementation}\label{sec:design-impl}
 
-Every measurement is a single \texttt{forward()} call followed by a softmax
-over the full vocabulary at the last position. The generation interface is
-never called. Nothing in the pipeline samples, so temperature, top-$p$ and
-beam width have no role, and a measurement is a deterministic function of the
-weights, the input and the arithmetic. The whole of
-\cref{sec:framework-probe,sec:framework-ratings} is computed from that one
-distribution, and the raw top ten tokens are retained with every row so that a
-surprising probability can be traced to the surface forms that produced it.
+Each measurement consists of a single \texttt{forward()} call followed by a
+softmax over the full vocabulary at the final input position. The generation
+interface is not used. Since no sampling occurs, temperature, top $p$ and beam
+width do not affect the measurement. The result is determined by the model
+weights, input and numerical arithmetic. The quantities defined in
+\cref{sec:framework-probe,sec:framework-ratings} are calculated from this
+distribution. The raw top ten tokens are retained with each row to support
+inspection of the surface forms associated with unexpected probabilities.
 
 \begin{figure}[htbp]\centering
 \resizebox{\linewidth}{!}{%
@@ -391,54 +403,62 @@ preceded by a space is a different token from the bare digit.}
 \label{fig:prefill}
 \end{figure}
 
-Where the rating cue sits decides whether the measurement works at all, and
-\cref{fig:prefill} shows the two arrangements. The chat template closes the
-user turn with an end of turn marker and opens an empty assistant turn. A cue
-written at the end of the user message is therefore never continued: the model
-begins a reply of its own, and the next token is its opening word. An early Phase~2
-run was built that way and the seven digits held $\capm_{\Dset}=0.0043$ of the
-distribution. Moving the identical string into the assistant turn as a prefill
-raised that to $0.994$, because the model is then completing a line it is
-already inside.
+The position of the rating cue determines which distribution is measured. The
+two arrangements are illustrated in \cref{fig:prefill}. The chat template
+terminates the user turn and opens a separate assistant turn. A cue placed at
+the end of the user message therefore does not directly establish the
+assistant's next token as a rating. Instead, the model begins its own
+response, and the measured position corresponds to its opening token.
 
-The trailing space in \texttt{Rating:\textvisiblespace} is part of the
-instrument rather than typography. Llama-3 tokenises the string
-\texttt{"\textvisiblespace 1"} as the two tokens \texttt{[220, 16]}, so only a
-bare digit is a single token. Without the space, the next position is the space
-itself and the seven probabilities read there describe the wrong decision. The
-seven bare digits were confirmed to be single tokens in the Llama-3.2
-vocabulary before the production runs, and the equivalent check was repeated
-for Qwen.
+An early Phase~2 run used this arrangement, and the seven digits captured only
+$\capm_{\Dset}=0.0043$ of the distribution. Moving the same cue into the
+assistant turn as a prefill raised captured mass to $0.994$. In that
+arrangement, the model continues the rating cue at the position where the
+digit is expected.
 
-Two architecture specific settings complete the pipeline. Qwen2-VL varies the
-number of visual tokens with image resolution, so the budget is pinned at
-$\texttt{min\_pixels}=256\cdot28^2$ and $\texttt{max\_pixels}=1280\cdot28^2$,
-which holds the visual token count equal across conditions and keeps context
-length out of the comparison (\cref{sec:bg-vlm}). For Llama the pooled sets
-$\Yset$ and $\Nset$ are resolved against the tokeniser at load time rather than
-written out as fixed identifiers, since a vocabulary change would otherwise
-narrow the sets without any sign that it had. The implementation runs on
-PyTorch 2.11.0, Transformers 4.57.6 pinned below version 5, accelerate 1.0.1
-and bitsandbytes 0.49.2 \cite{wolf2020transformers}. A suite of 124 unit tests
-across ten modules covers the item table, the stimulus generators, the pooling
-logic, the SIGIR and Chicago Face Database loaders, the Phase~1B metrics, the
-Phase~2 prompts and the cross device workaround of \cref{sec:design-faults}.
+The trailing space in \texttt{Rating:\textvisiblespace} is also part of the
+measurement procedure. Llama-3 tokenises \texttt{"\textvisiblespace 1"} as the
+two tokens \texttt{[220, 16]}. The bare digit is therefore the single token
+required at the measured position. Without the trailing space in the prefill,
+the next position corresponds to the space itself, and the seven digit
+probabilities describe a different continuation. Before the production runs,
+the seven bare digits were confirmed to be single tokens in the Llama-3.2
+vocabulary. The equivalent check was repeated for Qwen.
+
+The implementation also includes settings specific to each architecture.
+Qwen2-VL varies its number of visual tokens with image resolution. The budget
+is fixed at $\texttt{min\_pixels}=256\cdot28^2$ and
+$\texttt{max\_pixels}=1280\cdot28^2$ to hold the visual token count equal
+across conditions and control variation in context length (\cref{sec:bg-vlm}).
+For Llama, the pooled sets $\Yset$ and $\Nset$ are resolved against the
+tokeniser when the model is loaded. Fixed token identifiers are not used
+because a vocabulary change could otherwise alter the response set without an
+explicit failure.
+
+The software environment consists of PyTorch 2.11.0, Transformers 4.57.6
+pinned below version 5, accelerate 1.0.1 and bitsandbytes 0.49.2
+\cite{wolf2020transformers}. A suite of 124 unit tests across ten modules
+covers the item table, stimulus generators, pooling logic, SIGIR and Chicago
+Face Database loaders, Phase~1B metrics and Phase~2 prompts. It also covers
+the workaround for transfers across devices described in
+\cref{sec:design-faults}.
 
 % ---------------------------------------------------------------------
 \section{Compute environment and precision}\label{sec:design-compute}
 
-All runs were executed on UQ Bunya under SLURM, an environment whose storage
-and scheduling shaped the design in two ways. Model weights are loaded by
-\texttt{safetensors}, which memory maps the file by default. On the shared
-parallel file system every page fault is a network round trip, so a cold load
-of the 23\,GB 11B checkpoint took roughly 100 minutes. Weights are therefore
-copied to node local storage before each run and read from there. The Llama-90B
-snapshot needs a further step, because the published repository ships both
-\texttt{safetensors} and consolidated checkpoint files and occupies 331\,GB; a
-flat directory holding only the tensors and the configuration files is
-166\,GB. Queue waits are the second property, and they are measured rather than
-estimated: the smallest job in the project, a smoke test on one L40, was
-scheduled to start 4 hours and 46 minutes after it was submitted.
+All runs were executed on UQ Bunya under SLURM. Storage performance and queue
+delays influenced how the jobs were prepared and tested. Model weights are
+loaded through \texttt{safetensors}, which uses memory mapping by default. On
+the shared parallel file system, page faults require network access. A cold
+load of the 23\,GB 11B checkpoint took approximately 100 minutes. The weights
+were therefore copied to storage local to the compute node before each run.
+
+The Llama-90B snapshot required additional preparation. Its published
+repository contains both \texttt{safetensors} and consolidated checkpoint
+files, occupying 331\,GB. A flat directory containing only the required
+tensors and configuration files occupies 166\,GB. Queue delays were also
+recorded directly. The smallest job in the project, a smoke test using one
+L40, was scheduled to start 4 hours and 46 minutes after submission.
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X c c >{\raggedright\arraybackslash}p{0.27\linewidth}@{}}
@@ -458,36 +478,41 @@ Values are on the lowercase pair used at the time; $n=8$, directional only.}
 \label{tab:quant}
 \end{table}
 
-Quantisation would have made the large models far cheaper to run, and
-\cref{tab:quant} is the reason it was not used for the reported results. On
-eight prompts held fixed, 8-bit weights moved $\pyes$ by $0.065$ on average and
-4-bit NF4 by $0.084$ to $0.107$ depending on which modules were left in full
-precision. Those shifts are the size of the effects the audit is trying to
-detect, because \cref{eq:asi} aggregates signed item scores whose typical
-magnitude is of the same order. A quantised run could not be told apart from a
-real result. Every headline run is therefore bf16. The sweep also records a
-limit of the 8-bit path on this stack, because the int8 kernel rejects the four
-dimensional tensors the vision tower produces, so 8-bit runs only with that
-tower excluded. The comparison in \cref{tab:quant} is directional on eight
-prompts rather than an estimate of the shift.
+Quantisation was evaluated as a way to reduce the computing requirements of
+the larger models. However, the comparison in \cref{tab:quant} showed changes
+in response probabilities comparable with the effects under investigation.
+Across eight fixed prompts, 8 bit weights changed $\pyes$ by $0.065$ on
+average. For 4 bit NF4, the mean change ranged from $0.084$ to $0.107$,
+depending on which modules retained full precision.
 
-Quantisation is used once, deliberately, as a control. The invalid 90B runs
-discussed below arose from copies between GPUs, so a run confined to one GPU
-cannot be affected by that fault at all. A 4-bit single GPU Phase~1A run of the
-90B therefore serves as an independent check on the corrected multi GPU run.
-The two agree at Pearson $r=0.767$ with mean $|\Delta\pyes|=0.148$, which is
-the disagreement \cref{tab:quant} predicts for a 4-bit variant and no more.
-Further engineering detail is given in \cref{app:repro}.
+These shifts are relevant because \cref{eq:asi} aggregates signed item scores
+of a similar magnitude. Changes introduced by quantisation would therefore be
+difficult to distinguish from the effects measured by the audit. All headline
+runs consequently use bf16. The sweep also identified a limitation of the 8
+bit implementation: the int8 kernel rejects the four dimensional tensors
+produced by the vision tower. The 8 bit configuration therefore runs only when
+that tower is excluded from quantisation. The comparison in \cref{tab:quant}
+is a directional check on eight prompts, without providing a general estimate
+of the quantisation shift.
+
+Quantisation is retained for one execution control. The invalid 90B runs
+described below were affected by copies between GPUs. A run confined to a
+single GPU avoids that transfer path. A 4 bit single GPU Phase~1A run of the
+90B therefore provides an independent comparison with the corrected multi GPU
+run. The results agree at Pearson $r=0.767$, with a mean
+$|\Delta\pyes|=0.148$. This difference is consistent with the sensitivity to a
+4 bit configuration documented in \cref{tab:quant}. Further implementation
+details are provided in \cref{app:repro}.
 
 % ---------------------------------------------------------------------
 \section{Validity controls and the fault register}\label{sec:design-faults}
 
-Six measurement faults were found and fixed during the project, and
-\cref{tab:faults} records each with the symptom that exposed it. They are
-reported here, rather than quietly repaired, because they share a property
-that bears on how logit level audits should be reported: not one of them
-raised an error, and every one produced aggregate numbers that looked
-reasonable.
+Six measurement faults were identified and corrected during the project. Each
+fault and the diagnostic that exposed it are recorded in \cref{tab:faults}.
+None raised an error, and all produced plausible aggregate values. Reporting
+these faults documents why successful execution and reasonable summary
+statistics are insufficient to establish the validity of a logit level
+measurement.
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lXXl@{}}
@@ -507,14 +532,16 @@ error; all produced plausible aggregates.}
 \label{tab:faults}
 \end{table}
 
-The first two faults inflated the headline number. Treating inversion as
-though it asserted the proposition left $\ASIint$ at $0.639$ on a smoke test,
-and correcting the sign in \cref{eq:bias} moved it by a factor of five.
-Reading only the lowercase tokens \texttt{yes} and \texttt{no} captured about
-$0.09\%$ of the distribution. Pooling the case variants raised captured mass to
-roughly $47\%$ and lowered mean $\pyes$ by about $0.17$, which revised the acquiescence result of \cref{sec:framework-responsebias} from a
-dominant yes lean to a modest one. In both cases the uncorrected run reported
-the larger effect.
+The first two faults inflated the aggregate result. Scoring inversion as an
+assertion produced $\ASIint=0.639$ in a smoke test. Correcting the sign in
+\cref{eq:bias} changed the result by a factor of five. The second fault
+concerned the response tokens. Reading only lowercase \texttt{yes} and
+\texttt{no} captured approximately $0.09\%$ of the distribution. Pooling the
+case variants increased captured mass to approximately $47\%$ and reduced mean
+$\pyes$ by about $0.17$. This changed the acquiescence result in
+\cref{sec:framework-responsebias} from a dominant tendency to agree to a more
+modest one. Both faults therefore produced larger apparent effects before
+correction.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=\linewidth]{capm-fixes.pdf}
@@ -524,29 +551,35 @@ them rather than bars from a zero the axis does not have.}
 \label{fig:capm-fixes}
 \end{figure}
 
-Three of the six were caught by captured mass, and \cref{fig:capm-fixes} shows
-what those fixes bought. Each moved $\capm$ by two or three orders of
-magnitude, from a probe reading almost nothing to one reading nearly
-everything, which is the property that makes $\capm$ worth reporting beside
-every result. The other three were caught differently. The inversion sign
-was found by reading the five structures separately instead of only their
-average, the SIGIR loader by a unit test that asserted the length of the
-ranked list, and the zeroed cross device copies by output diversity.
+Captured mass exposed three of the six faults. The changes following
+correction are shown in \cref{fig:capm-fixes}. Each correction increased
+$\capm$ by two or three orders of magnitude, moving the probe from a small
+fraction of the distribution to nearly complete coverage. These changes
+demonstrate why captured mass is reported alongside the response
+probabilities.
 
-The last of those justifies the third check of
-\cref{sec:framework-validity}. Captured mass did not expose it, because the
-degenerate run reported a mean expected rating of $4.000$ on a scale from 1 to
-7, which is the midpoint and a value a cautious model might well return. What
-exposed it was that 330 distinct prompts produced 8 distinct values of
-$\capm$, and that $\pyes$ was exactly $0.5$ on 247 rows. Output carrying no
-information about its input can still aggregate to a plausible mean, so a run
-is accepted here only when logit spread, output diversity and captured mass
-are all reported and all pass. \cref{app:fault} gives the diagnosis, and the
-fix routes every copy between GPUs through host memory, which restores the
-single GPU result bit for bit.
+The remaining faults required other diagnostics. The inversion sign was
+identified by inspecting the five prompt structures separately instead of
+relying on their aggregate. A unit test of the ranked list length exposed the
+SIGIR loader fault. Output diversity exposed the zeroed copies between
+devices.
+
+The last fault supports the third check described in
+\cref{sec:framework-validity}. Captured mass alone did not establish the
+failure, while the degenerate run returned a plausible mean expected rating of
+$4.000$ on the scale from 1 to 7, so the decisive evidence concerned variation
+across inputs. Across 330 distinct prompts, $\capm$ took only 8 distinct
+values, and $\pyes$ was exactly $0.5$ on 247 rows.
+
+A distribution that carries no information about its input can still produce a
+plausible aggregate mean. Runs are therefore accepted only when logit spread,
+output diversity and captured mass are reported and satisfy their respective
+checks. The diagnosis is documented in \cref{app:fault}. The correction routes
+every copy between GPUs through host memory and restores the single GPU result
+bit for bit.
 
 % ---------------------------------------------------------------------
-\section{As-built scope}\label{sec:design-scope}
+\section{As built scope}\label{sec:design-scope}
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
@@ -570,48 +603,52 @@ on every axis except the second image stream.}
 \label{tab:scope}
 \end{table}
 
-\cref{tab:scope} lists every difference between the proposed design and the
-delivered one, and most of them are additions. The proposal specified three
-production models measured in one phase against synthetic stimuli. The audit as
-built covers five models over three phases and takes eight times as many
-measurements.
+The differences between the proposal and the delivered audit are collected in
+\cref{tab:scope}. Most concern additions to the experimental coverage. The
+proposal specified three production models evaluated in one phase against
+synthetic stimuli. The delivered audit covers five models across three phases
+and contains eight times as many measurements.
 
-Of those additions, two account for most of the extra work. Phase~1B was
-built after the supervisor asked for a run against real faces, and it answers a
-question Phase~1A cannot reach (\cref{sec:design-phase1b}). The parameter size
-axis addresses a related confound, because with one model from each family a
-difference between Llama and Qwen cannot be told apart from a difference
-between 90B and 72B. Three Qwen sizes against two Llama sizes separate the two
-explanations.
+Phase~1B and the parameter size comparison account for most of the additional
+work. It was introduced following the supervisor's request to evaluate real
+faces. It addresses the gender comparison that Phase~1A cannot provide
+(\cref{sec:design-phase1b}). The parameter size comparison addresses a
+separate limitation of evaluating one model from each family. With that
+selection, a difference between Llama and Qwen is also a difference between
+90B and 72B. Evaluating three Qwen sizes and two Llama sizes provides
+comparisons within each family as well as between families.
 
-Three reductions follow from results given earlier in this chapter. GPT-4o was
-dropped because its interface does not expose $\capm$
-(\cref{sec:design-models}), the silhouette was replaced because it failed the
-gender gate at $0.853$ (\cref{sec:design-stimuli}), and the consistency rate
-was dropped because \cref{sec:framework-calm} shows it is not identifiable from
-two scale orders.
+Three reductions followed from constraints established earlier in the chapter.
+GPT-4o was excluded because its interface does not expose $\capm$
+(\cref{sec:design-models}). The humanoid silhouette was replaced after failing
+the gender gate at $0.853$ (\cref{sec:design-stimuli}). The consistency rate
+was also omitted because it is not separately identifiable from two scale
+orders, as established in \cref{sec:framework-calm}.
 
-The remaining reduction is a decision about where to spend a fixed budget.
-The proposal planned a fresh crawl of the same ten queries alongside the 2018
-archive, which together would have measured drift over eight years, but only
-the archive was run. A fresh crawl supplies no human ratings, so the extrinsic
-comparison of \cref{sec:framework-extrinsic} would have had no baseline on that
-stream, and the queue time it would have consumed went instead to Phase~1B and
-the small models, leaving the temporal question open
+The contemporary image search stream was omitted to prioritise other
+measurements within the available budget. The proposal specified a fresh crawl
+of the same ten queries alongside the 2018 archive, which would have supported
+a comparison over eight years. Only the archive was evaluated. A fresh crawl
+would not provide corresponding human ratings, leaving the extrinsic
+comparison in \cref{sec:framework-extrinsic} without a baseline for that
+stream. The available queue time was instead allocated to Phase~1B and the
+smaller models. The temporal comparison remains outside the delivered scope
 (\cref{sec:disc-threats}).
 
-Two analyses that the proposal planned were not delivered. Cross-attention
-heatmaps were intended to show which image regions the adapter attends to while
-a rating is produced, but the attention hook written for the purpose never
-returned populated tensors on the sharded 90B. Diagnosing it was set aside once
-the cross device fault showed that anything read across a device boundary on
-those nodes was untrustworthy. The attention attribution the proposal envisaged is therefore
-absent, and the claim that visual input drives the observed effects rests on
-behavioural contrasts between conditions instead. The Spearman correlation
-across models was specified for three and is reported for five, where it stays
-descriptive: five points cannot support an inferential claim, and the five are
-not independent, since three of them share a family and a training recipe
-(\cref{sec:s2-deviation}).
+The treatment of the proposed attention and correlation analyses also changed.
+Cross attention heatmaps were intended to identify the image regions attended
+to while a rating was produced. However, the attention hook did not return
+populated tensors on the sharded 90B. Further diagnosis was deferred after the
+fault affecting transfers between devices established that readings across
+device boundaries on those nodes were unreliable. The planned attention
+attribution is therefore absent. The assessment of how visual input affects
+the models rests on behavioural comparisons between conditions.
+
+The Spearman correlation was proposed for three models and is reported for
+five. It remains descriptive because the sample does not support an
+inferential claim. The models are also not independent: three share a model
+family and training recipe. These constraints govern the interpretation of the
+comparison in \cref{sec:s2-deviation}.
 
 % \begin{plan}[Outstanding for this chapter]
 % \textbf{Job identifiers.} The text and \cref{tab:models} rest on jobs 27103565
