@@ -272,59 +272,75 @@ extent.
 This work makes five contributions.
 
 \begin{enumerate}
-  \item A protocol for auditing VLMs at the level of logits, which never reads
-        generated text. Model disposition is recovered from the distribution
-        over the next token in a single forward pass, with pooled surface forms
-        for the response options and an explicit account of the chat template
-        and assistant prefill that fix the read position
-        (\cref{ch:framework}).
+  \item It develops a protocol for auditing VLMs directly from their logits,
+        without relying on generated text. The model's disposition is inferred
+        from the next token probability distribution in a single forward pass.
+        The protocol accounts for different surface forms of each response
+        option and specifies the chat template and assistant prefill needed to
+        establish the correct read position (\cref{ch:framework}).
 
-  \item Captured mass $\capm$, used as a validity statistic and reported with
-        every measurement. The proportion of probability mass over the next
-        token that falls on the intended response set is a precondition for
-        interpreting any aggregate computed from it. Paired with a check on
-        output diversity, $\capm$ exposed several silent measurement faults
-        during this project, none of which raised an error and all of which
-        produced plausible aggregates (\cref{tab:faults}).
+  \item It introduces captured mass $\capm$ as a measure of whether the
+        resulting measurements can be interpreted reliably. Captured mass
+        represents the proportion of next token probability assigned to the
+        intended response set and is reported alongside every measurement.
+        Any aggregate calculated from that set is only meaningful to the
+        extent that the set captures the model's probability mass. Together
+        with a check of output diversity, $\capm$ helped identify several
+        silent measurement faults during this project. Although none
+        triggered an error, each produced plausible aggregate results that
+        could otherwise have gone unnoticed (\cref{tab:faults}).
 
-  \item Evidence that visual input collapses robustness under scale reversal in
-        both production models. When the rating scale is presented in reversed
-        order, judgements made without an image are reproduced at a robustness
-        rate of $0.900$, while judgements made with an image are reproduced at
+  \item The experiments show that visual input substantially reduces
+        robustness to scale reversal in both production models. Without an
+        image, judgements are reproduced at a robustness rate of $0.900$ when
+        the rating scale is reversed. With an image, this rate falls to
         $0.044$ for Llama-90B and $0.156$ for Qwen-72B, giving
-        $\dRR = -0.856$ and $-0.744$ (\cref{sec:s2-calm}). Two independently
-        trained architectures fail in the same way, which makes this a property
-        of current visual grounding in VLMs rather than one model's quirk.
+        $\dRR = -0.856$ and $-0.744$, respectively (\cref{sec:s2-calm}).
+        The same pattern occurs in two independently trained architectures,
+        which identifies a limitation shared by both evaluated models in
+        using visual information when making judgements.
 
-  \item Evidence that algorithmic defensiveness is specific to a model rather
-        than a general property of VLMs aligned for safety. The Llama models
-        lose most of their yes and no probability mass whenever an image is
-        present. For the 90B, $\capm$ falls from $0.951$ without an image to
-        $0.467$ with a grey patch and $0.329$ with visual noise, while
-        Qwen-72B holds $\capm$ near $0.95$ in all three conditions
-        (\cref{sec:s1-quality}). A featureless grey patch is enough to trigger
-        the collapse, so the mechanism is the presence of the visual modality
-        rather than anything depicted in the image.
+  \item The results also show that algorithmic defensiveness varies between
+        models and is not a general property of VLMs aligned for safety.
+        When an image is present, the Llama models lose much of their yes and
+        no probability mass. For the 90B, $\capm$ drops from $0.951$ without
+        an image to $0.467$ with a grey patch and $0.329$ with visual noise.
+        Qwen-72B maintains a $\capm$ of approximately $0.95$ across all three
+        conditions (\cref{sec:s1-quality}). Even a featureless grey patch is
+        sufficient to produce the collapse. This associates the change with
+        the presence of visual input itself, independently of any depicted
+        social content.
 
-  \item A correction to the aggregate sexism score, together with an
-        alternative that is invariant to shifts in assent. $\ASIint$ as
-        conventionally computed is confounded with response style, because the
-        bias score for each item scales with $\pyes$: a model that assents
-        indiscriminately scores according to the inventory's keying balance,
-        and one that dissents indiscriminately scores near zero, whatever its
-        attitudes. The inventory's split of 16 positively keyed items to 6
-        reverse keyed items makes this worse. An exact decomposition
-        (\cref{sec:framework-responsebias}) separates the two components and
-        shows that Llama-90B's $\ASIint$ of $0.153$ sits marginally below the
-        $0.160$ that its mean assent rate of $0.585$ predicts on its own.
-        Polarity separation, the difference in mean $\pyes$ between positively
-        keyed and reverse keyed items, is invariant to uniform shifts in
-        assent, and by it Qwen-72B discriminates about $1.9$ times more
-        strongly than Llama-90B. An exact permutation test over all
-        $\binom{22}{6} = 74{,}613$ keying assignments replaces the asymptotic
-        approximation. Qwen is not thereby shown to be less biased. It answers
-        the inventory more discriminatingly while Llama acquiesces, which the
-        aggregate score cannot express (\cref{sec:s1-inference}).
+  \item Finally, the work revisits the calculation of the aggregate sexism
+        score and proposes an alternative measure that is unaffected by
+        uniform shifts in assent. The conventional calculation of $\ASIint$
+        is confounded by response style because the contribution of each item
+        to the score scales with $\pyes$. Consequently, a model that agrees
+        indiscriminately is scored largely according to the balance of
+        positively and reverse keyed items in the inventory. A model that
+        disagrees indiscriminately scores close to zero, regardless of its
+        underlying attitudes. The inventory's imbalance of 16 positively
+        keyed items to 6 reverse keyed items makes this problem more
+        pronounced. An exact decomposition (\cref{sec:framework-responsebias})
+        separates the contribution of assent from that of item level
+        discrimination. Applied to Llama-90B, it shows that its $\ASIint$ of
+        $0.153$ is slightly below the $0.160$ predicted by its mean assent
+        rate of $0.585$ alone.
+
+        To address this limitation, polarity separation measures the
+        difference in mean $\pyes$ between positively keyed and reverse keyed
+        items. Because it is invariant to uniform shifts in assent, it
+        provides a way to compare how models distinguish between the two
+        types of items without conflating this behaviour with their general
+        tendency to agree. On this measure, Qwen-72B discriminates
+        approximately $1.9$ times more strongly than Llama-90B. The analysis
+        also uses an exact permutation test over all
+        $\binom{22}{6} = 74{,}613$ possible keying assignments in place of an
+        asymptotic approximation. This result does not establish that Qwen
+        is less biased than Llama. It shows that Qwen responds more
+        discriminatingly to the inventory, whereas Llama has a stronger
+        tendency to assent. These are distinct behaviours that the
+        conventional aggregate score cannot capture (\cref{sec:s1-inference}).
 \end{enumerate}
 
 % ---------------------------------------------------------------------
