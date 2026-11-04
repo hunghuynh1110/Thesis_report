@@ -12,126 +12,65 @@
 % \end{plan}
 
 % ---------------------------------------------------------------------
-\section{Aims and expectations}\label{sec:s2-aims}
+\section{Study overview}\label{sec:s2-aims}\label{sec:s2-quality}
 
-Study 2 evaluates how the five models judge the objectivity of image search
-results and whether these judgements are consistent with the intrinsic
-measurements reported in \cref{ch:study1}. The evaluation uses the ten queries
-and nine images per query from Otterbacher et al.\ \cite{otterbacher2018sigir}.
-Each model rates the images individually, whereas the human participants
-evaluated the corresponding query grid. Model ratings are therefore aggregated
-by query for comparison with the human baseline.
+Study 2 examines whether the inventory responses reported in \cref{ch:study1}
+correspond with judgements of image search results. Five models evaluated
+nine images for each of ten queries from Otterbacher et al.\
+\cite{otterbacher2018sigir}, under original and reversed scales and with
+or without the image. Human participants rated the corresponding grids,
+so the model ratings are averaged by query for the human comparison.
 
-The study addresses two questions. RQ2 examines the descriptive relationship
-between intrinsic scores and downstream judgements. Aim 4 examines whether
-robustness under scale reversal differs between the conditions with and
-without visual input.
+The analysis tests three expectations: robustness should remain similar
+between conditions if visual evidence has little influence, ratings resembling
+the low-ASI group should have deviations near zero, and differences specific
+to person queries should be reduced on the non-person control. These
+comparisons address the evaluated protocols, rather than isolating components
+within the models.
 
-Three expectations were specified before the analysis. First, if the judgement
-is determined primarily by the language component, adding visual input is
-expected to leave scale reversal robustness approximately unchanged, giving
-$\dRR\approx0$. Second, a model whose judgements resemble those of the low ASI
-human group is expected to produce a deviation close to zero. Third, a
-deviation associated specifically with images of people is expected to be
-reduced or absent for the non-person control query.
-
-The analysis first establishes the coverage of the rating response set
-(\cref{sec:s2-quality}). It then examines scale reversal robustness
-(\cref{sec:s2-calm}) and the relationship between ratings under the two scale
-orientations (\cref{sec:s2-anchor}). The remaining sections compare model
-ratings with the human baseline (\cref{sec:s2-deviation}), examine the
-non-person control (\cref{sec:s2-person}) and relate the query level results
-to the findings of Otterbacher et al.\ (\cref{sec:s2-sigir}).
-
-% \begin{plan}
-% RQ2 and Aim 4. Expectations: (E4) if the language model alone drives the
-% judgement, adding the image should not change robustness ($\dRR\approx0$);
-% (E5) a model that perceives bias like low-ASI humans has $\dm\approx0$; (E6) any
-% deviation specific to images of people should be absent for the non-person
-% control query.
-% \end{plan}
-% ---------------------------------------------------------------------
-
-\section{Measurement quality}\label{sec:s2-quality}
-
-All five models assign nearly all next-token probability to the seven rating
-digits. Mean captured mass, $\capm_{\Dset}$, is $0.9944$ for Llama-11B,
+Mean captured mass over the rating digits is $0.9944$ for Llama-11B,
 $0.9971$ for Qwen-2B, $0.9978$ for Llama-90B, $0.9993$ for Qwen-7B and
-$0.9996$ for Qwen-72B. The expected ratings are consequently calculated from
-a response set that captures almost the entire probability distribution.
-
-This coverage differs substantially from the binary probe in Study 1
-(\cref{tab:capm}). For example, Llama-90B assigns less than half of its
-probability mass to the yes and no response set when presented with a grey
-patch, but assigns almost all of its probability mass to the rating digits in
-Study 2. Visual input therefore does not produce low captured mass across
-both tasks.
-
-The comparison does not isolate the source of this difference. The studies
-use different questions, response sets and assistant prefills. The present
-results establish that the digit response set has high coverage under the
-rating protocol. They do not establish that the ratings are semantically
-valid or robust to changes in the scale definition. These properties are
-examined separately below.
-
-% \begin{plan}
-% One paragraph and one line of numbers: digit mass $\capm_{\Dset}$ mean / minimum
-% --- Llama-11B 0.994 / 0.955, Llama-90B 0.998 / 0.979, Qwen-72B 0.9995 / 0.999.
-% The rating probe is answered almost completely, so the Phase~2 results are not
-% a coverage artefact (contrast with \cref{tab:capm}).
-% \end{plan}
-% ---------------------------------------------------------------------
+$0.9996$ for Qwen-72B. Coverage is therefore high across all models, unlike
+the binary probe, although high coverage alone does not establish valid
+or consistent judgements. The results below first examine scale reversal,
+then compare ratings with the human baseline.
 
 \section{Robustness under scale reversal}\label{sec:s2-calm}
 
-The scale reversal manipulation presents each model with two versions of the
-rating task. In the original orientation, 7 denotes an extremely objective
-result. In the reversed orientation, 7 denotes an extremely subjective result.
-After normalisation, equivalent judgements should produce equivalent ratings.
-The robustness rate measures the proportion of pairs whose normalised ratings
-differ by no more than the specified tolerance (\cref{eq:rr}).
+Scale reversal exchanges the meanings of the endpoints while retaining the
+underlying judgement: a raw rating $r$ should become $8-r$.
+\Cref{tab:s2-rr} reports agreement after normalisation, with the primary
+comparison shown in \cref{fig:s2-rr}. Three observations summarise the result:
 
-\Cref{tab:s2-rr} reports results at three tolerances for both image conditions,
-and \cref{fig:s2-rr} shows the primary comparison. At the primary tolerance,
-$\tau=0.5$, Llama-90B and Qwen-72B each achieve a text-only robustness rate
-of $0.900$. With visual input, their rates fall to $0.044$ and $0.156$,
-respectively. The corresponding differences are $\dRR=-0.856$ for Llama-90B
-and $-0.744$ for Qwen-72B. Thus, both evaluated large models show substantially
-lower robustness in the visual condition.
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item At $\tau=0.5$, Llama-90B and Qwen-72B each achieve robustness of
+$0.900$ without an image, falling to $0.044$ and $0.156$ in the image
+condition. This corresponds to agreement on four of 90 image pairs for
+Llama-90B and 14 of 90 for Qwen-72B, compared with nine of ten distinct
+query pairs without images. Their differences are $\dRR=-0.856$ and
+$-0.744$, with 95\% intervals of $[-0.98,-0.66]$ and $[-0.98,-0.50]$, respectively.
+Both intervals exclude zero, so the expectation of similar robustness
+between conditions is unsupported for the two largest models. The separation
+also persists at the other two tolerances shown in the table.
 
-The smaller models have low robustness in both conditions. Qwen-2B achieves
-$0.200$ without an image and $0.189$ with an image. Qwen-7B achieves $0.200$
-and $0.156$, while Llama-11B achieves $0.000$ and $0.022$. Their respective
-differences are $-0.011$, $-0.044$ and $+0.022$. These small differences occur
-against low text-only baselines and should not be interpreted as evidence of
-reliable performance in either condition. In particular, Llama-11B fails all
-90 text-only pairs at the primary tolerance.
+\item The smaller models have low robustness in both conditions, giving
+small differences against an already unreliable baseline. Qwen-2B changes
+from $0.200$ to $0.189$, Qwen-7B from $0.200$ to $0.156$, and Llama-11B
+from $0.000$ to $0.022$. Their near-zero differences consequently should
+not be interpreted as evidence of stable ratings.
 
-The difference between conditions persists across the tolerance settings. At
-$\tau=0.25$, Llama-90B achieves $0.900$ without an image and $0.000$ with an
-image; Qwen-72B achieves $0.800$ and $0.089$. At $\tau=1$, the corresponding
-rates are $1.000$ and $0.300$ for Llama-90B, and $1.000$ and $0.267$ for
-Qwen-72B. Allowing a larger difference between paired ratings increases
-robustness but does not remove the separation between the two conditions
-(\cref{sec:framework-calm}).
+\item The conditions differ in referent wording as well as image presence,
+using ``a typical result'' without an image and ``this image result''
+with one. The comparison therefore establishes lower robustness in the
+image condition for the two largest models, without identifying a causal
+effect of visual input alone.
+\end{enumerate}
 
-Uncertainty is estimated using a cluster bootstrap over queries, as specified
-in \cref{sec:framework-calm}. In the text-only condition, the prompt depends
-on the query and scale orientation but not on the image. The 90 recorded pairs
-therefore contain only ten distinct text-only pairs, each repeated nine times.
-Treating these rows as independent would overstate the amount of information
-available.
-
-Resampling the ten queries $B=10{,}000$ times gives 95\% intervals of
-$[-0.98,-0.66]$ for Llama-90B and $[-0.98,-0.50]$ for Qwen-72B. Both intervals
-exclude zero. The corresponding intervals for Qwen-2B and Qwen-7B are
-$[-0.30,+0.27]$ and $[-0.38,+0.22]$, which include zero.
-
-The results do not support the expectation of unchanged robustness for the
-two largest models. However, the conditions also differ in the wording used
-to refer to the search result. The observed differences therefore characterise
-the evaluated visual and text-only protocols; they do not isolate the
-contribution of the vision encoder or another individual component.
+Intervals use $B=10{,}000$ bootstrap resamples of the ten queries, following
+\cref{sec:framework-calm}. The text-only condition contains 90 recorded
+pairs but only ten distinct query-level pairs, each repeated for nine images;
+resampling rows would incorrectly treat those repetitions as independent
+information.
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccccc@{}}
@@ -150,7 +89,7 @@ Llama-90B & 0.000 / 0.90 & 0.044 / 0.90 & 0.300 / 1.00 & $-0.856$ & $[-0.98,-0.6
 \caption{Robustness rate under CALM scale reversal. Vision: 90 pairs; text-only:
 90 rows but 10 distinct pairs. Interval: cluster bootstrap over the 10 queries
 ($B=10{,}000$), resampling queries rather than rows.}
-\label{tab:s2-rr}
+\label{tab:s2-rr}\label{tab:app-rr-full}
 \end{table}
 \begin{figure}[htbp]\centering
 \includegraphics[width=\linewidth]{s2-rr.pdf}
@@ -161,52 +100,29 @@ rather than rows.}
 \label{fig:s2-rr}
 \end{figure}
 
-% \begin{plan}
-% \begin{itemize}
-%   \item \newanalysis{(A4) cluster bootstrap and (A5) tolerance sensitivity.
-%         Why: the text-only arm has only 10 independent pairs, so row-level
-%         standard errors are wrong; and $\tau=0.5$ is a design choice --- the
-%         conclusion should hold for any reasonable $\tau$. Preliminary: it does.}
-%   \item Two architectures with different vision encoders and fusion methods
-%         show the same collapse; the 11B fails reversal in \emph{both}
-%         conditions, so it has no baseline to lose (report, do not hide).
-% \end{itemize}
-% \end{plan}
-% ---------------------------------------------------------------------
+\subsection{Scale anchors and paired agreement}\label{sec:s2-anchor}
 
-\section{Scale anchors and robustness}\label{sec:s2-anchor}
+The raw-rating analysis in \cref{fig:s2-anchor} complements robustness by
+examining the relationship between the two scale orientations.
+Exact transformation requires $y=8-x$, including both slope $-1$ and
+intercept 8, so a fitted slope alone cannot establish correct anchor use.
+The mean raw ratings are retained in \cref{tab:s2-anchor}.
 
-The robustness rate measures agreement between paired judgements but does not
-describe the relationship between their raw ratings. The anchor analysis
-examines this relationship by comparing the expected rating under the reversed
-scale with the expected rating under the original scale.
+Without images, the fitted slopes are $-0.97$ for Llama-90B and $-1.03$
+for Qwen-72B, changing to $-0.87$ and $-0.67$ with images.
+The negative slopes preserve the overall direction of scale reversal, but
+the ratings are displaced from the required transformation. With images,
+Llama-90B's mean reversed rating is $4.64$ rather than the $3.21$ required
+by its mean original rating; Qwen-72B gives $4.19$ rather than $2.50$.
+These offsets of $1.43$ and $1.69$ scale points show how a negative
+relationship can coexist with poor agreement between paired judgements.
 
-For exact adherence to the scale transformation, an original rating $x$ should
-correspond to a reversed rating $y=8-x$. This relationship has a slope of $-1$
-and an intercept of 8. Returning the same raw rating under both orientations
-would instead produce $y=x$. The fitted slope provides a diagnostic of the
-direction of the relationship, although the slope alone is insufficient to
-establish correct use of the anchors (\cref{sec:framework-calm}).
+The smaller models also depart from the ideal transformation, with Qwen-2B
+giving a slope of $+0.79$ in both conditions and Qwen-7B changing from
+$-0.06$ to $+0.74$. These diagnostics describe the observed ratings without
+identifying how the models process the scale instructions.
 
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-& \multicolumn{2}{c}{Text only} & \multicolumn{2}{c}{Vision} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
-Model & original & reversed & original & reversed \\
-\midrule
-Qwen-2B & 4.41 & 4.45 & 4.45 & 4.73 \\
-Qwen-7B & 3.76 & 3.41 & 5.21 & 4.42 \\
-Llama-11B & 2.51 & 3.15 & 3.36 & 2.84 \\
-Qwen-72B & 2.65 & 5.20 & 5.50 & 4.19 \\
-Llama-90B & 2.75 & 5.13 & 4.79 & 4.64 \\
-\bottomrule
-\end{tabular}
-\caption{Mean \emph{raw} expected rating $\rexp$ by condition and scale order.
-Following the reversed anchors moves a rating $r$ to about $8-r$; ignoring them
-leaves it unchanged.}
-\label{tab:s2-anchor}
-\end{table}
+\clearpage
 \begin{figure}[htbp]\centering
 \includegraphics[width=\linewidth]{s2-anchor.pdf}
 \caption{Expected rating under the reversed scale against the expected rating under the
@@ -219,34 +135,180 @@ indicate a reversal to a positive relationship.}
 \label{fig:s2-anchor}
 \end{figure}
 
-Without visual input, the two largest models approximate the expected
-transformation. The fitted slopes are $-0.97$ for Llama-90B and $-1.03$ for
-Qwen-72B. Llama-90B has a mean raw rating of $2.75$ under the original scale
-and $5.13$ under the reversed scale, consistent with the complementary ratings
-expected from $y=8-x$ (\cref{tab:s2-anchor}).
+\section{Comparison with human judgements}\label{sec:s2-deviation}
 
-With visual input, the fitted slopes remain negative but move to $-0.87$ for
-Llama-90B and $-0.67$ for Qwen-72B. The mean original and reversed ratings are
-$4.79$ and $4.64$ for Llama-90B, and $5.50$ and $4.19$ for Qwen-72B. The paired
-ratings consequently depart from the ideal transformation despite retaining
-a negative fitted relationship (\cref{fig:s2-anchor}).
+The primary deviation $\dm$ compares original-order model ratings with the
+mean grid ratings of participants at or below the median total ASI score
+(\cref{eq:deltam}). A negative value indicates lower perceived objectivity
+than this baseline, while a positive value indicates higher perceived
+objectivity. This comparison does not establish whether a model is more
+or less sexist than the human group.
 
-The smaller models show different patterns. Qwen-2B has a slope of $+0.79$ in
-both conditions, with mean raw ratings near $4.5$. Qwen-7B has a slope of
-$-0.06$ without visual input and $+0.74$ with visual input. These results
-accompany the low robustness rates already observed in the text-only condition
-(\cref{tab:s2-rr}). They indicate departures from the required transformation
-but do not, by themselves, establish that the models disregard the scale
-definitions.
+\Cref{tab:s2-deltam} shows that Qwen-72B rates the results slightly above
+the baseline ($+0.216$), while Qwen-7B is closest in absolute terms
+($-0.066$). The remaining deviations are $-0.491$ for Llama-90B, $-0.834$
+for Qwen-2B and $-1.920$ for Llama-11B. These positions require caution
+because the models' ratings are unstable under scale reversal.
 
-Llama-90B illustrates the distinction between the two diagnostics. Its fitted
-slope changes by $0.10$, from $-0.97$ to $-0.87$, while its robustness rate
-falls from $0.900$ to $0.044$. A negative slope can preserve the overall
-direction of the relationship while individual pairs differ substantially
-from the required transformation. The robustness rate directly measures
-whether each pair remains within the specified tolerance, which is necessary
-when a model is used to judge individual items (\cref{sec:disc-rq}).
+The order-averaged values illustrate the risk of combining the orientations:
+Llama-90B's $-1.203$ is only $0.077$ from the anchor-insensitivity null
+of $-1.280$. Proximity does not prove anchor insensitivity, but makes the
+order-averaged result difficult to interpret independently of that response
+pattern. The original order is therefore primary, with the alternative
+values retained as sensitivity comparisons.
 
+Across five models, the correlation between aggregate inventory scores and
+signed original-order deviations is $\rho=-0.70$. Models with higher
+aggregate scores therefore tend to rate the results as less objective relative
+to the human baseline, differing in direction from the original human
+association. An exact two-sided permutation calculation gives $p=0.233$,
+with 28 of 120 rank permutations producing an equally or more extreme
+correlation. This calculation assumes exchangeable model pairings, while
+variants within each family are related; the comparison therefore remains
+descriptive. Its interpretation is also limited by the small sample and
+the aggregate score's sensitivity to agreement tendencies.
+
+The position index $\lambda$ in \cref{eq:lambda} is not calculated, so the
+analysis does not locate models between the low and high ASI human groups.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
+\toprule
+$\dm$ variant & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
+\midrule
+Original order only (\cref{eq:deltam}) & $-0.834$ & $-0.066$ & $-1.920$ & $+0.216$ & $-0.491$ \\
+Reversed order only & $-2.014$ & $-1.697$ & $-0.123$ & $-1.467$ & $-1.916$ \\
+Order-averaged & $-1.424$ & $-0.881$ & $-1.022$ & $-0.625$ & $-1.203$ \\
+Anchor-insensitivity null (\cref{prop:null}) & $-1.280$ & $-1.280$ & $-1.280$ & $-1.280$ & $-1.280$ \\
+\bottomrule
+\end{tabularx}
+\caption{Extrinsic deviation from the SIGIR 2018 low-ASI baseline under the
+candidate definitions (vision rows, 90 per order).}
+\label{tab:s2-deltam}
+\end{table}
+
+\subsection{Person queries and the non-person control}\label{sec:s2-person}
+
+\Cref{tab:s2-person} compares the nine person queries with the balloon
+control, while \cref{fig:s2-queries} shows the individual query ratings.
+Llama-90B has deviations of $-0.582$ for person queries and $+0.333$
+for the control, giving a control-minus-person gap of $0.915$.
+Qwen-72B has deviations of $+0.184$ and $+0.507$, giving a gap of
+$0.322$. Both assign a higher rating relative to the human baseline
+on the control, although only Llama-90B is closer to the baseline there.
+
+The remaining gaps are $+0.062$ for Llama-11B, $-0.291$ for Qwen-7B
+and $-1.080$ for Qwen-2B, so the direction is not shared across models.
+One control query cannot distinguish a general person effect from properties
+of the balloon query, whose human baseline is also the highest at $6.365$.
+The comparison remains descriptive and would require additional controls to
+support a category-level conclusion.
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Model & 9 person queries & Control & Control minus person \\
+\midrule
+Qwen-2B & $-0.726$ & $-1.806$ & $-1.080$ \\
+Qwen-7B & $-0.036$ & $-0.328$ & $-0.291$ \\
+Llama-11B & $-1.927$ & $-1.864$ & $+0.062$ \\
+Qwen-72B & $+0.184$ & $+0.507$ & $+0.322$ \\
+Llama-90B & $-0.582$ & $+0.333$ & $+0.915$ \\
+\bottomrule
+\end{tabular}
+\caption{Original-order deviation from the low-ASI baseline, comparing person
+queries with the ``hot air baloon'' control. Gaps use unrounded means;
+\cref{tab:app-s2-person-orders} retains the order-averaged comparison.}
+\label{tab:s2-person}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s2-queries.pdf}
+\caption{Per-query mean rating against the low-ASI human baseline, queries ordered by
+baseline. Marker shapes identify the five models, with vertical offsets for
+readability. Filled marks use the original scale order and hollow marks
+average the two CALM orders; the hollow marks cluster on the anchor-insensitivity null
+of 4.0 predicted by \cref{prop:null}. The control query is shaded.}
+\label{fig:s2-queries}
+\end{figure}
+
+\subsection{Correspondence with the 2018 human findings}\label{sec:s2-sigir}
+
+Otterbacher et al.\ \cite{otterbacher2018sigir} found that participants
+higher in benevolent sexism were less likely to identify the ``smart person''
+and ``warm person'' grids as non-objective. The present results provide
+only partial correspondence on those queries:
+
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item ``Smart person'' has the most negative deviation for Qwen-72B
+($-0.816$), Llama-90B ($-1.749$) and Qwen-7B ($-0.697$).
+These models rate that query furthest below the low-ASI human baseline.
+
+\item ``Warm person'' is second lowest for Qwen-72B ($-0.472$) and
+fourth lowest for Llama-90B ($-0.674$), with intermediate positions for
+the other models. The two queries therefore do not show a consistent
+joint pattern across the evaluated sample.
+\end{enumerate}
+
+The correspondence concerns which query stands out, rather than a repetition
+of the human relationship. Three models rate ``smart person'' furthest below
+the low-ASI baseline, assigning it lower perceived objectivity; the original
+human finding concerned higher benevolent sexism and reduced recognition
+of bias. The cross-model comparison remains inconclusive, with additional
+differences arising from the total-ASI baseline split and the use of individual
+images instead of complete grids.
+
+\section{Summary for RQ2}\label{sec:s2-summary}
+
+RQ2 remains inconclusive: the observed relationship differs in direction
+from the human finding, but the model sample and measurement differences
+prevent a firm comparison. The clearest downstream result concerns rating
+reliability, with substantially lower scale reversal robustness in the image
+condition for the two largest models.
+
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item The two largest models show substantially lower scale reversal
+robustness in the image condition, while smaller models are unreliable
+in both conditions. The wording difference prevents isolating visual input
+as the sole cause.
+
+\item Four models rate the search results below the low-ASI baseline,
+while Qwen-72B rates them slightly above it. These deviations and the
+single control query remain descriptive comparisons, rather than establishing
+a ranking of model sexism or a general effect specific to pictures of people.
+
+\item The analysis does not establish a reliable relationship between
+inventory scores and downstream deviations. Partial correspondence on
+``smart person'' does not demonstrate replication of the benevolent-sexism
+association observed among human participants.
+\end{enumerate}
+
+% \begin{plan}
+% RQ2 and Aim 4. Expectations: (E4) if the language model alone drives the
+% judgement, adding the image should not change robustness ($\dRR\approx0$);
+% (E5) a model that perceives bias like low-ASI humans has $\dm\approx0$; (E6) any
+% deviation specific to images of people should be absent for the non-person
+% control query.
+% \end{plan}
+% ---------------------------------------------------------------------
+% \begin{plan}
+% One paragraph and one line of numbers: digit mass $\capm_{\Dset}$ mean / minimum
+% --- Llama-11B 0.994 / 0.955, Llama-90B 0.998 / 0.979, Qwen-72B 0.9995 / 0.999.
+% The rating probe is answered almost completely, so the Phase~2 results are not
+% a coverage artefact (contrast with \cref{tab:capm}).
+% \end{plan}
+% ---------------------------------------------------------------------
+% \begin{plan}
+% \begin{itemize}
+%   \item \newanalysis{(A4) cluster bootstrap and (A5) tolerance sensitivity.
+%         Why: the text-only arm has only 10 independent pairs, so row-level
+%         standard errors are wrong; and $\tau=0.5$ is a design choice --- the
+%         conclusion should hold for any reasonable $\tau$. Preliminary: it does.}
+%   \item Two architectures with different vision encoders and fusion methods
+%         show the same collapse; the 11B fails reversal in \emph{both}
+%         conditions, so it has no baseline to lose (report, do not hide).
+% \end{itemize}
+% \end{plan}
+% ---------------------------------------------------------------------
 % \begin{plan}
 % \newanalysis{(A3) anchor-following analysis. Why: $\dRR$ says \emph{that}
 % robustness collapses; this says \emph{how} --- with an image present, Llama
@@ -257,75 +319,6 @@ when a model is used to judge individual items (\cref{sec:disc-rq}).
 % \cite{zheng2023judging,wang2024fair,ye2025justice}.}
 % \end{plan}
 % ---------------------------------------------------------------------
-
-\section{Deviation from the low-ASI human baseline}\label{sec:s2-deviation}
-
-Model judgements are compared with the mean query ratings of the human
-participants who scored lowest on the inventory. For each query, the comparison
-uses the model's mean rating across the nine individual images and the human
-rating of the complete grid. The deviation measure therefore compares
-judgements at the query level while retaining the distinction between the
-two presentation formats (\cref{sec:framework-extrinsic}).
-
-The primary definition of $\dm$ uses the original scale orientation
-(\cref{eq:deltam}). This orientation corresponds to the human task, whereas
-the reversed orientation was introduced to evaluate robustness. Averaging both
-orientations would incorporate the model's response to the scale manipulation
-into the comparison with human judgements.
-
-The alternative definitions demonstrate the importance of this choice
-(\cref{tab:s2-deltam}). Llama-90B has an order-averaged deviation of $-1.203$,
-which is only $0.077$ from the anchor-insensitivity null of $-1.280$
-(\cref{prop:null}). Proximity to this null does not establish that the model
-ignores the anchors, but it shows that the order-averaged measure can be
-difficult to distinguish from the value produced by anchor insensitivity.
-The original-order deviation of $-0.491$ is therefore used for the primary
-comparison.
-
-The direction of the deviation follows the human association reported by
-Otterbacher et al.\ \cite{otterbacher2018sigir}. Participants with higher
-inventory scores were less likely to judge biased grids as non-objective and
-consequently assigned higher objectivity ratings. Under this interpretation,
-a model rating below the low ASI baseline lies further in the direction of
-perceiving the results as non-objective. This direction describes the rating
-comparison and does not establish the model's underlying attitudes.
-
-On the original scale, Qwen-72B has a mean deviation of $+0.216$, Qwen-7B
-$-0.066$, Llama-90B $-0.491$, Qwen-2B $-0.834$ and Llama-11B $-1.920$.
-Qwen-72B therefore rates the results as slightly more objective than the low
-ASI group, while the other four models rate them as less objective. Qwen-7B
-is closest to the baseline in absolute terms.
-
-These deviations require interpretation alongside the robustness results
-(\cref{sec:s2-calm}). A model whose rating changes substantially under scale
-reversal does not occupy a stable position relative to the baseline across
-the two orientations. Llama-11B, which has the largest negative deviation,
-also fails all text-only robustness pairs at the primary tolerance and
-achieves only $0.022$ robustness with visual input.
-
-The analysis does not compute the position index $\lambda$
-(\cref{eq:lambda}), which would locate each model relative to both the low
-and high ASI groups. The participant responses permit this additional
-comparison, but it is outside the delivered analysis. The reported deviations
-consequently measure distance from the low ASI baseline without locating the
-models across the full human comparison axis (\cref{sec:disc-threats}).
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-$\dm$ variant & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-Original order only (\cref{eq:deltam}) & $-0.834$ & $-0.066$ & $-1.920$ & $+0.216$ & $-0.491$ \\
-Reversed order only & $-2.014$ & $-1.697$ & $-0.123$ & $-1.467$ & $-1.916$ \\
-Order-averaged & $-1.424$ & $-0.881$ & $-1.022$ & $-0.625$ & $-1.203$ \\
-Anchor-insensitivity null (\cref{prop:null}) & $-1.280$ & $-1.280$ & $-1.280$ & $-1.280$ & $-1.280$ \\
-\bottomrule
-\end{tabular}
-\caption{Extrinsic deviation from the SIGIR 2018 low-ASI baseline under the
-candidate definitions (vision rows, 90 per order).}
-\label{tab:s2-deltam}
-\end{table}
-
 % \begin{plan}
 % \begin{itemize}
 %   \item \decision{(D1) adopt one primary definition before writing. The
@@ -346,67 +339,6 @@ candidate definitions (vision rows, 90 per order).}
 % \end{itemize}
 % \end{plan}
 % ---------------------------------------------------------------------
-
-\section{People versus the non-person control}\label{sec:s2-person}
-
-Nine queries concern images of people. The remaining query, depicting a hot
-air balloon, provides a non-person control. The comparison examines whether
-the deviation from the human baseline differs between the person queries and
-this control. \Cref{tab:s2-person} reports the group means, and
-\cref{fig:s2-queries} shows the individual queries.
-
-For Llama-90B, the mean original-order deviation is $-0.582$ across the person
-queries and $+0.333$ for the control, giving a control-minus-person gap of
-$0.915$. For Qwen-72B, the corresponding deviations are $+0.184$ and $+0.507$,
-giving a gap of $0.322$. Both large models therefore assign a higher rating
-relative to the human baseline on the control query than on the person queries.
-
-This pattern does not imply a smaller absolute deviation on the control for
-both models. Llama-90B is closer to the baseline on the control, whereas
-Qwen-72B is further above it. The shared result concerns the direction of
-the signed difference between query groups.
-
-Llama-11B has a comparatively small gap of $+0.062$. Qwen-7B and Qwen-2B show
-gaps of $-0.291$ and $-1.080$, respectively, placing the control further below
-the human baseline than the person queries. The positive control-minus-person
-difference observed in the largest models is therefore not shared across
-all five models.
-
-The comparison is limited by the use of a single control query. A difference
-between the person queries and the balloon query cannot distinguish a general
-person category effect from other properties of that particular query. The
-balloon also has the highest human baseline, $6.365$, which affects the
-available range of positive deviation. Establishing a category effect would
-require additional non-person queries with comparable baseline ratings
-(\cref{sec:disc-threats}).
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lcccccc@{}}
-\toprule
-& \multicolumn{3}{c}{Original order} & \multicolumn{3}{c}{Order-averaged} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}
-Model & 9 person queries & control & gap & 9 person queries & control & gap \\
-\midrule
-Qwen-2B & $-0.726$ & $-1.806$ & -1.080 & $-1.304$ & $-2.509$ & -1.206 \\
-Qwen-7B & $-0.036$ & $-0.328$ & -0.291 & $-0.778$ & $-1.815$ & -1.038 \\
-Llama-11B & $-1.927$ & $-1.864$ & 0.062 & $-0.994$ & $-1.274$ & -0.281 \\
-Qwen-72B & $+0.184$ & $+0.507$ & 0.322 & $-0.738$ & $+0.386$ & 1.124 \\
-Llama-90B & $-0.582$ & $+0.333$ & 0.915 & $-1.333$ & $-0.036$ & 1.297 \\
-\bottomrule
-\end{tabular}
-\caption{Mean deviation from the low-ASI baseline for the nine person queries
-and the ``hot air baloon'' control.}
-\label{tab:s2-person}
-\end{table}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\linewidth]{s2-queries.pdf}
-\caption{Per-query mean rating against the low-ASI human baseline, queries ordered by
-baseline. Filled marks are the original scale order and hollow marks average
-the two CALM orders; the hollow marks cluster on the anchor-insensitivity null
-of 4.0 predicted by \cref{prop:null}. The control query is shaded.}
-\label{fig:s2-queries}
-\end{figure}
-
 % ---------------------------------------------------------------------
 % \begin{plan}
 % \begin{itemize}
@@ -419,37 +351,6 @@ of 4.0 predicted by \cref{prop:null}. The control query is shaded.}
 % \end{itemize}
 % \end{plan}
 % ---------------------------------------------------------------------
-
-\section{Relation to the SIGIR 2018 findings}\label{sec:s2-sigir}
-
-Otterbacher et al.\ \cite{otterbacher2018sigir} reported an association between
-benevolent sexism and objectivity judgements for two queries: ``smart person'',
-whose results were predominantly male, and ``warm person'', whose results were
-predominantly female. The present analysis examines whether these queries
-also show distinctive deviations in the model ratings.
-
-Under the original scale orientation, ``smart person'' has the most negative
-deviation for three models: $-0.816$ for Qwen-72B, $-1.749$ for Llama-90B and
-$-0.697$ for Qwen-7B. For each of these models, it is also the lowest deviation
-among the nine person queries. These models therefore rate the query furthest
-below the low ASI baseline, in the direction associated with perceiving the
-results as less objective.
-
-The results for ``warm person'' are less consistent. It has the second lowest
-deviation for Qwen-72B, at $-0.472$, and the fourth lowest for Llama-90B, at
-$-0.674$. Its position is intermediate for the remaining three models. The
-two queries therefore do not form a consistent pair across the evaluated
-models.
-
-The correspondence with the human findings is descriptive. Three models show
-their most negative deviation on ``smart person'', while ``warm person'' does
-not show an equivalent pattern. This does not reproduce the original
-association between participant sexism and objectivity judgements. The present
-comparison contains only five models, and the models evaluate individual
-images while the human participants evaluated complete grids. The results
-identify a query-specific pattern but do not establish a general relationship
-between query type and model bias (\cref{sec:disc-threats}).
-
 % \begin{plan}
 % \begin{itemize}
 %   \item In \cite{otterbacher2018sigir} benevolent sexism predicted the
@@ -464,42 +365,3 @@ between query type and model bias (\cref{sec:disc-threats}).
 % \end{itemize}
 % \end{plan}
 % ---------------------------------------------------------------------
-
-\section{Summary for RQ2}\label{sec:s2-summary}
-
-Study 2 finds a substantial reduction in scale reversal robustness for the
-two largest models in the visual condition. Llama-90B and Qwen-72B each
-achieve a text-only robustness rate of $0.900$, falling to $0.044$ and $0.156$
-with visual input. Their differences of $-0.856$ and $-0.744$ have bootstrap
-intervals that exclude zero, and the separation persists across all three
-tolerances.
-
-The smaller models have low robustness in both conditions. Their differences
-near zero consequently provide little evidence of stable judgement. Across
-the five evaluated models, the substantial reduction occurs in the two models
-with high text-only robustness. The available model sizes do not establish
-where this behaviour changes between 11B and 72B or whether model size
-accounts for the difference.
-
-The relationship between intrinsic scores and downstream deviations is less
-conclusive. In descending order of intrinsic score, the models are Llama-90B,
-Llama-11B, Qwen-2B, Qwen-7B and Qwen-72B (\cref{ch:study1}). In descending
-order of signed original-order deviation, they are Qwen-72B, Qwen-7B,
-Llama-90B, Qwen-2B and Llama-11B. The resulting rank correlation is
-$\rho=-0.70$, with $p=0.188$. Qwen-7B is closest to the human baseline, with
-a deviation of $-0.066$.
-
-This correlation does not establish a relationship between intrinsic and
-downstream measurements. The sample contains only five models, including three
-variants from the same family, and the result does not reach conventional
-statistical significance. Interpretation is also constrained by the response
-style effects identified in Study 1 and the scale reversal sensitivity
-observed here (\cref{sec:disc-rq}).
-
-The human comparison provides a descriptive account of model ratings on the
-selected queries. It remains limited by the use of one primary scale
-orientation, ten queries, one non-person control and different presentation
-formats for models and human participants. Within these limits, three models
-assign their most negative deviation to ``smart person''. The more consistent
-finding across the two largest models is the loss of robustness under scale
-reversal in the visual condition.

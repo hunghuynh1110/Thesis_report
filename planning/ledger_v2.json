@@ -1205,5 +1205,20 @@
     "p_BS": 0.0032
    }
   ]
+ },
+ "cross_model_comparison": {
+  "models": [
+   "qwen2b",
+   "qwen7b",
+   "llama11b",
+   "llama90b",
+   "qwen72b"
+  ],
+  "rho": -0.7,
+  "p_exact_two_sided": 0.233333,
+  "n_extreme": 28,
+  "n_permutations": 120,
+  "null_assumption": "exchangeable model pairings",
+  "interpretation": "descriptive; variants share model families"
  }
 }

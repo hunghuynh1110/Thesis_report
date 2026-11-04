@@ -6,8 +6,8 @@ Reads the parquet files of the audit repository at ~/Code/VLM_Audit
 (outputs_bunya/) plus planning/ledger_v2.json, and writes vector PDFs into
 figures/, named after the LaTeX label without the "fig:" prefix.
 
-Nothing here estimates or rounds a published number: every value is recomputed
-from the stored runs. The permutation null (s1-perm) is a full enumeration of
+Statistics shared with the report tables are read from the facts ledger;
+other plotted values are calculated from the stored runs. The permutation null (s1-perm) is a full enumeration of
 all C(22,6) = 74,613 keying assignments, so it is exact rather than sampled.
 
 Usage:
@@ -513,7 +513,9 @@ def fig_s2_rr(d: Data, out: Path) -> None:
         for x, v in zip(xs + off, vals):
             ax.text(x, v + 0.025, f"{v:.3f}", ha="center", fontsize=8, color=INK)
     for i, key in enumerate(MODELS):
-        drr, lo, hi = cluster_bootstrap_drr(d.p2[key])
+        reported = d.ledger["phase2"][key]
+        drr = reported["delta_rr"]
+        lo, hi = reported["delta_rr_ci95"]
         ax.annotate(f"$\\Delta\\mathrm{{RR}}$ {drr:+.3f}\n[{lo:+.2f}, {hi:+.2f}]",
                     xy=(i, 0), xycoords=("data", "axes fraction"),
                     xytext=(0, -26), textcoords="offset points",
@@ -549,14 +551,13 @@ def fig_s2_anchor(d: Data, out: Path) -> None:
             ax.plot(x, y, "o", ms=3.4, alpha=0.55, color=colour, mew=0, zorder=4)
             if len(x) > 2 and np.ptp(x) > 1e-9:
                 slopes[cond] = float(np.polyfit(x, y, 1)[0])
-        ax.set_title(name, loc="left", pad=4, fontsize=8.5)
-        # Five narrow panels cannot hold "beta_1 no image = -1.12" on one line,
-        # so the slopes are stacked and coloured to match their series.
+        ax.set_title(name, loc="left", y=1.20, pad=4, fontsize=8.5)
+        # Reserve a band above the data for slopes, coloured by condition.
         for row, (cond, colour) in enumerate([("text_only", BLUE), ("vision", ORANGE)]):
             if cond not in slopes:
                 continue
-            ax.text(0.05, 0.97 - 0.11 * row, f"$\\beta_1$ {slopes[cond]:+.2f}",
-                    transform=ax.transAxes, ha="left", va="top",
+            ax.text(0.05, 1.12 - 0.08 * row, f"$\\beta_1$ {slopes[cond]:+.2f}",
+                    transform=ax.transAxes, ha="left", va="bottom",
                     fontsize=7.2, color=colour)
         ax.set_xlim(0.7, 7.3)
         ax.set_ylim(0.7, 7.3)
@@ -582,8 +583,13 @@ def fig_s2_queries(d: Data, out: Path) -> None:
     queries = sorted(base, key=lambda q: base[q])
     fig, ax = plt.subplots(figsize=(TEXTWIDTH_IN, 3.4))
     ax.axvline(4.0, color=MUTED, lw=1.0, ls=(0, (3, 2)), zorder=2)
-    ax.text(3.92, -0.85, "anchor-insensitivity null, 4.0", fontsize=7.6,
-            color=INK2, va="center", ha="right")
+    ax.annotate("anchor-insensitivity null: 4.0", xy=(4.0, 1.0),
+                xycoords=("data", "axes fraction"), xytext=(4, 5),
+                textcoords="offset points", fontsize=7.2, color=INK2,
+                va="bottom", ha="left", annotation_clip=False)
+    markers = {"qwen2b": "o", "qwen7b": "s", "llama11b": "^",
+               "qwen72b": "v", "llama90b": "P"}
+    offsets = dict(zip(MODELS, np.linspace(-0.24, 0.24, len(MODELS))))
     for i, q in enumerate(queries):
         ax.plot([base[q]], [i], "D", ms=5.5, color=INK, zorder=5)
         for key in MODELS:
@@ -591,9 +597,12 @@ def fig_s2_queries(d: Data, out: Path) -> None:
             sub = df[(df.condition == "vision") & (df["query"] == q)]
             orig = sub[sub.scale_order == "original"].rating_normalised.mean()
             both = sub.rating_normalised.mean()
-            ax.plot([orig], [i], "o", ms=5, color=MODELS[key][1], zorder=4, mew=0)
-            ax.plot([both], [i], "o", ms=5, color=MODELS[key][1], zorder=3,
-                    mew=0.8, mfc="white", mec=MODELS[key][1])
+            y = i + offsets[key]
+            ax.plot([orig], [y], marker=markers[key], ls="", ms=5,
+                    color=MODELS[key][1], zorder=4, mew=0)
+            ax.plot([both], [y], marker=markers[key], ls="", ms=5,
+                    color=MODELS[key][1], zorder=3, mew=0.8,
+                    mfc="white", mec=MODELS[key][1])
     control = queries.index("hot air baloon")
     ax.axhspan(control - 0.45, control + 0.45, color=NEUTRAL, zorder=0)
     ax.set_yticks(range(len(queries)), queries)
@@ -602,11 +611,11 @@ def fig_s2_queries(d: Data, out: Path) -> None:
     ax.xaxis.grid(True)
     ax.set_axisbelow(True)
     handles = [Line2D([], [], marker="D", ls="", color=INK, label="low-ASI human baseline")]
-    handles += [Line2D([], [], marker="o", ls="", color=MODELS[k][1], label=MODELS[k][0])
+    handles += [Line2D([], [], marker=markers[k], ls="", color=MODELS[k][1], label=MODELS[k][0])
                 for k in MODELS]
     handles.append(Line2D([], [], marker="o", ls="", color=MUTED, mfc="white",
                           label="averaged over both orders"))
-    ax.legend(handles=handles, ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.16))
+    ax.legend(handles=handles, ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.24))
     finish(fig, "s2-queries", out)
 
 

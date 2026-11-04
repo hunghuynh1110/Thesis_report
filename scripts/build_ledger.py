@@ -305,6 +305,27 @@ def phase2(stem: str) -> dict:
     return out
 
 
+def cross_model_comparison(phase1a_results: dict, phase2_results: dict) -> dict:
+    """Enumerate the two-sided Spearman null under exchangeable model pairings.
+
+    Family dependence limits inference; the reported comparison is descriptive.
+    """
+    models = list(MODELS)
+    x = stats.rankdata([phase1a_results[m]["asi_intrinsic"] for m in models])
+    y = stats.rankdata([phase2_results[m]["delta_m_original"] for m in models])
+    observed = float(np.corrcoef(x, y)[0, 1])
+    extreme = total = 0
+    for permuted in itertools.permutations(y):
+        coefficient = float(np.corrcoef(x, permuted)[0, 1])
+        extreme += abs(coefficient) >= abs(observed) - 1e-12
+        total += 1
+    return {"models": models, "rho": r(observed, 6),
+            "p_exact_two_sided": r(extreme / total, 6),
+            "n_extreme": int(extreme), "n_permutations": total,
+            "null_assumption": "exchangeable model pairings",
+            "interpretation": "descriptive; variants share model families"}
+
+
 def main() -> int:
     if not OUT.exists():
         print(f"audit outputs not found at {OUT}", file=sys.stderr)
@@ -373,6 +394,9 @@ def main() -> int:
              "gap_BS": ledger["phase1b"][k]["gender_gap_BS"]["gap"],
              "p_BS": ledger["phase1b"][k]["gender_gap_BS"]["p"]} for k in ks]
         for f, ks in fam.items()}
+
+    ledger["cross_model_comparison"] = cross_model_comparison(
+        ledger["phase1a"], ledger["phase2"])
 
     path = HERE / "planning" / "ledger_v2.json"
     path.write_text(json.dumps(ledger, indent=1) + "\n")
