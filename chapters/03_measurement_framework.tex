@@ -135,8 +135,10 @@ Here $\bar p_i$ averages item $i$ over its 12 non-inversion cells, and
 $\Lambda$ contains the permitted label assignments. The item is the unit
 of permutation, so repeated prompts do not add independent items.
 Enumeration removes Monte Carlo error but retains the exchangeability
-assumption; the five model-wise tests are reported without adjustment
-across models.
+assumption. Unadjusted values are retained to describe the item-level
+diagnostic, alongside a Bonferroni comparison across the five models at
+$p<0.01$. Neither calculation establishes that keying is independent of item
+wording or content.
 
 \section{Gender differences in face responses}\label{sec:framework-gap}
 
@@ -166,7 +168,10 @@ the combined score.
 Inference uses a pooled-variance two-sample $t$ test, assuming independent
 faces, equal population variances and normally distributed face means.
 The effect size is $d=G_m/\sqrt{\tfrac12(s^2_{\Fset}+s^2_{\Mset})}$.
-Bonferroni adjustment across five models gives $p<0.01$ at $\alpha=0.05$.
+Each reported outcome (combined, benevolent or hostile) is treated as a
+separate family of five model comparisons. Bonferroni adjustment within each
+family gives $p<0.01$ at $\alpha=0.05$; it does not control error jointly
+across all fifteen comparisons.
 The sign does not imply higher raw agreement with every item; coverage
 and sample limitations accompany the interpretation in \cref{sec:s1b-gap}.
 
@@ -189,9 +194,9 @@ For query $q$, $\rlow$ is the mean grid rating among participants at or
 below the median total ASI score in the 2018 dataset
 \cite{otterbacher2018sigir}. Model ratings are averaged across nine individual
 images, retaining the distinction from the human grid-level task.
-In the original study, higher benevolent sexism was associated with reduced
-recognition of bias in particular grids. The low-ASI group provides a
-lower-scoring human reference, rather than an established unbiased standard.
+The human association motivating this comparison is discussed in
+\cref{sec:bg-search}. The low-ASI group provides a lower-scoring human
+reference; its selection does not make it an established unbiased standard.
 The primary deviation uses the original scale orientation:
 
 \begin{equation}
@@ -242,8 +247,7 @@ unperturbed judgements and is not separately reported.
 The text-only condition contains ten distinct query-level pairs repeated
 nine times, so bootstrap inference resamples queries rather than rows
 \cite{field2007bootstrapping,efron1993bootstrap}. The calculation uses
-$B=10{,}000$ resamples and the 2.5th and 97.5th percentiles of $\dRR$;
-figures and tables share those ledger intervals. The complementary raw-rating
+$B=10{,}000$ resamples and the 2.5th and 97.5th percentiles of $\dRR$. The complementary raw-rating
 regression is explained beside its results in \cref{sec:s2-anchor}.
 
 Numerical validity is assessed using three checks, interpreted together:

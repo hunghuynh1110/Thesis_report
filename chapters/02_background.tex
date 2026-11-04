@@ -13,53 +13,27 @@
 
 % ---------------------------------------------------------------------
 \section{Vision language models}\label{sec:bg-vlm}
-% \begin{plan}
-% \begin{itemize}
-%   \item Transformer attention \cite{vaswani2017attention} --- give
-%         \cref{eq:attention}; vision transformers \cite{dosovitskiy2021vit};
-%         contrastive image--text alignment \cite{radford2021clip}.
-%   \item Two ways of fusing vision into a language model, both audited here:
-%         (a) \emph{cross-attention adapters} (Flamingo-style
-%         \cite{alayrac2022flamingo}; Llama~3.2-Vision inserts cross-attention
-%         layers after every fourth self-attention layer of the language model,
-%         fed by a ViT-H/14 encoder \cite{grattafiori2024llama3}) --- give
-%         \cref{eq:crossattn}; (b) \emph{visual tokens in the input sequence}
-%         with dynamic resolution (Qwen2-VL \cite{wang2024qwen2vl}).
-%   \item Why it matters for the audit: in (a) the image enters through
-%         dedicated layers, so a grey patch can change behaviour without
-%         changing the prompt; in (b) image size changes the sequence length,
-%         which is why the visual token budget is pinned (\cref{sec:design-impl}).
-%   \item End with the output layer: \cref{eq:nexttoken}, the quantity this
-%         thesis reads.
-% \end{itemize}
-% \end{plan}
 
-Both models audited in this thesis are decoder transformers with a vision
-encoder attached, and attention is the operation that both halves are built
-from. Each position forms a query, compares it against the keys of the
-positions it is allowed to see, and returns the matching weighted average of
-their values.
+The five models evaluated here belong to two families of decoder-based
+vision language models. Both combine an image encoder with a language model,
+but differ in how the visual features enter the decoder. Attention provides
+the underlying operation, weighting values $V$ according to the similarity
+between queries $Q$ and keys $K$ \cite{vaswani2017attention}:
 
 \begin{equation}
   \operatorname{Attn}(Q,K,V) = \softmax\!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right)V
   \label{eq:attention}
 \end{equation}
 
-The scaling by $\sqrt{d_k}$ keeps the dot products from pushing the softmax
-into saturation as the key dimension grows \cite{vaswani2017attention}. Images
-enter through the same machinery rather than a separate one. A Vision
-Transformer cuts the image into fixed patches, embeds each patch as a token and
-runs an ordinary transformer stack over the resulting sequence
-\cite{dosovitskiy2021vit}. Training an image encoder and a text encoder against
-each other on paired images and captions, so that a picture and its description
-land close together, gives the shared space that most current multimodal
-systems are built on \cite{radford2021clip}.
+A Vision Transformer represents an image through patch embeddings processed
+by transformer layers \cite{dosovitskiy2021vit}. Contrastive training on
+paired images and text can align their representations, as demonstrated
+by CLIP \cite{radford2021clip}. These components provide a basis for
+multimodal architectures, although their integration and training differ.
 
-The two models audited here join vision to language in different ways, and the
-difference decides what an image is able to do to a measurement. The first
-route leaves the language model's own layers untouched and inserts new layers
-that read the image, in the form introduced by Flamingo
-\cite{alayrac2022flamingo}.
+Llama-3.2-Vision connects image features to the language decoder through
+gated cross-attention blocks \cite{grattafiori2024llama3}, following the
+integration approach introduced by Flamingo \cite{alayrac2022flamingo}:
 
 \begin{equation}
   \bm h_\ell' = \bm h_\ell + \tanh(\alpha_\ell)\,
@@ -67,27 +41,21 @@ that read the image, in the form introduced by Flamingo
   \label{eq:crossattn}
 \end{equation}
 
-Here $\bm e(v)$ are the image encoder's features and $\alpha_\ell$ is a learned
-scalar gate. The gate is not a presentational device. In the reference
-implementation of Llama-3.2-Vision \cite{wolf2020transformers} it is a
-parameter initialised at zero, so an untrained adapter passes the language
-model through unchanged, and a second gate of the same form sits on the
-feedforward sublayer of each adapter block. Eight such blocks are interleaved
-among the 40 decoder layers of the 11B model, at layer indices 3, 8, 13, 18,
-23, 28, 33 and 38, which places one after every four self attention layers. The
-encoder feeding them is a ViT-H/14 of 32 layers and width 1280, operating at
-448 pixels \cite{grattafiori2024llama3}. Supplying an image changes no prompt
-token, so everything an image does to this model it does through
-\cref{eq:crossattn}.
+Here $\bm e(v)$ denotes image features and $\alpha_\ell$ is a learned gate
+controlling the cross-attention contribution. The reference implementation
+includes gates on the attention and feedforward sublayers
+\cite{wolf2020transformers}. This permits visual features to influence
+decoder states without inserting them as ordinary text tokens.
 
-Qwen2-VL takes the second route and makes the image part of the input sequence.
-It encodes a picture at its native resolution and emits a number of visual
-tokens that grows with the picture, which leaves the language model itself
-unmodified \cite{wang2024qwen2vl}. The sequence the model reads is then a
-function of the image as well as the prompt, so two conditions differing only
-in their image also differ in how much there is to read. \cref{sec:design-impl}
-pins the visual token budget for that reason. Both routes arrive at the same
-output layer.
+Qwen2-VL instead merges image patch representations into visual tokens
+that enter the decoder sequence alongside text \cite{wang2024qwen2vl}.
+Their number varies with image resolution, so visual input affects sequence
+length as well as content. The experimental settings bound this token count
+as described in \cref{sec:design-impl}; they do not make every input
+sequence the same length. \Cref{fig:fusion} illustrates the two routes.
+
+For the evaluated architectures, the final hidden state produces next-token
+logits and their normalised probability distribution:
 
 \begin{equation}
   p(t \mid x, v) = \softmax(\bm z)_t = \frac{\exp(z_t)}{\sum_{u\in\vocab}\exp(z_u)},
@@ -95,25 +63,9 @@ output layer.
   \label{eq:nexttoken}
 \end{equation}
 
-\cref{eq:nexttoken} is the quantity this thesis reads, and the audit stops
-there. Everything a user would see, a sampled token and then a sentence, is
-downstream of this distribution, which is the argument of \cref{ch:framework}
-for measuring here instead.
-
-% \begin{plan}[Notes on the equations above]
-% \cref{eq:crossattn} is the gated cross-attention form of
-% \cite{alayrac2022flamingo}; $\bm e(v)$ are image-encoder features and
-% $\alpha_\ell$ a learned gate. \textbf{Checked (Nov 2026):} the Llama-3.2
-% adapter \emph{is} tanh-gated. \texttt{MllamaCrossAttentionDecoderLayer} in the
-% reference implementation holds \texttt{cross\_attn\_attn\_gate} and
-% \texttt{cross\_attn\_mlp\_gate}, both \texttt{nn.Parameter(torch.zeros(1))},
-% applied as \texttt{residual + gate.tanh() * hidden\_states}; default
-% \texttt{cross\_attention\_layers} are $[3,8,13,18,23,28,33,38]$ and the vision
-% config is patch 14 / width 1280 / 32 layers / image 448. So \cref{eq:crossattn}
-% may be presented as the actual form, not only ``the general form''.
-% \cref{eq:nexttoken} reappears in \cref{prop:uniform} (why a zero hidden state
-% gives a uniform distribution).
-% \end{plan}
+The audit reads this distribution before sampling, preserving probabilities
+that would be reduced to a selected token during generation.
+\Cref{ch:framework} defines the measurements obtained from that distribution.
 
 \begin{figure}[htbp]\centering
 \resizebox{\linewidth}{!}{%
@@ -162,17 +114,93 @@ height=7mm,inner sep=3pt},
   {\textbf{measured here} (\cref{eq:nexttoken})};
 \end{tikzpicture}}
 \caption{Two ways of injecting an image into a language model.
-Llama-3.2-Vision leaves the decoder's own layers unchanged and adds gated
-cross-attention blocks after every fourth self-attention layer, at indices 3,
-8, 13, 18, 23, 28, 33 and 38 of 40. Qwen2-VL emits visual tokens that join the
+Llama-3.2-Vision uses gated cross-attention blocks to connect image features
+to the decoder; the illustrated Llama-11B configuration places eight such
+blocks among 40 decoder layers. Qwen2-VL emits visual tokens that join the
 text tokens in the input sequence, so the sequence length grows with the
 image. Both routes end at the same distribution, which is where this thesis
 takes its reading.}
 \label{fig:fusion}
 \end{figure}
 
+% \begin{plan}
+% \begin{itemize}
+%   \item Transformer attention \cite{vaswani2017attention} --- give
+%         \cref{eq:attention}; vision transformers \cite{dosovitskiy2021vit};
+%         contrastive image--text alignment \cite{radford2021clip}.
+%   \item Two ways of fusing vision into a language model, both audited here:
+%         (a) \emph{cross-attention adapters} (Flamingo-style
+%         \cite{alayrac2022flamingo}; Llama~3.2-Vision inserts cross-attention
+%         layers after every fourth self-attention layer of the language model,
+%         fed by a ViT-H/14 encoder \cite{grattafiori2024llama3}) --- give
+%         \cref{eq:crossattn}; (b) \emph{visual tokens in the input sequence}
+%         with dynamic resolution (Qwen2-VL \cite{wang2024qwen2vl}).
+%   \item Why it matters for the audit: in (a) the image enters through
+%         dedicated layers, so a grey patch can change behaviour without
+%         changing the prompt; in (b) image size changes the sequence length,
+%         which is why the visual token budget is pinned (\cref{sec:design-impl}).
+%   \item End with the output layer: \cref{eq:nexttoken}, the quantity this
+%         thesis reads.
+% \end{itemize}
+% \end{plan}
+% \begin{plan}[Notes on the equations above]
+% \cref{eq:crossattn} is the gated cross-attention form of
+% \cite{alayrac2022flamingo}; $\bm e(v)$ are image-encoder features and
+% $\alpha_\ell$ a learned gate. \textbf{Checked (Nov 2026):} the Llama-3.2
+% adapter \emph{is} tanh-gated. \texttt{MllamaCrossAttentionDecoderLayer} in the
+% reference implementation holds \texttt{cross\_attn\_attn\_gate} and
+% \texttt{cross\_attn\_mlp\_gate}, both \texttt{nn.Parameter(torch.zeros(1))},
+% applied as \texttt{residual + gate.tanh() * hidden\_states}; default
+% \texttt{cross\_attention\_layers} are $[3,8,13,18,23,28,33,38]$ and the vision
+% config is patch 14 / width 1280 / 32 layers / image 448. So \cref{eq:crossattn}
+% may be presented as the actual form, not only ``the general form''.
+% \cref{eq:nexttoken} reappears in \cref{prop:uniform} (why a zero hidden state
+% gives a uniform distribution).
+% \end{plan}
 % ---------------------------------------------------------------------
+
 \section{Social bias in learned representations}\label{sec:bg-bias}
+
+Learned representations can reproduce social associations present in their
+training material. Caliskan et al.\ \cite{caliskan2017semantics} adapted
+the Implicit Association Test \cite{greenwald1998iat} to word embeddings,
+recovering associations involving race, gender and occupations from a web
+corpus. Such results demonstrate measurable associations in representation
+geometry, without requiring a model to state an explicit belief.
+
+Visual systems also show differences across demographic groups.
+Buolamwini and Gebru \cite{buolamwini2018gender} found that commercial
+gender-classification error rates varied across skin tone and gender,
+with the largest errors for darker-skinned women. In multimodal evaluation,
+VisoGender examines gendered reference resolution in occupational images
+\cite{hall2023visogender}, while ModSCAN measures stereotyped responses
+across occupations, descriptors and persona traits
+\cite{jiang2024modscan}. These studies examine different tasks and
+measures, making their scope important when comparing findings.
+
+Component-level analysis provides evidence about where particular effects
+arise. Weng et al.\ \cite{weng2024images} used causal mediation in an
+object detection model and found image features contributed more to their
+bias measures than text features or the fusion encoder on the two evaluated
+datasets. This motivates examining visual input in an audit, but does not
+identify the responsible components in the generative models studied here.
+
+Associations measured within representations can also relate to downstream
+retrieval. Ghate et al.\ \cite{ghate2025biases} reported a mean correlation
+of $\rho=0.83\pm0.10$ between intrinsic and extrinsic bias measures across
+114 analyses, six social groups and three encoder-based models.
+Their findings motivate testing downstream behaviour alongside intrinsic
+measurements, rather than assuming that the relationship transfers to a
+different model or task.
+
+Interpretation also requires specifying what a bias measure represents.
+Blodgett et al.\ \cite{blodgett2020language} emphasise the need to identify
+the relevant construct and potential harm, while Gallegos et al.\
+\cite{gallegos2024bias} distinguish measurements at the embedding,
+probability and generated-text levels. The present study examines
+probabilities and gender-related trait attribution, with the limits of the
+adapted construct stated separately from possible consequences in deployment.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Human-like associations in embeddings, measured with an IAT
@@ -189,142 +217,52 @@ takes its reading.}
 %         \emph{probability} level.
 % \end{itemize}
 % \end{plan}
-
-The finding that learned representations carry human social associations
-predates the models audited here. Caliskan et al.\
-\cite{caliskan2017semantics} adapted the Implicit Association Test
-\cite{greenwald1998iat}, which measures how quickly people pair concepts, into
-a test on the geometry of word embeddings. From an ordinary web corpus it
-recovered the same associations the psychological literature reports in
-people.
-Some of these are harmless, such as flowers with pleasantness, and some are
-not, such as names with race and gender with careers. The claim was about
-provenance rather than about any one model: text corpora hold a usable imprint
-of the associations of the people who wrote them.
-
-Vision carries its own version of the problem. Commercial gender
-classification systems were shown to fail unevenly across intersections of
-skin tone and gender, with the largest error rates on darker skinned women
-\cite{buolamwini2018gender}. Multimodal models inherit the pattern in subtler
-forms. VisoGender tests whether a model resolves a pronoun to the professional
-or to the client in an occupational photograph, and finds resolution that
-tracks occupational stereotypes \cite{hall2023visogender}. ModSCAN measures
-stereotyped responses across occupations, descriptors and persona traits for
-both gender and race, and reports bias in every model it tests
-\cite{jiang2024modscan}.
-
-Which modality carries the bias has been measured directly. Weng et al.\
-\cite{weng2024images} applied causal mediation analysis to a vision language
-detector, intervening on components to separate the direct effect of an input
-from the effect transmitted through the model's parts. Image features were the
-larger contributor in both datasets they examined, accounting for 32.57\% of
-the measured bias on MSCOCO and 12.63\% on PASCAL-SENTENCE, in each case above
-the text features and above the deep fusion encoder. The result is from an
-object detection model rather than a generative one, so it transfers to this
-thesis as motivation rather than as evidence. It does motivate the design:
-if the visual pathway is where the bias lives, an audit that only varies the
-wording is looking in the wrong place.
-
-Bias measured inside a model also reaches the systems built on it. Ghate et
-al.\ \cite{ghate2025biases} correlated intrinsic measures taken in the
-representation space of encoder based models against extrinsic measures of bias
-in zero shot retrieval. Over 114 analyses, six social groups and three models,
-the mean correlation was $\rho = 0.83 \pm 0.10$. Their secondary
-result is the uncomfortable one for a field that assumes scale helps: the
-larger and better performing models propagated more. An encoder's bias is
-therefore not contained by the encoder, which is the premise that makes a judge
-built on such a model worth auditing at all.
-
-Calling all of this ``bias'' hides more than it reveals. Blodgett et al.\
-\cite{blodgett2020language} surveyed 146 papers and found most of them
-motivated by vague appeals to harm, with no statement of who is harmed, how, or
-why the behaviour counts as harmful. The remedy they propose is to name the
-construct and the harm explicitly, which this thesis does by borrowing both
-from an instrument designed for the purpose (\cref{sec:bg-asi}). Gallegos et
-al.\ \cite{gallegos2024bias} supply the other half of the vocabulary, sorting
-bias metrics by the level at which they operate: embeddings, probabilities, or
-generated text. This thesis works at the probability level throughout, and
-\cref{sec:bg-probability} gives the reasons.
-
 % ---------------------------------------------------------------------
+
 \section{Gender bias in image search and its human perception}\label{sec:bg-search}
-% \begin{plan}
-% \begin{itemize}
-%   \item Under-representation and stereotype exaggeration for occupations,
-%         and its effect on users' beliefs \cite{kay2015unequal}; little change
-%         five years later \cite{metaxa2021image}.
-%   \item Character traits rather than occupations: women shown for warm
-%         traits, men for agentic ones \cite{otterbacher2017competent}, grounded
-%         in the warmth/competence model \cite{fiske2002scm}.
-%   \item \textbf{The human baseline used in this thesis}
-%         \cite{otterbacher2018sigir}: crowdsourced, three countries (UK, USA,
-%         India), 281 participants, 10 queries, 3$\times$3 Google image grids,
-%         objectivity rated 1 (extremely subjective) to 7 (extremely objective),
-%         ASI administered at the end. Key result: higher benevolent sexism
-%         predicts \emph{not} rating the ``smart person'' and ``warm person''
-%         grids as non-objective --- sexist participants are less likely to see
-%         bias. This sign matters for interpreting $\dm$
-%         (\cref{sec:framework-extrinsic}).
-%   \item \cref{tab:sigir-queries}: the 10 queries; fill trait valence and
-%         bias direction from Table 1 of \cite{otterbacher2018sigir} for the
-%         five queries it lists, and mark the other five as reported in the
-%         released dataset.
-% \end{itemize}
-% \end{plan}
 
-Image search is where the representational problem of
-\cref{sec:bg-bias} becomes a problem about people. Kay et al.\
-\cite{kay2015unequal} compared the gender composition of image search results
-for occupations against labour statistics, and found women systematically
-underrepresented in professions where women are in fact well represented.
-Exposure to those results then shifted participants' estimates of the real
-distribution. The second half is what makes the first
-half matter, since a ranking that merely reflected the world would not move
-beliefs about it. Metaxa et al.\ \cite{metaxa2021image} repeated the
-measurement several years later across gender and race and found the
-distortion still there.
+Image search can both reflect social stereotypes and influence users'
+perceptions. Kay et al.\ \cite{kay2015unequal} found occupational gender
+imbalances relative to labour statistics and showed that exposure to results
+shifted participants' estimates of the occupational distribution.
+Metaxa et al.\ \cite{metaxa2021image} subsequently examined gender and
+race representation, identifying continuing distortions in search results.
 
-The pattern is not confined to who appears in which job. Otterbacher et al.\
-\cite{otterbacher2017competent} queried image search for character traits
-rather than occupations and found women returned for warm traits such as
-emotional or sensitive and men for agentic ones such as assertive or
-intelligent. The division maps onto the Stereotype Content Model, which holds
-that person perception runs along the two dimensions of warmth and competence
-\cite{fiske2002scm}. Women are commonly placed high on warmth and low on
-competence, and men the other way around. A ranked list that sorts
-traits by gender in this way reproduces the structure of human stereotyping
-rather than merely its counts.
+The pattern extends beyond occupations to descriptions of personal traits.
+Otterbacher et al.\ \cite{otterbacher2017competent} found women associated
+with warm traits and men with agentic traits in image search.
+This corresponds with the warmth and competence dimensions of the Stereotype
+Content Model \cite{fiske2002scm}, which distinguishes the content of
+stereotypes from representation counts alone.
 
-The study that supplies this thesis with its human baseline asked who notices
+The 2018 study provides the human comparison used in this thesis
 \cite{otterbacher2018sigir}. Otterbacher, Checco, Demartini and Clough
-recruited 281 crowd workers across the United Kingdom, the United States and
-India, and showed each of them grids of nine images returned by Google for ten
-queries. The design avoids priming through a technique the authors call reverse
-image search: participants first see a grid and are asked to guess the query it
-came from, so they describe the images before learning that a search engine
-produced them. Only afterwards is the query revealed and each grid rated for
-objectivity on a scale from 1, extremely subjective, to 7, extremely objective.
-The Ambivalent Sexism Inventory comes last, so that answering it cannot shape
-the ratings.
+recruited 281 crowd workers across the United Kingdom, United States and
+India, using nine-image grids for ten queries. Their reverse image search
+procedure first asked participants to infer the query from a grid, before
+revealing the actual query and requesting an objectivity judgement.
+Ratings ranged from 1, extremely subjective, to 7, extremely objective;
+the ASI was administered afterwards to reduce priming from its questions.
+Participants therefore described the visual content before being asked to
+judge the search engine's objectivity, rather than beginning with an explicit
+gender-bias question. Although the released dataset contains ten queries,
+the published initial analysis focused on four gender-skewed trait queries
+and the balloon control. One participant with undisclosed gender was excluded
+from that analysis, accounting for the reported sample of 280.
 
-Sexism predicted what participants saw. Controlling for country, age, gender
-and self reported search experience, the benevolent dimension of the inventory
-was negatively associated with rating the ``smart person'' and ``warm person''
-grids as not objective. Those two are the positively valenced trait queries,
-and their results are the most strongly skewed by gender. Participants scoring
-higher on benevolent sexism were less likely than others to call a biased set
-of results biased. The association did not appear for the negatively valenced
-queries, ``aggressive person'' and ``anxious person'', and on the neutral
-query only 28 of 280 participants judged the results not objective, with no
-participant characteristic predicting that judgement.
+Controlling for country, age, gender and self-reported search experience,
+higher benevolent sexism was associated with a lower likelihood of judging
+the ``smart person'' and ``warm person'' grids as non-objective.
+Those grids were predominantly male and female, respectively.
+The association did not appear for ``aggressive person'' or ``anxious
+person''. For the balloon control, 28 of 280 participants judged the
+results non-objective, with no measured participant characteristic predicting
+that judgement.
 
-The direction of that association is the single most important fact this
-chapter supplies to the rest of the thesis. More sexist raters gave the biased
-grids \emph{higher} objectivity scores, so a rating below the baseline of the
-least sexist participants places a respondent further from the sexist end of
-the human range, not closer to it. \cref{sec:framework-extrinsic} returns to
-this when it defines $\dm$, and declines to adopt the sign convention the
-project proposal assumed.
+The association was specific to benevolent sexism and these queries.
+It motivates examining whether gender-related inventory responses in models
+correspond with their judgements of image search results, with the original
+human findings providing the starting point for that comparison.
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lccc@{}}
@@ -348,20 +286,85 @@ from Table~1 of \cite{otterbacher2018sigir}, which lists those five only;
 the valence and skew of the remaining five are not reported there and cannot
 be recovered from the released responses, which carry ratings rather than
 image annotations. The low-ASI mean is the per-query baseline $\rlow$ used in
-\cref{ch:study2} (median split on the participants' ASI score). ``baloon'' is the dataset's spelling and was used
+\cref{ch:study2} (median split on the participants' total ASI score). ``baloon'' is the dataset's spelling and was used
 verbatim in the prompts.}
 \label{tab:sigir-queries}
 \end{table}
 
-\cref{tab:sigir-queries} lists the ten queries with the baselines they
-generate. The ten means span 4.70 to 6.37, which is worth noting before
-\cref{ch:study2} compares a model against them: the least sexist participants
-rated every grid towards the objective end of the scale, including the four
-whose results are skewed. The neutral query drew the highest rating of all, as
-a query with no person in it should.
+\Cref{tab:sigir-queries} lists the queries and baseline ratings used here;
+\cref{sec:design-phase2} explains how the human groups and image task are
+adapted for the model comparison.
 
+% \begin{plan}
+% \begin{itemize}
+%   \item Under-representation and stereotype exaggeration for occupations,
+%         and its effect on users' beliefs \cite{kay2015unequal}; little change
+%         five years later \cite{metaxa2021image}.
+%   \item Character traits rather than occupations: women shown for warm
+%         traits, men for agentic ones \cite{otterbacher2017competent}, grounded
+%         in the warmth/competence model \cite{fiske2002scm}.
+%   \item \textbf{The human baseline used in this thesis}
+%         \cite{otterbacher2018sigir}: crowdsourced, three countries (UK, USA,
+%         India), 281 participants, 10 queries, 3$\times$3 Google image grids,
+%         objectivity rated 1 (extremely subjective) to 7 (extremely objective),
+%         ASI administered at the end. Key result: higher benevolent sexism
+%         predicts \emph{not} rating the ``smart person'' and ``warm person''
+%         grids as non-objective --- sexist participants are less likely to see
+%         bias. This sign matters for interpreting $\dm$
+%         (\cref{sec:framework-extrinsic}).
+%   \item \cref{tab:sigir-queries}: the 10 queries; fill trait valence and
+%         bias direction from Table 1 of \cite{otterbacher2018sigir} for the
+%         five queries it lists, and mark the other five as reported in the
+%         released dataset.
+% \end{itemize}
+% \end{plan}
 % ---------------------------------------------------------------------
+
 \section{Ambivalent sexism and its measurement}\label{sec:bg-asi}
+
+The Ambivalent Sexism Inventory (ASI) was developed to measure two related
+components of attitudes towards women \cite{glick1996asi}.
+Hostile sexism concerns antagonistic beliefs, including claims that women
+exaggerate discrimination or seek control over men. Benevolent sexism uses
+apparently favourable descriptions while assigning women restrictive roles,
+such as portraying them as pure, fragile or dependent on male protection.
+The inventory contains 22 agreement items, with eleven in each subscale.
+Cross-national findings show that the subscales are positively related and
+associated with measures of gender inequality \cite{glick2000beyond}.
+The distinction matters because an approving tone can still assign different
+expectations to women and men; benevolence in this framework is not simply
+courtesy or a favourable evaluation.
+
+The adapted inventory in \cref{tab:items} illustrates both components:
+``exaggerating problems they have at work'' belongs to the hostile subscale,
+while ``someone who should be cherished and protected'' belongs to the
+benevolent subscale. These are the phrases administered to the models,
+rather than verbatim statements from the original questionnaire.
+
+Six items are reverse-keyed, meaning that agreement indicates lower
+endorsement of the corresponding sexist belief; the remaining sixteen are
+positively keyed. In the administered ordering in \cref{tab:items}, the
+reverse-keyed items are 6, 7, 9, 15, 20 and 22.
+The original human questionnaire and the signed probability index used here
+are different scoring procedures, so the effect of keying must be examined
+for the particular model measure. \Cref{prop:shift} establishes that effect
+for the adapted index.
+
+Response style provides a further reason to examine agreement separately
+from item content. Acquiescence and preferences for particular scale positions
+can distort questionnaire comparisons, with their effects depending on
+instrument design \cite{baumgartner2001response}. Reverse-keyed items can
+also introduce error when respondents process their wording differently
+\cite{weijters2013reversed}. These concerns apply to human measurement
+and motivate testing the assumptions again for model responses.
+
+Validity concerns the inferences supported by scores rather than an inherent
+property of the questionnaire \cite{messick1995validity}.
+The ASI's human validation therefore does not automatically validate an
+adaptation that changes the referent, response format and respondent.
+\Cref{sec:design-phase1} describes those changes, while
+\cref{sec:disc-threats} discusses their consequences for interpretation.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Hostile vs benevolent sexism, the 22-item ASI, 11 items each
@@ -380,50 +383,40 @@ a query with no person in it should.
 %         --- sets up the threats-to-validity structure of \cref{sec:disc-threats}.
 % \end{itemize}
 % \end{plan}
-
-Glick and Fiske \cite{glick1996asi} argued that sexism is not a single
-antipathy towards women but a pair of correlated attitudes that look opposite
-and work together. Hostile sexism is the familiar kind: women are seeking
-control, exaggerating problems, using sex as a weapon. Benevolent sexism is
-affectionate in tone and restrictive in content, casting women as pure, fragile
-and in need of protection by men. The Ambivalent Sexism Inventory measures both
-with 22 items, eleven for each subscale, answered on an agreement scale. The
-two subscales correlate positively across nations, and national averages on
-both track national measures of gender inequality \cite{glick2000beyond}, which
-is what justifies treating a benevolent score as an index of sexism rather than
-of courtesy.
-
-Six of the 22 items are keyed in reverse, so that agreement indicates the
-absence of sexism rather than its presence: items 6, 7, 9, 15, 20 and 22. The
-remaining sixteen run the other way. The imbalance is deliberate and harmless
-in a human sample, where a general tendency to agree is weak enough for the
-reverse items to absorb much of it. It is neither of those things when the
-respondent is a language model, and \cref{prop:shift} works out exactly what a
-ratio of sixteen to six does to an index built from agreement probabilities.
-
-Survey methodology has studied the underlying problem for decades. Response
-styles, the tendency to agree regardless of content or to favour extreme
-points of a scale, vary across countries and distort comparisons between
-groups. How far they distort a scale score depends on the proportion of items
-keyed in reverse \cite{baumgartner2001response}. Reversing an item is not
-a free correction either, since reversed items attract their own systematic
-error from respondents who process them carelessly \cite{weijters2013reversed}.
-Both results describe humans. This thesis treats them as warnings about an
-instrument that was designed around a human respondent and is here being given
-to something else.
-
-Whether the instrument measures what it claims is not settled by its
-provenance. Messick \cite{messick1995validity} argued that validity is a
-property of the inferences drawn from a score rather than of the test.
-Establishing it means assembling an argument from several kinds of evidence,
-among them evidence that the score is not explained by something irrelevant. An
-inventory built for people and administered to a model inherits none of its
-original validity evidence automatically. \cref{sec:disc-threats} sets out the
-threats in Messick's terms, and \cref{sec:framework-responsebias} supplies the
-evidence that most directly bears on the irrelevant explanation.
-
 % ---------------------------------------------------------------------
+
 \section{Administering questionnaires to language models}\label{sec:bg-surveys}
+
+Questionnaires offer a structured way to compare model responses, but their
+use does not establish that a model behaves as a human respondent.
+Dominguez-Olmedo et al.\ \cite{dominguez2024questioning} administered
+American Community Survey questions to 43 models and identified strong
+sensitivity to option position and labels, including preference for ``A''.
+After randomising presentation, responses tended towards uniformity rather
+than revealing a stable demographic profile.
+
+Tjuatja et al.\ \cite{tjuatja2024response} examined whether nine models
+reproduced response biases documented in human surveys. The models generally
+differed from human respondents, with reinforcement-learning-from-human-feedback
+models showing the largest divergence. They also changed responses under
+perturbations that did not similarly affect human answers.
+These results caution against interpreting equivalent questionnaire formats
+as evidence of equivalent response processes.
+
+Probability-based surveys raise related questions about whose opinions are
+represented. Santurkar et al.\ \cite{santurkar2023opinions} found that
+recovered opinion distributions did not closely match any evaluated American
+demographic group. Sharma et al.\ \cite{sharma2024sycophancy} examined
+agreement with user views and linked sycophantic responses to human preference
+signals in training. Agreement can therefore reflect influences other than
+the content of the proposition being evaluated.
+
+For the present audit, these findings motivate checking prompt sensitivity
+and separating general agreement from discrimination between item types.
+The decomposition in \cref{sec:framework-responsebias} addresses the specific
+sensitivity of the adapted inventory score, rather than assuming every
+questionnaire or model is affected in the same way.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Models show ordering/labelling biases on survey items, and once these
@@ -439,48 +432,43 @@ evidence that most directly bears on the irrelevant explanation.
 %         inventory score must be read together with its response style.
 % \end{itemize}
 % \end{plan}
-
-Giving a questionnaire to a language model and reading the answers as opinions
-has become a common method, and the two most careful examinations of it are
-discouraging. Dominguez-Olmedo et al.\ \cite{dominguez2024questioning} put 43
-models through the American Community Survey using standard prompting, and
-found responses governed by where an option sat and what it was labelled, with
-a marked preference for options labelled ``A''. Randomising the order to
-remove that preference did not reveal an opinion underneath. Across model
-sizes and pretraining corpora the answers moved towards uniform, which means
-that a model appearing to represent a demographic group may be doing no more
-than matching whichever group's aggregate statistics are closest to uniform.
-
-Tjuatja et al.\ \cite{tjuatja2024response} asked a sharper version of the
-question. Humans have well documented response biases in surveys, such as
-shifting answers when a question is reworded in ways that should not matter, so
-a model acting as a human proxy ought to reproduce them. Across nine models
-they generally did not, and models that had been through reinforcement learning
-from human feedback were the furthest from human behaviour. The failure runs
-both ways: those models also moved under perturbations that leave human answers
-unchanged. A model is therefore not a noisy human respondent but a different
-kind of respondent, sensitive along different axes.
-
-Two related results describe the direction a model's answers tend to move.
-Santurkar et al.\ \cite{santurkar2023opinions} read opinions from the
-probabilities assigned to answer options rather than from generated text, which
-is methodologically close to what this thesis does. The opinion distributions
-they recovered matched no American demographic group well. Sharma et al.\
-\cite{sharma2024sycophancy} traced a
-tendency to agree with whatever the user appears to believe back to the human
-preference data itself, since human raters reward responses that match their
-stated view. That tendency is the closest model analogue of acquiescence, and
-it arrives through training rather than through carelessness.
-
-What this leaves for the present audit is a measurement problem rather than a
-reason to abandon the instrument. A model's rate of agreement is a free
-parameter set by its training, not a baseline that can be assumed near chance,
-so an inventory score computed from agreement probabilities is uninterpretable
-on its own. \cref{sec:framework-responsebias} makes that statement exact and
-reports the general tendency to agree alongside every score that depends on it.
-
 % ---------------------------------------------------------------------
+
 \section{Alignment, refusal and covert bias}\label{sec:bg-alignment}
+
+Instruction tuning and alignment modify the model that produces the response
+distribution, rather than acting only after probabilities have been calculated.
+Training on human preferences \cite{ouyang2022training} or written principles
+\cite{bai2022constitutional} can consequently affect both explicit answers
+and probability-based measurements. Differences between explicit responses
+and indirectly measured associations require empirical investigation.
+
+R\"ottger et al.\ \cite{rottger2024xstest} documented exaggerated safety,
+where models refuse harmless prompts resembling unsafe requests.
+Arditi et al.\ \cite{arditi2024refusal} identified a direction in the residual
+stream whose manipulation could suppress or induce refusal in the evaluated
+models. This provides evidence for an internal mechanism, but does not make
+low probability on a selected response set a universal refusal detector.
+
+Explicitly favourable responses can also coexist with negative indirect
+associations. Hofmann et al.\ \cite{hofmann2024covert} compared overt racial
+stereotypes with judgements associated with African American English,
+including simulated employment and sentencing decisions. Human preference
+training reduced overt expression without correspondingly removing the covert
+associations. Bai et al.\ \cite{bai2025explicitly} similarly identified
+stereotype associations in models that passed explicit bias tests.
+These findings concern the evaluated measures and do not imply that every
+apparent difference reveals a concealed attitude.
+
+Measurement framing introduces another source of variation. Gao and Kreiss
+\cite{gao2025measuring} found that gender-bias estimates changed with
+evaluative framing and that discrete-choice measures amplified apparent bias
+relative to probability measures. Persona framing also affects social
+reasoning \cite{yang2026persona}. Such sensitivity motivates the hypothesis
+of algorithmic defensiveness introduced in \cref{sec:intro-problem}, but
+changes in response distributions alone do not demonstrate that a model
+recognises an audit or deliberately conceals its associations.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item RLHF and constitutional training \cite{ouyang2022training,bai2022constitutional}
@@ -497,63 +485,43 @@ reports the general tendency to agree alongside every score that depends on it.
 %         argument for reporting the measurement level explicitly.
 % \end{itemize}
 % \end{plan}
-
-The models audited here have been trained to be careful. Instruction tuning
-and reinforcement learning from human preferences modify model behaviour
-through training \cite{ouyang2022training}.
-Later methods replace part of that human feedback with a written set of
-principles the model critiques itself against \cite{bai2022constitutional}.
-Both methods update the model that produces the response distribution.
-Differences between explicit responses and indirectly measured associations
-therefore require empirical evaluation; they cannot be inferred from the
-measurement position alone.
-
-Careful training overshoots in a measurable way. R\"ottger et al.\
-\cite{rottger2024xstest} built a test suite of prompts that are entirely safe
-but resemble unsafe ones in vocabulary or shape, such as asking how to kill a
-Python process, and found models refusing them at high rates. They named the
-behaviour exaggerated safety. It is the closest documented analogue in text of
-what \cref{sec:s1-quality} reports in vision, where a model declines a yes or
-no question about a statement it answers readily when the only change is a
-featureless grey square in the input.
-
-Refusal has internal structure, which is what makes it measurable before
-decoding. Arditi et al.\ \cite{arditi2024refusal} found that across a range of
-open models the decision to refuse is mediated by a single direction in the
-residual stream, so that erasing that direction suppresses refusal and adding
-it induces refusal on harmless prompts. A refusal is therefore not an opaque
-string appearing at the end of a generation but a quantity the model carries
-and that the output distribution reflects. Reading the distribution instead of
-the string is reading the same decision one step earlier.
-
-Alignment can also move bias rather than remove it. Hofmann et al.\
-\cite{hofmann2024covert} separated what models say about African Americans from
-what they infer about speakers of African American English. The overt
-stereotypes came out positive, while the covert ones were more negative than
-any human stereotype about African Americans ever recorded experimentally, and
-they carried into simulated decisions about employment and criminal
-sentencing.
-Their result about alignment is the one this thesis builds on: human preference
-training widened the gap between the covert and overt measures, because it
-suppressed the overt expression while leaving the underlying association in
-place. Bai et al.\ \cite{bai2025explicitly} reached a compatible conclusion by
-a different route, finding stereotype associations across four social
-categories and 21 stereotypes in eight models that pass explicit bias tests.
-
-The act of measuring is itself a treatment. Gao and Kreiss
-\cite{gao2025measuring} varied how clearly a prompt signalled that it was a
-gender bias evaluation, across four task formats, and found that prompts
-reading as evaluation produced different output distributions from prompts that
-did not. Their second finding bears directly on \cref{ch:framework}: discrete
-choice metrics amplified the apparent bias relative to measures taken from
-token probabilities, so a reported bias figure is partly an artefact of the
-level at which it was read. Persona framing shifts social reasoning in a
-related way \cite{yang2026persona}. An audit that announces itself therefore
-measures a model that knows it is being audited, which is the problem
-\cref{sec:intro-problem} names algorithmic defensiveness.
-
 % ---------------------------------------------------------------------
+
 \section{Evaluation from probabilities}\label{sec:bg-probability}
+
+Probability measurements require a response set that represents the intended
+answers. Holtzman et al.\ \cite{holtzman2021surface} showed that competing
+surface forms can divide probability among alternative expressions of the
+same answer. The pooled measure in \cref{eq:pooled} accounts for specified
+case variants, while \cref{sec:design-faults} records the consequences of
+using an incomplete response set.
+
+Answer-token priors introduce a separate influence. Zhao et al.\
+\cite{zhao2021calibrate} used content-free inputs to estimate preferences
+that arise without task evidence and improved classification through
+calibration. This motivates distinguishing answer preferences from responses
+to item content; the visual controls in \cref{sec:design-stimuli} examine
+responses when informative image content is absent, without implementing
+that text-calibration procedure directly.
+
+The suitability of probability measurements also depends on the question
+being evaluated. Hu and Levy \cite{hu2023prompting} found that probability
+measurements outperformed prompted metalinguistic judgements in their tasks.
+Wang et al.\ \cite{wang2024myanswer}, however, found substantial mismatches
+between first-token preferences and generated answers on multiple-choice
+questions, with reported mismatch rates above 60\% in their evaluation.
+Even high probability coverage at the first response position does not
+therefore guarantee agreement with a subsequent generated answer. These studies examine different evaluation settings and show why
+probabilities and generated text should not be treated as interchangeable
+measurements. Captured mass reports response coverage but does not resolve
+that distinction.
+
+Preferences can attach to option identifiers as well as answer content.
+Zheng et al.\ \cite{zheng2024robust} examined 20 models on three benchmarks
+and found sensitivity to the position and identifiers of answer options.
+The rating task here also uses discrete labels, motivating a reversal of
+the scale endpoints to test whether normalised judgements remain consistent.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Probability mass is split across surface forms of the same answer
@@ -571,55 +539,41 @@ measures a model that knows it is being audited, which is the problem
 %         --- the digit prior seen in \cref{sec:s2-deviation}.
 % \end{itemize}
 % \end{plan}
-
-Reading an answer off a probability distribution is harder than it looks, and
-the first complication is that one answer has many spellings. Holtzman et al.\
-\cite{holtzman2021surface} showed that the probability of a correct answer is
-divided among its surface forms, so scoring a single string underrates the
-answer it represents and the highest probability string is often not the
-intended one. Their remedy reweights options by their prior likelihood in the
-task context. \cref{eq:pooled} takes the simpler route available to a closed
-answer set and sums the mass over the spellings of each answer, and
-\cref{sec:framework-probe} reports what that correction was worth on the
-models audited.
-
-Models also carry priors over answers that have nothing to do with the
-question. Zhao et al.\ \cite{zhao2021calibrate} exposed these by feeding
-content free inputs, such as the string ``N/A'' in place of a real example, and
-reading what the model predicted anyway; subtracting the resulting bias
-improved few shot accuracy considerably. The grey patch and the Gaussian noise
-patch of \cref{sec:design-stimuli} are content free inputs in precisely this
-sense, and what a model does with them is a measurement of its prior rather
-than of its perception.
-
-Whether to read probabilities at all has been tested against the alternative.
-Hu and Levy \cite{hu2023prompting} compared asking a model for a
-metalinguistic judgement against reading the probability it assigns to the
-relevant strings, and found the prompted judgements consistently worse,
-diverging further as the question moved away from what the probabilities
-directly encode.
-
-The opposite result deserves equal weight. Wang et al.\
-\cite{wang2024myanswer} compared first token probabilities against the text a
-model actually generates on multiple choice questions and found mismatch rates
-above 60\%, worst in models heavily tuned on conversational or safety data, and
-persisting even when the prompt forced the answer format. This thesis reads
-first token probabilities and therefore inherits the limitation, which
-\cref{sec:disc-threats} states rather than argues away. The captured mass of
-\cref{eq:capm} is the partial answer available here: a measurement that reports
-how much of the distribution it covers makes visible the cases where the text
-and the probe are likely to disagree.
-
-A further prior attaches to the labels themselves. Zheng et al.\
-\cite{zheng2024robust} showed across 20 models and three benchmarks that
-multiple choice answers shift with option position because models assign extra
-probability to particular option identifier tokens, independent of content.
-The rating task of \cref{ch:study2} reads single digits and is open to the same
-effect, which is one reason every stimulus there is rated under both scale
-orientations.
-
 % ---------------------------------------------------------------------
+
 \section{LLM and MLLM judges, and positional perturbation}\label{sec:bg-judges}
+
+Automated judges can reproduce systematic preferences unrelated to the
+quality they are intended to evaluate. Zheng et al.\ \cite{zheng2023judging}
+identified position bias, verbosity bias and preference for a judge's own
+outputs. Wang et al.\ \cite{wang2024fair} showed that changing candidate
+order could reverse rankings, demonstrating the need to control presentation
+when interpreting model judgements.
+
+Chen et al.\ \cite{chen2024mllmjudge} evaluated multimodal judges on scoring,
+pairwise comparison and batch ranking. Agreement with human preferences
+varied by task, with scoring and batch ranking less reliable than pairwise
+comparison in their evaluation. Their analysis also identified position,
+length and egocentric biases, making performance on one judgement format
+insufficient evidence of reliability on another.
+
+CALM evaluates twelve judgement biases through controlled input perturbations
+that should preserve the verdict \cite{ye2025justice}.
+This approach tests the stability of a judgement separately from its
+agreement with a reference answer. For example, exchanging the order of two
+candidates changes their presentation without changing their substantive
+content, allowing the resulting preference to be checked for order sensitivity.
+The present study adapts its robustness-rate concept to scale reversal,
+checking whether the same normalised rating is retained after the endpoints
+are exchanged. The expected raw digit changes under reversal, but its
+interpretation should remain the same after normalisation; this distinguishes
+scale adherence from a preference for particular numerical labels.
+Related work examines the ordering of scoring rubrics and
+identifiers \cite{li2026scoring} and compares model judgement biases with
+human biases \cite{chen2024humans}. These findings motivate the robustness
+check without establishing that instability in the present task has the
+same cause.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item Position, verbosity and self-enhancement biases
@@ -633,46 +587,9 @@ orientations.
 %         \cite{chen2024humans}.
 % \end{itemize}
 % \end{plan}
-
-Using a model to score the output of other models became standard practice
-faster than its failure modes were catalogued. Zheng et al.\
-\cite{zheng2023judging} named the main three: position bias, a preference for
-whichever candidate appears first; verbosity bias, a preference for longer
-answers; and self enhancement bias, a preference for the judge's own outputs.
-Wang et al.\ \cite{wang2024fair} showed how large the first can be, with
-rankings reversing when the candidates are presented in the opposite order. A
-judge whose verdict depends on presentation is not measuring the property it
-was asked about.
-
-The multimodal case is less studied and no better behaved. Chen et al.\
-\cite{chen2024mllmjudge} benchmarked multimodal models as judges across
-scoring, pairwise comparison and batch ranking, and found them close to human
-preference on pairwise comparison but diverging on the other two. Their
-analysis of failure modes covers position bias alongside egocentric and length
-bias. Scoring, the format
-closest to the task in \cref{ch:study2}, was among the weaker ones.
-
-CALM supplies the method this thesis borrows. Ye et al.\ \cite{ye2025justice}
-built a framework that quantifies twelve biases in model judges by modifying an
-input in a way that should not change the correct verdict and measuring how
-often the verdict changes anyway. The robustness rate of \cref{eq:rr} is that
-construction applied to the rating scale: reverse the anchors, so that 7 means
-extremely subjective instead of extremely objective, and count how often the
-normalised rating survives. Two further studies extend the catalogue to the
-ordering of rubric items and score identifiers \cite{li2026scoring} and compare
-model judgement biases against human ones directly \cite{chen2024humans}.
-
 % ---------------------------------------------------------------------
+
 \section{Research gap}\label{sec:bg-gap}
-% \begin{plan}
-% One page. Summarise as \cref{tab:gap}, then one paragraph: prior work measures
-% either generated text or embeddings; probability-level work is text-only;
-% human-anchored work is either text-only or human-only; none reports how much
-% of the distribution the measurement captured. \textbf{Verify every cell
-% against the paper while writing}; cells marked ``?'' are not yet checked.
-% \textbf{Done (Nov 2026):} every cell checked against the paper's abstract and
-% reported method; no ``?'' remains.
-% \end{plan}
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lc>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}Xcc@{}}
@@ -699,23 +616,36 @@ reported. Checked against each source in November 2026.}
 \label{tab:gap}
 \end{table}
 
-The studies in \cref{tab:gap} address different parts of the measurement
-problem. The probability based audits listed there examine text, while the
-image studies examine outputs, representations or component interventions.
-The human study supplies the ASI and image search comparison
-\cite{otterbacher2018sigir}, and CALM supplies a framework for systematic
-perturbations of model judgements \cite{ye2025justice}. This thesis combines
-these elements in a multimodal audit with explicit response coverage. The
-comparison concerns the reviewed studies and does not establish an exhaustive
-absence of related methods.
+The approaches compared in \cref{tab:gap} examine social associations,
+response sensitivity, human perceptions and judgement robustness, but do not
+provide an audit combining visual inputs, targeted next-token probability
+measurements, explicit response-set coverage and the human inventory--search
+comparison. The unresolved question is how visual input affects the coverage
+and stability of measurements drawn from a restricted response set, and what
+those properties allow an auditor to infer from the resulting scores.
 
-The last column is the absence that matters most. No prior work in the table
-reports what fraction of the model's output distribution its measurement
-covered. A probability conditioned on a fiftieth of a model's behaviour and one
-conditioned on nearly all of it are therefore reported identically. The models
-audited here differ exactly there, and the difference is not small:
-\cref{sec:s1-quality} finds a model whose captured mass falls from 0.979 to
-0.237 when a featureless grey square is added to its input. A measurement that
-does not report its own coverage cannot tell a change of attitude from a
-refusal to answer, and this thesis reports coverage with every quantity that
-depends on it.
+This matters because a conditional preference between selected answers can
+remain numerically plausible even when those answers capture little of the
+output distribution. A rating can also have high response coverage while
+changing under an equivalent scale definition. Coverage and robustness
+therefore address different requirements for interpreting the measurement;
+neither can be assumed from the choice to read probabilities alone.
+
+The present study addresses this gap through two linked evaluations.
+The inventory study addresses RQ1 by examining gender-related responses
+while separating general agreement, item discrimination and response coverage.
+The search study addresses RQ2 by examining rating robustness and comparing
+model judgements with the historical human reference. Together, these evaluations assess the reliability
+of the measurements before considering whether inventory responses correspond
+with downstream judgements. The gap is defined relative to the reviewed
+approaches, without claiming that every related method has been excluded.
+
+% \begin{plan}
+% One page. Summarise as \cref{tab:gap}, then one paragraph: prior work measures
+% either generated text or embeddings; probability-level work is text-only;
+% human-anchored work is either text-only or human-only; none reports how much
+% of the distribution the measurement captured. \textbf{Verify every cell
+% against the paper while writing}; cells marked ``?'' are not yet checked.
+% \textbf{Done (Nov 2026):} every cell checked against the paper's abstract and
+% reported method; no ``?'' remains.
+% \end{plan}
