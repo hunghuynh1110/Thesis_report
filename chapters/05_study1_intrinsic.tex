@@ -16,43 +16,59 @@
 % \end{plan}
 
 % ---------------------------------------------------------------------
-\section{Aims and expectations}\label{sec:s1-aims}
-% \begin{plan}
-% Restate RQ1 and three expectations stated before looking at the results:
-% (E1) bias scores are stable across the five structures if they reflect
-% attitudes rather than wording \cite{gao2025measuring}; (E2) a semantically
-% empty image should not change the answer distribution; (E3) a model that holds
-% the attitudes the ASI measures agrees more with positively keyed than with
-% reverse-keyed items ($\PS>0$).
-% \end{plan}
+\section{Study overview}\label{sec:s1-aims}
 
-This chapter answers RQ1 from what the five models do when the inventory is
-put to them with nothing at stake, and, in Phase~1B, with a photograph of a
-face in front of them. Three expectations were fixed before the results were
-examined. The first is that a bias score reflecting an attitude rather than a
-turn of phrase should stay roughly constant across the five prompt structures,
-which change the wording while holding the proposition fixed
-\cite{gao2025measuring}. The second is that an image carrying no information
-about a person should leave the answer distribution much as it was. The third
-is that a model holding the attitudes the inventory measures should agree more
-readily with the sixteen items keyed towards sexism than with the six keyed
-against it, which is to say $\PS>0$ in \cref{eq:ps}.
+Study 1 examines responses to the adapted Ambivalent Sexism Inventory across
+five models. Phase~1A varies prompt structure and image condition without
+showing a person, while Phase~1B presents the same items with female and male
+face photographs. The analysis distinguishes response coverage, differences
+in trait attribution and the contribution of general agreement to the
+aggregate score.
 
-One of those expectations fails early, and that failure sets the order of what
-follows. Measurement quality is reported first (\cref{sec:s1-quality}),
-because captured mass decides how much of a model's behaviour any later score
-describes. The aggregate scores come next (\cref{sec:s1-aggregate}), followed by the
-decomposition that separates attitude from response style
-(\cref{sec:s1-responsebias}). \cref{sec:s1-inference} then gives the exact
-test of a statistic invariant to uniform shifts in assent, and \cref{sec:s1-replication}
-the checks that the execution path shaped none of it. Phase~1B closes the chapter with the
-comparison Phase~1A cannot make, between photographs of women and photographs
-of men (\cref{sec:s1b-gap,sec:s1b-race}).
+Three expectations were specified before examining the results: scores should
+be reasonably stable across prompt structures, uninformative images should
+leave responses largely unchanged, and agreement with positively keyed items
+should exceed agreement with reverse-keyed items if the model endorses the
+attitudes represented by the instrument. Prompt sensitivity motivates the
+first check \cite{gao2025measuring}; the scoring and polarity conventions
+are defined in \cref{ch:framework}.
 
-% ---------------------------------------------------------------------
+The results show lower response coverage for Llama when images are present,
+gender differences on the benevolent subscale and an aggregate score sensitive
+to general agreement. Coverage is established first, followed by the face
+comparison, the scoring analysis and checks on the stability of these results.
+
 \section{Measurement quality and response coverage}\label{sec:s1-quality}
+
+The binary scores are conditional on the intended yes and no responses, so
+captured mass is needed to establish how much probability those responses
+represent. \Cref{tab:capm} reports coverage across conditions, with the
+corresponding distributions shown in \cref{fig:capm-dist}.
+
+Both Llama models show substantially lower coverage with images, including
+the featureless grey patch. Llama-11B falls from $0.979$ without an image
+to $0.237$ with the patch and $0.204$ with noise; Llama-90B falls from
+$0.951$ to $0.467$ and $0.329$. The Qwen models remain comparatively stable,
+with a maximum change of $0.034$ from the text-only condition. The contrast
+is present at both evaluated Llama sizes and absent across the three Qwen
+sizes, although this sample cannot separate all differences between the
+families.
+
+Real faces do not remove the coverage difference: Phase~1B means are $0.140$
+for Llama-11B and $0.479$ for Llama-90B, compared with $0.998$ for Qwen-7B
+and $0.972$ for Qwen-72B. The Llama face scores therefore describe a smaller
+fraction of the output distribution, which limits their interpretation.
+
+The Llama-11B diagnostic recorded the token \texttt{I} with probability
+$0.4149$ on one item, consistent with the beginning of an explanatory or
+refusal response. Production runs retained the target token probabilities
+only, so these records do not identify the alternative continuations across
+all models. The finding is consequently reduced response coverage, with
+refusal remaining one possible explanation rather than a directly established
+outcome for every affected measurement.
+
 \begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
 \toprule
 Condition & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
 \midrule
@@ -63,9 +79,9 @@ Noise & 0.876 (0\%) & 0.999 (0\%) & 0.204 (29\%) & 0.952 (0\%) & 0.329 (18\%) \\
 All (Phase~1A) & 0.892 & 0.995 & 0.473 & 0.955 & 0.582 \\
 Phase~1B, real faces & 0.858 & 0.998 & 0.140 & 0.972 & 0.479 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Mean captured mass $\capm$ by image condition (share of rows with
-$\capm<0.1$ in brackets). $n=110$ per cell.}
+$\capm<0.1$ in brackets). Phase~1A: $n=110$ per condition and model; Phase~1B: $n=4{,}400$ per model.}
 \label{tab:capm}
 \end{table}
 \begin{figure}[htbp]\centering
@@ -77,6 +93,302 @@ Qwen-72B is unaffected. Conditions are no image, uniform grey patch and
 Gaussian noise; means are printed above each box.}
 \label{fig:capm-dist}
 \end{figure}
+
+\section{Gender differences in face attribution}\label{sec:s1b-gap}
+
+Phase~1B compares responses to 20 female and 20 male photographs, using the
+face as the unit of analysis. \Cref{tab:s1b-gap} and \cref{fig:gap} report
+the signed difference for the combined inventory and each subscale.
+The principal findings are as follows:
+
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item The benevolent gap is positive in four models and negative in Qwen-2B.
+It ranges from $-0.0071$ for Qwen-2B to $+0.0540$ for Qwen-72B, with four
+of the five gaps reaching the Bonferroni threshold of $p<0.01$.
+Llama-11B does not reach that threshold ($p=0.039$), which does not establish
+either an absent effect or equivalence with the other models.
+
+\item Combining the subscales reduces the visibility of these differences,
+because their estimated gaps generally point in opposite directions.
+Llama-90B has a benevolent gap of $+0.0340$ at $p=0.003$, but a combined
+gap of $+0.0053$ at $p=0.622$. Only Qwen-72B reaches the corrected threshold
+for the combined gap, while none of the hostile gaps reaches it.
+
+\item Mean conditional yes-probabilities provide a complementary illustration
+on positively keyed benevolent items, excluding the inversion prompts.
+Llama-90B assigns $0.627$ to female photographs and $0.573$ to male
+photographs, while Qwen-72B assigns $0.265$ and $0.185$, respectively.
+These are averages across that item subset, not probabilities for an
+individual statement such as ``someone who should be cherished and
+protected''. They also differ from the signed subscale gap, which includes
+reverse-keyed items and all five prompt structures.
+\end{enumerate}
+
+These comparisons concern responses to the sampled photographs under the
+adapted prompts, and do not establish an underlying attitude towards women.
+The low Llama coverage reported in \cref{sec:s1-quality} is an additional
+limitation, while the use of one database and 20 faces per gender restricts
+generalisation. Race comparisons remain exploratory because each gender and
+race cell contains only five faces; their descriptive results are reported
+in \cref{sec:s1b-race}.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
+\toprule
+ & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
+\midrule
+Combined $G_m$ & $-0.0010$ & $+0.0050$ & $+0.0067$ & $+0.0221$ & $+0.0053$ \\
+\quad $t$ test $p$ & 0.631 & 0.197 & 0.231 & $<0.001$ & 0.622 \\
+Benevolent $G_m$ & $-0.0071$ & $+0.0185$ & $+0.0180$ & $+0.0540$ & $+0.0340$ \\
+\quad $t$ test $p$ & 0.004 & 0.002 & 0.039 & $<0.001$ & 0.003 \\
+Hostile $G_m$ & $+0.0051$ & $-0.0084$ & $-0.0046$ & $-0.0099$ & $-0.0234$ \\
+\quad $t$ test $p$ & 0.166 & 0.050 & 0.638 & 0.041 & 0.116 \\
+\midrule
+Cohen's $d$ (benevolent) & $-0.97$ & $+1.06$ & $+0.68$ & $+3.74$ & $+0.99$ \\
+\bottomrule
+\end{tabularx}
+\caption{Phase~1B gender gap by subscale, on 20 female against 20 male face
+means (\cref{eq:gap}). Testing five models puts the Bonferroni threshold at
+$p<0.01$, which the benevolent gap clears in four of the five; Llama-11B is
+the one case that does not reach this threshold. The combined score clears it only for Qwen-72B,
+because the two subscales move in opposite directions and partly cancel.}
+\label{tab:s1b-gap}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{gap.pdf}
+\caption{Phase~1B gender gap by model and subscale, with the models ordered by
+parameter count. Each point is the difference between 20 female and 20 male
+face means (\cref{eq:gap}); bars are 95\% confidence intervals from the
+two sample $t$ test on those 40 face means. The benevolent gap is positive in
+four models and negative in Qwen-2B.
+Four benevolent gaps reach the corrected threshold; Llama-11B does not.
+The estimated benevolent gap is larger at each successive evaluated size
+within each family; these comparisons do not establish a general size effect,
+while no hostile gap reaches the corrected threshold.}
+\label{fig:gap}
+\end{figure}
+
+\clearpage
+\section{Aggregate scoring and response style}\label{sec:s1-aggregate}
+
+The face comparison measures differences between photographed groups, whereas
+Phase~1A examines the score produced without an identified person.
+\Cref{tab:s1-aggregate} reports the aggregate index and its decomposition,
+allowing general agreement to be distinguished from the contribution associated
+with variation between items.
+
+Llama-90B has the highest aggregate score, $+0.153$, but a model assigning
+its mean yes-probability of $0.585$ uniformly to every prompt would already
+score $0.160$. The residual is therefore $D=-0.007$, as defined by
+\cref{eq:decomp}. Qwen-72B has a much smaller aggregate score of $+0.008$,
+but a residual of $-0.061$. The aggregate ordering consequently cannot be
+read directly as an ordering of attitudes, since it includes a substantial
+contribution from how readily each model agrees.
+
+The score also changes with prompt structure, including a sign reversal on
+the inversion prompts. That reversal partly follows from the scoring rule
+and does not independently establish a change in attitude.
+\Cref{sec:s1-structure-detail} provides the structure-specific results and
+the descriptive comparison between hostile and benevolent aggregate scores.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
+\toprule
+ & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
+\midrule
+$\ASIint$ (\cref{eq:asi}) & $+0.054$ & $+0.017$ & $+0.084$ & $+0.008$ & $+0.153$ \\
+Mean $\pyes$ & 0.288 & 0.335 & 0.527 & 0.251 & 0.585 \\
+Response-style part $\tfrac{3}{11}\bar p$ (\cref{eq:decomp}) & 0.079 & 0.091 & 0.144 & 0.068 & 0.160 \\
+Residual $D$ & $-0.025$ & $-0.075$ & $-0.060$ & $-0.061$ & $-0.007$ \\
+\midrule
+HS subscale & $+0.049$ & $+0.049$ & $+0.159$ & $+0.030$ & $+0.159$ \\
+BS subscale & $+0.059$ & $-0.016$ & $+0.008$ & $-0.015$ & $+0.147$ \\
+\bottomrule
+\end{tabularx}
+\caption{Phase~1 aggregates (330 measurements per model).}
+\label{tab:s1-aggregate}
+\end{table}
+
+\subsection{Polarity separation}\label{sec:s1-responsebias}
+
+All five models agree more readily with reverse-keyed items on the
+non-inversion prompts, producing negative polarity separation
+(\cref{tab:s1-ps}). The values range from $-0.006$ for Qwen-2B to $-0.188$
+for Qwen-72B, despite every model having a positive aggregate index.
+This is consistent with the decomposition: the inventory's keying imbalance
+allows general agreement to contribute positively even when the two item
+groups are distinguished in the opposite direction.
+
+Qwen-72B's separation is $1.94$ times the magnitude of Llama-90B's,
+indicating stronger discrimination between the item groups on this measure.
+It does not establish that Qwen-72B is less sexist, because separation and
+the overall level of agreement describe different response properties.
+\Cref{fig:s1-items} shows the item means for the largest model in each family,
+with the full group comparisons retained in the table.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
+\toprule
+ & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
+\midrule
+$\overline{\pyes}$, positively keyed ($n=192$) & 0.258 & 0.266 & 0.472 & 0.199 & 0.599 \\
+$\overline{\pyes}$, reverse keyed ($n=72$) & 0.264 & 0.423 & 0.582 & 0.386 & 0.696 \\
+$\PS$ (\cref{eq:ps}, non-inversion rows) & $-0.006$ & $-0.157$ & $-0.110$ & $-0.188$ & $-0.097$ \\
+$\PS$, all rows (sensitivity) & $-0.000$ & $-0.111$ & $-0.069$ & $-0.149$ & $-0.064$ \\
+\bottomrule
+\end{tabularx}
+\caption{Response style decomposition on non inversion rows. All five models
+agree more with the reverse keyed statements, yet all five have
+$\ASIint>0$.}
+\label{tab:s1-ps}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s1-items.pdf}
+\caption{Mean $\pyes$ per item over the 12 cells outside the inversion
+structure, for the largest model of each family, with items ordered by
+Llama-90B's value within each keying group. The three smaller models are left
+out because 22 items against five series cannot be read; their group means
+appear in \cref{tab:s1-ps}. Dashed lines mark the group means, so the polarity separation
+$\PS$ is the horizontal gap between them. Both models agree more readily with
+the six items keyed in reverse than with the sixteen keyed towards sexism.}
+\label{fig:s1-items}
+\end{figure}
+
+\subsection{Statistical inference for polarity separation}\label{sec:s1-inference}
+
+The exact test evaluates polarity separation against all
+$\binom{22}{6}=74{,}613$ assignments of six reverse-keying labels, under
+the exchangeability assumption stated in \cref{eq:perm}.
+\Cref{tab:s1-perm} reports the results, and \cref{fig:s1-perm} provides
+the null distributions in the supplementary material.
+
+Qwen-72B ($p=0.010$) and Qwen-7B ($p=0.026$) reach the unadjusted
+significance threshold, whereas Llama-90B ($p=0.196$), Llama-11B ($p=0.341$)
+and Qwen-2B ($p=0.862$) do not. These tests are unadjusted across models
+and should be distinguished from the corrected face comparisons.
+The unit of permutation is the item, so repeated prompts do not increase
+the number of inventory items available for inference. Non-significance
+does not establish absent discrimination, and the within-subscale separation
+values are retained as descriptive comparisons without additional tests.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
+\toprule
+ & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
+\midrule
+Item-level $\PS$ & $-0.006$ & $-0.157$ & $-0.110$ & $-0.188$ & $-0.097$ \\
+Exact two-sided $p$ (\cref{eq:perm}) & 0.862 & 0.026 & 0.341 & 0.010 & 0.196 \\
+\midrule
+Within HS (8 vs 3 items) & $-0.038$ & $-0.068$ & $+0.081$ & $-0.101$ & $-0.113$ \\
+Within BS (8 vs 3 items) & $+0.026$ & $-0.246$ & $-0.300$ & $-0.275$ & $-0.081$ \\
+\bottomrule
+\end{tabularx}
+\caption{Exact permutation test over all $\binom{22}{6}=74{,}613$ keying
+assignments, enumerated in full rather than sampled. Within-subscale values are
+descriptive only, since each subscale holds just three reverse-keyed items.}
+\label{tab:s1-perm}
+\end{table}
+
+\section{Sensitivity to coverage and execution conditions}\label{sec:s1-sensitivity}
+
+The Llama coverage reductions raise the question of whether the aggregate
+results depend on measurements with little probability on the intended
+responses. \Cref{tab:s1-capmfilter} reports scores after applying increasing
+captured-mass thresholds, using the same saved outputs.
+
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item Llama-90B's aggregate score falls from $+0.153$ on all 330 rows to
+$+0.120$, $+0.053$ and $+0.015$ at thresholds of $0.1$, $0.3$ and $0.5$.
+The final threshold retains 188 rows, demonstrating that the aggregate is
+sensitive to the inclusion of low-coverage measurements.
+
+\item Polarity separation remains negative for both Llama models and grows
+in magnitude as the threshold increases. It changes from $-0.097$ to
+$-0.159$ for Llama-90B and from $-0.110$ to $-0.207$ for Llama-11B.
+The Qwen models change little because most measurements remain above the
+thresholds, although Qwen-2B's small separation changes sign at the highest
+threshold.
+
+\item Filtering changes which items and conditions contribute to the means,
+so the retained scores are sensitivity results rather than automatically
+corrected estimates. Higher coverage improves representation of the intended
+response set but does not, by itself, establish semantic validity or remove
+response-style effects.
+\end{enumerate}
+
+An independent Llama-90B rerun on a different node agrees closely with the
+reference ($r=0.9996$, mean absolute difference $0.0024$).
+The detailed execution comparisons are retained in \cref{sec:s1-replication},
+including the single-GPU quantised run and its limitations.
+
+\begin{table}[htbp]\centering\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Model & Coverage threshold & Rows retained & $\ASIint$ & $\PS$ \\
+\midrule
+Qwen-2B & All rows & 330 & $+0.054$ & $-0.006$ \\
+ & $\capm\ge0.1$ & 330 & $+0.054$ & $-0.006$ \\
+ & $\capm\ge0.3$ & 330 & $+0.054$ & $-0.006$ \\
+ & $\capm\ge0.5$ & 316 & $+0.055$ & $+0.006$ \\
+\addlinespace
+Qwen-7B & All rows & 330 & $+0.017$ & $-0.157$ \\
+ & $\capm\ge0.1$ & 330 & $+0.017$ & $-0.157$ \\
+ & $\capm\ge0.3$ & 330 & $+0.017$ & $-0.157$ \\
+ & $\capm\ge0.5$ & 330 & $+0.017$ & $-0.157$ \\
+\addlinespace
+Llama-11B & All rows & 330 & $+0.084$ & $-0.110$ \\
+ & $\capm\ge0.1$ & 284 & $+0.049$ & $-0.119$ \\
+ & $\capm\ge0.3$ & 166 & $+0.016$ & $-0.186$ \\
+ & $\capm\ge0.5$ & 113 & $+0.054$ & $-0.207$ \\
+\addlinespace
+Qwen-72B & All rows & 330 & $+0.008$ & $-0.188$ \\
+ & $\capm\ge0.1$ & 330 & $+0.008$ & $-0.188$ \\
+ & $\capm\ge0.3$ & 330 & $+0.008$ & $-0.188$ \\
+ & $\capm\ge0.5$ & 329 & $+0.007$ & $-0.188$ \\
+\addlinespace
+Llama-90B & All rows & 330 & $+0.153$ & $-0.097$ \\
+ & $\capm\ge0.1$ & 299 & $+0.120$ & $-0.118$ \\
+ & $\capm\ge0.3$ & 236 & $+0.053$ & $-0.141$ \\
+ & $\capm\ge0.5$ & 188 & $+0.015$ & $-0.159$ \\
+\bottomrule
+\end{tabular}
+\caption{Sensitivity of Phase~1A scores to captured mass. Each threshold
+retains rows with $\capm$ at or above the stated value. Polarity separation
+is calculated from the retained non-inversion rows. Filtering changes the
+composition of the sample and is reported as a sensitivity analysis.}
+\label{tab:s1-capmfilter}
+\end{table}
+
+\section{Summary for RQ1}\label{sec:s1-summary}
+
+The intrinsic results support three conclusions about the measured responses,
+while limiting their interpretation as evidence of underlying attitudes.
+
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item Face photographs reveal benevolent-subscale gender differences that
+combining the inventory can obscure. Four of the five differences reach
+the corrected threshold, but their direction is not uniform across models.
+
+\item Aggregate scores depend on general agreement as well as item content.
+Polarity separation is negative throughout, with two models reaching the
+unadjusted threshold, and should be interpreted alongside the aggregate
+rather than as a direct ranking of sexism.
+
+\item Images reduce binary response coverage in the evaluated Llama models,
+including when they contain no person. This limits the probability represented
+by their conditional scores and makes coverage sensitivity an essential
+part of their interpretation.
+\end{enumerate}
+
+% \begin{plan}
+% Restate RQ1 and three expectations stated before looking at the results:
+% (E1) bias scores are stable across the five structures if they reflect
+% attitudes rather than wording \cite{gao2025measuring}; (E2) a semantically
+% empty image should not change the answer distribution; (E3) a model that holds
+% the attitudes the ASI measures agrees more with positively keyed than with
+% reverse-keyed items ($\PS>0$).
+% \end{plan}
+% ---------------------------------------------------------------------
 % \begin{plan}
 % \begin{itemize}
 %   \item Report this \emph{before} any bias score. It is the clearest Phase~1
@@ -93,154 +405,7 @@ Gaussian noise; means are printed above each box.}
 %         describes about a third to a half of its behaviour.
 % \end{itemize}
 % \end{plan}
-
-Captured mass is reported before any bias score, because it bounds what a bias
-score can mean. \cref{eq:binary} is a ratio between two pooled masses, and it is
-unchanged whether those masses hold most of the distribution or almost none of
-it. A $\pyes$ taken where $\capm$ is low therefore describes only a small
-corner of what the model would do. \cref{tab:capm} gives $\capm$ by image
-condition for all five models and \cref{fig:capm-dist} shows the
-distributions behind those means.
-
-The second expectation of \cref{sec:s1-aims} fails, and it fails on one family
-only. Both Llama models lose most of their yes and no mass as soon as any
-image is supplied: Llama-11B falls from $0.979$ with no image to $0.237$ on
-the grey patch and $0.204$ on noise, and Llama-90B from $0.951$ to $0.467$ and
-$0.329$. All three Qwen models are flat across the same contrast, moving by at
-most $0.034$ from the text only condition. The grey patch carries no shape, no person
-and no content of any kind, so what triggers the collapse is the presence of
-the visual modality rather than anything depicted in it.
-
-Size does not explain the split. The two Llama models sit at 11B and 90B and
-both collapse, while the three Qwen models span 2B to 72B and none does, so
-the behaviour tracks the family and not the parameter count. Qwen-2B holds
-$0.883$ of its mass under an image while Llama-90B, forty five times larger,
-holds $0.398$. This is the clearest result in Phase~1A and it does not depend
-on the scoring formula at all, since it is a property of where the probability
-sits rather than of how the two sides are combined.
-
-Phase~1B sharpens the same contrast. A photograph of a real face is a stronger
-stimulus than a grey rectangle, and Llama-11B falls further under it, to
-$0.140$ averaged over all 4,400 measurements, while Qwen-7B holds $0.998$.
-Llama-90B recovers somewhat, to $0.479$, which is above its noise figure of
-$0.329$ but still barely half of what it holds with no image at all. Whatever
-the Llama models are doing when an image appears, a recognisable human face
-does not undo it.
-
-Where the mass goes was recorded in only one run, so the word for it needs
-care. In the diagnostic sweep on the 11B (job 27103565) the largest competitor
-to yes and no on the first inventory item was the token \texttt{I}, which took
-$0.4149$ and begins a reply of the form ``I cannot determine\ldots''. The
-production runs stored the target tokens alone, so the same inspection cannot
-be repeated on the 90B, and calling its behaviour refusal is an inference from
-the 11B rather than an observation. The pattern it resembles is the
-exaggerated safety R\"ottger et al. \cite{rottger2024xstest} document in text,
-where models decline prompts that merely look like unsafe ones.
-
-Everything later in this chapter inherits a consequence from these numbers.
-For the two Llama models under an image, $\pyes$ is conditioned on between a
-seventh and a half of the model's behaviour, so their vision-condition scores
-are weaker evidence than the same figure computed on Qwen. The fraction of
-rows falling below a captured mass of $0.1$ makes the same point at the level
-of individual measurements: on Llama-11B it is 13\% under the grey patch and
-29\% under noise, on Llama-90B 10\% and 18\%, and on every Qwen model it is
-zero.
-
 % ---------------------------------------------------------------------
-\section{Aggregate scores}\label{sec:s1-aggregate}
-
-The aggregate index is reported here, but \cref{prop:shift} has already fixed
-how it must be read. \cref{tab:s1-aggregate} gives $\ASIint$ for all five
-models together with the two terms of \cref{eq:decomp}, and the comparison
-between them is the result of this section. Llama-90B scores $+0.153$, the
-highest of the five, while a model answering yes at its mean rate of $0.585$
-to every prompt, and so carrying no information about any item, would score
-$\tfrac{3}{11}\times0.585=0.160$. Its residual $D$ is therefore $-0.007$, so
-almost the whole of its index is its willingness to say yes.
-
-The ordering by $\ASIint$ and the ordering by $D$ disagree. Qwen-72B scores
-$+0.008$, twenty times smaller than Llama-90B, yet its residual is $-0.061$,
-nearly nine times larger in magnitude. Qwen-7B and Llama-11B sit at $-0.075$
-and $-0.060$. By the index the five models differ mostly in how often they
-assent, whereas by the part of the index that depends on which item was asked,
-the model with the lowest headline score carries more item-level signal than
-the model with the highest. No conclusion about attitude survives from
-$\ASIint$ alone.
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
- & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-$\ASIint$ (\cref{eq:asi}) & $+0.054$ & $+0.017$ & $+0.084$ & $+0.008$ & $+0.153$ \\
-Mean $\pyes$ & 0.288 & 0.335 & 0.527 & 0.251 & 0.585 \\
-Response-style part $\tfrac{3}{11}\bar p$ (\cref{eq:decomp}) & 0.079 & 0.091 & 0.144 & 0.068 & 0.160 \\
-Residual $D$ & $-0.025$ & $-0.075$ & $-0.060$ & $-0.061$ & $-0.007$ \\
-\midrule
-HS subscale & $+0.049$ & $+0.049$ & $+0.159$ & $+0.030$ & $+0.159$ \\
-BS subscale & $+0.059$ & $-0.016$ & $+0.008$ & $-0.015$ & $+0.147$ \\
-\bottomrule
-\end{tabular}
-\caption{Phase~1 aggregates (330 measurements per model).}
-\label{tab:s1-aggregate}
-\end{table}
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-Structure & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-\multicolumn{6}{@{}l}{\emph{mean directional score} $\bar b$} \\
-Direct & $+0.083$ & $+0.048$ & $+0.132$ & $+0.002$ & $+0.245$ \\
-Descriptive & $+0.139$ & $+0.111$ & $+0.271$ & $+0.111$ & $+0.283$ \\
-Attribution & $+0.142$ & $+0.116$ & $+0.195$ & $+0.046$ & $+0.299$ \\
-Hypothetical & $+0.098$ & $+0.039$ & $+0.142$ & $-0.003$ & $+0.157$ \\
-Inversion & $-0.192$ & $-0.230$ & $-0.322$ & $-0.117$ & $-0.219$ \\
-\midrule
-\multicolumn{6}{@{}l}{\emph{mean} $\pyes$} \\
-Direct & 0.206 & 0.295 & 0.456 & 0.207 & 0.645 \\
-Descriptive & 0.298 & 0.358 & 0.650 & 0.388 & 0.667 \\
-Attribution & 0.310 & 0.334 & 0.503 & 0.216 & 0.630 \\
-Hypothetical & 0.224 & 0.250 & 0.400 & 0.188 & 0.560 \\
-Inversion & 0.403 & 0.440 & 0.628 & 0.254 & 0.424 \\
-\bottomrule
-\end{tabular}
-\caption{Mean bias score and mean $\pyes$ by prompt structure.}
-\label{tab:s1-structure}
-\end{table}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\linewidth]{s1-structure.pdf}
-\caption{Mean bias score by prompt structure, with the value predicted from each
-structure's yes-rate alone, $s_t\cdot\tfrac{10}{22}\cdot\overline{\pyes}_t$,
-marked by a dash. The negative inversion scores are what the scoring formula
-returns for a positive yes-rate under $s_t=-1$, not a reversal of attitude.}
-\label{fig:s1-structure}
-\end{figure}
-
-The first expectation of \cref{sec:s1-aims} also fails.
-\cref{tab:s1-structure} and \cref{fig:s1-structure} report the scores by
-prompt structure, and the inversion rows carry the opposite sign in every one
-of the five models, from $-0.117$ on Qwen-72B to $-0.322$ on Llama-11B. The
-four remaining structures agree in sign but not in size, spanning $+0.002$ to
-$+0.245$ on the direct form alone. A score that moves this much with the
-wording of a question it is meant to hold constant is measuring the wording as
-much as the attitude.
-
-The sign flip on inversion has a mechanical explanation that does not require
-the model to have changed its view. Agreement is scored through
-\cref{eq:bias}, where inversion carries $s_t=-1$, so a model answering yes at
-a similar rate to both the direct and the inverted form produces a positive
-score on one and a negative score on the other whatever it holds. Separating
-the two readings needs the answers to the two forms compared directly rather
-than through the index, which \cref{sec:disc-rq} returns to.
-
-One result from the development model did not replicate. The difference
-between the hostile and benevolent subscales on Llama-11B is $0.150$, which
-the progress seminar reported as the signal surviving the measurement fixes.
-Llama-90B gives $0.011$ on the same quantity, Qwen-72B $0.045$, Qwen-7B
-$0.065$ and Qwen-2B $-0.010$. The gap is a property of the 11B rather than of
-the Llama family or of the method, and it is recorded here as a development
-result that the production runs did not confirm.
 % \begin{plan}
 % \begin{itemize}
 %   \item Read $\ASIint$ in the light of \cref{prop:shift}: Llama-90B's $+0.153$
@@ -259,84 +424,7 @@ result that the production runs did not confirm.
 %         replicate.
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
-\section{Response style and polarity separation}\label{sec:s1-responsebias}
-
-The third expectation of \cref{sec:s1-aims} fails in the opposite direction
-from the one anticipated. \cref{tab:s1-ps} reports mean $\pyes$ separately for
-the sixteen items keyed towards sexism and the six keyed against, over the 264
-rows outside the inversion structure, and every model agrees more readily with
-the reverse-keyed items. Polarity separation is therefore negative throughout,
-running from $-0.006$ on Qwen-2B to $-0.188$ on Qwen-72B. On the item-level
-pattern, none of the five leans towards the attitudes the inventory measures.
-
-That this coexists with a positive $\ASIint$ in all five models is the exact
-situation \cref{prop:shift} describes. The index weights sixteen positively
-keyed items against six reverse-keyed ones, so the keying ratio alone converts
-a general willingness to agree into a positive score, and the item-level
-pattern has to be large enough to overcome that before it can show through.
-Llama-90B assents at $0.585$ and separates the two kinds of item by $-0.097$;
-the first of those numbers dominates the index and the second does not.
-
-Psychometrics has described this failure mode for decades in human samples,
-where acquiescence distorts a scale score in proportion to the share of items
-keyed in reverse \cite{baumgartner2001response}, and where reversed items
-bring their own systematic error from respondents who process them carelessly
-\cite{weijters2013reversed}. The present case is worse than the human one.
-A person's tendency to agree is a modest perturbation around a roughly
-balanced baseline, whereas a model's is a free parameter of its training:
-mean $\pyes$ runs from $0.199$ on Qwen-72B to $0.599$ on Llama-90B across the
-positively keyed rows alone. Tjuatja et al. \cite{tjuatja2024response} find
-that models tuned with human feedback diverge furthest from human response
-behaviour, and Dominguez-Olmedo et al. \cite{dominguez2024questioning} find
-survey answers governed by option position and label rather than by content.
-
-Polarity separation is the statistic that survives this, because
-\cref{prop:invariance} makes it invariant to any uniform shift in assent. By
-it the models rank differently again. Qwen-72B separates the two kinds of item
-$1.94$ times as sharply as Llama-90B, and Qwen-7B at $-0.157$ separates them
-more sharply than either Llama model, while Qwen-2B at $-0.006$ barely
-separates them at all. \cref{fig:s1-items} shows the item-level pattern behind
-the two largest models, with the group means marked so that $\PS$ is the
-horizontal gap between them.
-
-What this ranking does and does not say is worth stating precisely, because
-the quantity is easy to over-read. A large $|\PS|$ means the model
-distinguishes the two kinds of statement, not that it holds a more acceptable
-view of women; a model could separate them sharply and still sit anywhere on
-the scale of assent. Qwen-72B is not thereby shown to be less sexist than
-Llama-90B. It answers the inventory more discriminatingly while Llama-90B
-assents more uniformly, and \cref{sec:disc-rq} keeps those two properties
-apart.
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
- & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-$\overline{\pyes}$, positively keyed ($n=192$) & 0.258 & 0.266 & 0.472 & 0.199 & 0.599 \\
-$\overline{\pyes}$, reverse keyed ($n=72$) & 0.264 & 0.423 & 0.582 & 0.386 & 0.696 \\
-$\PS$ (\cref{eq:ps}, non-inversion rows) & $-0.006$ & $-0.157$ & $-0.110$ & $-0.188$ & $-0.097$ \\
-$\PS$, all rows (sensitivity) & $-0.000$ & $-0.111$ & $-0.069$ & $-0.149$ & $-0.064$ \\
-\bottomrule
-\end{tabular}
-\caption{Response style decomposition on non inversion rows. All five models
-agree more with the reverse keyed statements, yet all five have
-$\ASIint>0$.}
-\label{tab:s1-ps}
-\end{table}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\linewidth]{s1-items.pdf}
-\caption{Mean $\pyes$ per item over the 12 cells outside the inversion
-structure, for the largest model of each family, with items ordered by
-Llama-90B's value within each keying group. The three smaller models are left
-out because 22 items against five series cannot be read; their group means
-appear in \cref{tab:s1-ps}. Dashed lines mark the group means, so the polarity separation
-$\PS$ is the horizontal gap between them. Both models agree more readily with
-the six items keyed in reverse than with the sixteen keyed towards sexism.}
-\label{fig:s1-items}
-\end{figure}
 % \begin{plan}
 % Explain with \cref{prop:shift,prop:invariance} why a positive $\ASIint$ can come
 % from a model whose item-level pattern leans anti-sexist (16:6 keying, yes-rate
@@ -344,81 +432,7 @@ the six items keyed in reverse than with the sixteen keyed towards sexism.}
 % \cite{baumgartner2001response,weijters2013reversed} and to model-specific
 % response biases \cite{tjuatja2024response,dominguez2024questioning}.
 % \end{plan}
-
 % ---------------------------------------------------------------------
-\section{Statistical inference for polarity separation}\label{sec:s1-inference}
-
-A separation of $-0.188$ invites the question whether a separation that large
-could arise from keying labels that carry no information at all. The exact
-permutation test of \cref{eq:perm} answers it under the stated null
-exchangeability assumption, without a parametric model for $\pyes$, by
-enumerating all $\binom{22}{6}=74{,}613$ ways of
-assigning six reverse labels to the twenty two items and counting how many
-produce a statistic at least as extreme as the observed one.
-\cref{tab:s1-perm} gives the result for each model and \cref{fig:s1-perm}
-shows the observed value against the full null distribution.
-
-Two of the five separations are distinguishable from chance and three are not.
-Qwen-72B reaches $p=0.010$ and Qwen-7B $p=0.026$ under the unadjusted
-tests, while Llama-90B gives
-$p=0.196$, Llama-11B $p=0.341$ and Qwen-2B $p=0.862$. This revises a claim the
-earlier drafts of this work carried. Reading the separations alone suggested
-that both production models discriminate in the anti-sexist direction, and on
-this test only the Qwen models do, with Llama-90B's separation sitting well
-inside what random keying produces. These $p$ values are unadjusted across
-models; the Bonferroni correction reported for the face comparisons is not
-applied to this set of polarity tests.
-
-The reason the test is harsh is that its unit is the item. Each of the 22
-items is collapsed to its mean $\pyes$ over the twelve non-inversion cells
-before the labels are permuted, so the design has twenty two independent units
-however many prompts were run. Running 330 measurements per model buys
-precision within an item rather than more items. Treating the 264
-non-inversion rows as exchangeable would have produced far smaller $p$ values
-from the same data, and would have counted the five structures and three
-conditions as independent evidence about keying when they are not.
-
-Non-significance here is not evidence that a separation is absent. With
-twenty two items the test detects only a separation large relative to the
-spread of item means, so the right reading of Llama-90B's $p=0.196$ is that
-its separation of $-0.097$ is not large enough, against the variation among
-its own items, to be told apart from chance. Whether it would separate at a
-larger item count is a question this design cannot settle.
-
-The within-subscale rows of \cref{tab:s1-perm} are reported descriptively and
-are not tested. Splitting the inventory leaves eight positively keyed items
-against three reverse-keyed ones in each half, which is too thin for the same
-enumeration to mean anything. The pattern across the five models is not
-consistent either. The benevolent half separates more strongly than the
-hostile half on Llama-11B ($-0.300$ against $+0.081$) and on Qwen-7B
-($-0.246$ against $-0.068$), whereas Llama-90B shows the reverse ($-0.081$
-against $-0.113$).
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
- & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-Item-level $\PS$ & $-0.006$ & $-0.157$ & $-0.110$ & $-0.188$ & $-0.097$ \\
-Exact two-sided $p$ (\cref{eq:perm}) & 0.862 & 0.026 & 0.341 & 0.010 & 0.196 \\
-\midrule
-Within HS (8 vs 3 items) & $-0.038$ & $-0.068$ & $+0.081$ & $-0.101$ & $-0.113$ \\
-Within BS (8 vs 3 items) & $+0.026$ & $-0.246$ & $-0.300$ & $-0.275$ & $-0.081$ \\
-\bottomrule
-\end{tabular}
-\caption{Exact permutation test over all $\binom{22}{6}=74{,}613$ keying
-assignments, enumerated in full rather than sampled. Within-subscale values are
-descriptive only, since each subscale holds just three reverse-keyed items.}
-\label{tab:s1-perm}
-\end{table}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\linewidth]{s1-perm.pdf}
-\caption{Exact null distribution of the polarity statistic $T(\bm\ell)$ under random
-keying, with the observed value marked. Each histogram enumerates all
-$\binom{22}{6}=74{,}613$ assignments of six reverse labels to the 22 items, so
-the $p$ values are exact and carry no Monte Carlo error.}
-\label{fig:s1-perm}
-\end{figure}
 % \begin{plan}
 % \begin{itemize}
 %   \item \newanalysis{(A6) the permutation test promised in the proposal.
@@ -431,86 +445,7 @@ the $p$ values are exact and carry no Monte Carlo error.}
 %         no separation.
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
-\section{Replication and execution-path checks}\label{sec:s1-replication}
-
-Nothing above is worth reporting if the numbers are artefacts of how the runs
-were executed. The 90B is the model at risk, because it is the one that had to
-be sharded across three GPUs and so the one exposed to the fault of
-\cref{app:fault}. Two checks bound that risk, and \cref{tab:s1-replication}
-reports both against the corrected bf16 run.
-
-The first repeats the whole of Phase~1A on a different node. It agrees with
-the reference at $r=0.9996$ with a mean absolute difference in $\pyes$ of
-$0.0024$, and 220 of the 330 rows are bit-identical, which is what a
-deterministic forward pass should give when the arithmetic lands the same way.
-The second runs the 90B in 4-bit on a single GPU, which makes no copy between
-devices at all and therefore cannot be touched by the fault even in principle.
-It agrees less closely, at $r=0.767$ and a mean absolute difference of
-$0.148$, and moves $\ASIint$ from $+0.1530$ to $+0.1100$. That disagreement
-is the size \cref{tab:quant} predicts for a 4-bit variant, so it bounds the
-cost of quantisation rather than revealing a residual fault.
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-Rows kept & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-all 330 & 330 / +0.054 / -0.006 & 330 / +0.017 / -0.157 & 330 / +0.084 / -0.110 & 330 / +0.008 / -0.188 & 330 / +0.153 / -0.097 \\
-$\capm\ge0.1$ & 330 / +0.054 / -0.006 & 330 / +0.017 / -0.157 & 284 / +0.049 / -0.119 & 330 / +0.008 / -0.188 & 299 / +0.120 / -0.118 \\
-$\capm\ge0.3$ & 330 / +0.054 / -0.006 & 330 / +0.017 / -0.157 & 166 / +0.016 / -0.186 & 330 / +0.008 / -0.188 & 236 / +0.053 / -0.141 \\
-$\capm\ge0.5$ & 316 / +0.055 / +0.006 & 330 / +0.017 / -0.157 & 113 / +0.054 / -0.207 & 329 / +0.007 / -0.188 & 188 / +0.015 / -0.159 \\
-\bottomrule
-\end{tabular}
-\caption{Sensitivity to measurement coverage. Each cell gives the number of
-rows retained, $\ASIint$ and $\PS$ when Phase~1A is recomputed on rows at or
-above a captured mass threshold. The three Qwen models are unaffected because
-almost none of their rows fall below it.}
-\label{tab:s1-capmfilter}
-\end{table}
-
-A third check matters more than either, and it bears on the scores rather than
-on the hardware. \cref{sec:s1-quality} established that the Llama models hold
-only a fraction of their mass on the response set under an image, so the
-question is whether their aggregate scores depend on the rows where that
-fraction is smallest. \cref{tab:s1-capmfilter} recomputes $\ASIint$ and $\PS$
-on progressively better covered rows, and the answer for Llama-90B is that
-they do. Its index falls from $+0.153$ on all 330 rows to $+0.120$, $+0.053$ and
-$+0.015$ as the threshold rises to $0.1$, $0.3$ and $0.5$. On the 188 rows
-where it genuinely answers the question it scores close to Qwen-72B's
-$+0.007$ rather than twenty times above it.
-
-The separation moves the other way, and that is the more useful half of the
-result. On Llama-90B $\PS$ strengthens from $-0.097$ to $-0.159$ as coverage
-improves, and on Llama-11B from $-0.110$ to $-0.207$, so the anti-sexist
-item-level pattern of \cref{sec:s1-responsebias} is clearest exactly where
-the measurement is cleanest. The three Qwen models barely move on either
-quantity, which is expected, since almost none of their rows fall below any
-of these thresholds. Taken together the two columns say that Llama-90B's high
-index is carried by rows on which it was largely declining to answer, while
-its negative separation is not.
-
-\begin{table}[htbp]\centering\small
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
-\toprule
-Compared with the bf16 3-GPU run & Pearson $r$ & Spearman $\rho$ & Mean $|\Delta\pyes|$ & $\ASIint$ \\
-\midrule
-Independent rerun, different node (220/330 rows bit-identical) & 0.9996 & 0.9996 & 0.0024 & $+0.1527$ \\
-4-bit, single GPU (no cross-GPU copies)                  & 0.767  & 0.747  & 0.148  & $+0.1100$ \\
-\bottomrule
-\end{tabularx}
-\caption{Llama-90B Phase~1 replication (reference $\ASIint=+0.1530$).}
-\label{tab:s1-replication}
-\end{table}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\linewidth]{s1-replication.pdf}
-\caption{Llama-90B per-prompt $\pyes$ against two comparison runs. The independent rerun
-reproduces the reference almost exactly. The 4-bit single-GPU run, which makes
-no cross-GPU copy by construction and so cannot be affected by the fault of
-\cref{app:fault}, agrees less closely and bounds the cost of quantisation.}
-\label{fig:s1-replication}
-\end{figure}
 % \begin{plan}
 % \begin{itemize}
 %   \item These checks establish that the host-staged copy workaround
@@ -523,97 +458,7 @@ no cross-GPU copy by construction and so cannot be affected by the fault of
 %         should not depend on low-coverage rows.}
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
-\section{The gender gap on real faces}\label{sec:s1b-gap}
-
-Phase~1B asks the question the rest of the chapter cannot. Everything to this
-point measures what a model says about a person whose gender is never given,
-so it can show that a model assents or discriminates between item types, but
-not that it treats women and men differently. With a photograph supplying the
-gender, the difference between the 20 female and the 20 male face means is
-directly observable, and \cref{tab:s1b-gap} and \cref{fig:gap} report it.
-
-The benevolent half of the inventory carries a gender gap in every one of the
-five models. It runs $-0.0071$ on Qwen-2B, $+0.0185$ on Qwen-7B, $+0.0180$ on
-Llama-11B, $+0.0340$ on Llama-90B and $+0.0540$ on Qwen-72B, and four of the
-five clear the Bonferroni threshold of $p<0.01$ that testing five models
-requires. Llama-11B at $p=0.039$ is the exception, and its Cohen's $d$ of
-$0.68$ against the others' $0.97$ to $3.74$ is consistent with limited power
-in the sample, but does not establish
-that its population effect matches the other models. Apart from Qwen-2B, every gap points the
-same way: the benevolent items are attributed more readily to photographs of
-women than to photographs of men.
-
-The combined score hides this, which is the result's second half. Llama-90B
-scores $+0.0053$ overall at $p=0.622$, a result that does not reach the stated
-significance threshold, while its benevolent gap is $+0.0340$ at $p=0.003$.
-The two subscales
-move in opposite directions and partly cancel, since the hostile gap is
-negative in four of the five models, so scoring the inventory as a single
-number destroys the one effect in it that is statistically solid. Four of the
-five combined gaps do not reach the corrected threshold,
-compared with one of the five benevolent gaps.
-
-The hostile gaps are not claimed. None reaches the corrected threshold, the
-values run from $-0.0234$ to $+0.0051$ with $p$ from $0.041$ to $0.638$, and
-the direction is visible without being defensible. A scoring artefact also makes
-them harder to read than they look. \cref{eq:bias} multiplies $\pyes$ by item
-polarity, and Qwen-72B's hostile gap of $-0.0099$ splits into $+0.0018$ over
-the eight items keyed towards hostility and $-0.0409$ over the three keyed
-against it, so the sign of the whole comes from the reverse-coded minority.
-
-Expressed as yes-rates rather than as scores, the size of the effect is easier
-to judge. On the benevolent items stated in the sexist direction, with the
-inversion structure excluded, Llama-90B puts $0.627$ on yes for women's faces
-against $0.573$ for men's, and Qwen-72B $0.265$ against $0.185$. These are
-differences of five and eight points in how often a model assents to a
-statement such as that the person should be cherished and protected, depending
-only on whether the photograph shows a woman or a man.
-
-Two cautions attach to these numbers. The first is coverage: Llama-11B holds
-only $0.140$ of its mass on the response set across the 4,400 Phase~1B
-measurements and Llama-90B $0.479$, so both Llama gaps are computed on a
-minority of each model's behaviour, whereas Qwen-72B's $0.972$ is not. The
-second is scope: 20 faces a side detects an effect of about one standard
-deviation between faces and no smaller, and the faces come from one database,
-so these gaps describe these 40 photographs rather than photographs in
-general. \cref{sec:disc-threats} carries both forward.
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
- & Qwen-2B & Qwen-7B & Llama-11B & Qwen-72B & Llama-90B \\
-\midrule
-Combined $G_m$ & $-0.0010$ & $+0.0050$ & $+0.0067$ & $+0.0221$ & $+0.0053$ \\
-\quad $t$ test $p$ & 0.631 & 0.197 & 0.231 & $<0.001$ & 0.622 \\
-Benevolent $G_m$ & $-0.0071$ & $+0.0185$ & $+0.0180$ & $+0.0540$ & $+0.0340$ \\
-\quad $t$ test $p$ & 0.004 & 0.002 & 0.039 & $<0.001$ & 0.003 \\
-Hostile $G_m$ & $+0.0051$ & $-0.0084$ & $-0.0046$ & $-0.0099$ & $-0.0234$ \\
-\quad $t$ test $p$ & 0.166 & 0.050 & 0.638 & 0.041 & 0.116 \\
-\midrule
-Cohen's $d$ (benevolent) & $-0.97$ & $+1.06$ & $+0.68$ & $+3.74$ & $+0.99$ \\
-\bottomrule
-\end{tabular}
-\caption{Phase~1B gender gap by subscale, on 20 female against 20 male face
-means (\cref{eq:gap}). Testing five models puts the Bonferroni threshold at
-$p<0.01$, which the benevolent gap clears in four of the five; Llama-11B is
-the one case that does not reach this threshold. The combined score clears it only for Qwen-72B,
-because the two subscales move in opposite directions and partly cancel.}
-\label{tab:s1b-gap}
-\end{table}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\linewidth]{gap.pdf}
-\caption{Phase~1B gender gap by model and subscale, with the models ordered by
-parameter count. Each point is the difference between 20 female and 20 male
-face means (\cref{eq:gap}); bars are 95\% confidence intervals from the
-two sample $t$ test on those 40 face means. The benevolent gap is positive in
-four models and negative in Qwen-2B.
-Four benevolent gaps reach the corrected threshold; Llama-11B does not.
-The gap increases with parameter count within both evaluated families,
-while no hostile gap reaches the corrected threshold.}
-\label{fig:gap}
-\end{figure}
 % \begin{plan}
 % \begin{itemize}
 %   \item Lead with the result: $G_m^{\BS}$ runs $-0.0071$, $+0.0185$,
@@ -636,33 +481,7 @@ while no hostile gap reaches the corrected threshold.}
 %         which is why its gap does not survive correction.
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
-\section{Race, reported as exploratory}\label{sec:s1b-race}
-
-Race is stratified in the Phase~1B sample at five faces a cell, which is too
-thin to support an inferential claim, so what follows is descriptive and no
-test is applied to it. The design was powered for gender at 20 faces a side,
-and splitting the same 40 faces four ways leaves each race cell with a
-quarter of that.
-
-The per-race means are nonetheless worth recording, because on one model they
-are larger than the effect the study was built to measure. Llama-90B's mean
-bias score runs from $-0.0016$ on Black faces to $+0.0574$ on White faces, a
-spread of $0.0590$, while its gender gap on the same rows is $+0.0053$. The
-other four models are flatter, spanning $0.0029$ on Qwen-2B, $0.0084$ on
-Qwen-72B, $0.0135$ on Qwen-7B and $0.0208$ on Llama-11B. A spread that
-exceeds the measured gender effect by a factor of eleven on one model is a
-reason to run a study powered for race, not a result about race.
-
-Captured mass by cell was recorded for the same reason, since a model that
-declines more often for some demographics than others would make its own
-scores uneven in a way the means conceal. On Llama-90B it runs from $0.431$
-on Black female faces to $0.514$ on Asian female faces, a range of $0.083$
-around a mean of $0.479$, with no ordering that separates the cells cleanly
-by race or by gender. Nothing here suggests selective refusal, though five
-faces a cell could not establish its absence either.
-
 % ---------------------------------------------------------------------
 % \begin{plan}
 % Half a page. Five faces per race cell cannot support an inferential claim, so
@@ -674,39 +493,4 @@ faces a cell could not establish its absence either.
 % Also report $\capm$ by cell, since \cref{sec:design-phase1b} raises whether a
 % model refuses more for some demographics than others.
 % \end{plan}
-
 % ---------------------------------------------------------------------
-\section{Summary for RQ1}\label{sec:s1-summary}
-
-RQ1 asked what intrinsic baseline attitude the models hold when evaluated in a
-vacuum, and the chapter's answer is that the index the proposal defined for
-that purpose mostly measures something else. $\ASIint$ is dominated by how
-often a model says yes, because the inventory's sixteen to six keying converts
-assent into a positive score, and Llama-90B's residual of $-0.007$ leaves
-almost nothing of its $+0.153$ once that term is removed. Filtering to the
-rows the model actually answers takes the same index to $+0.015$.
-
-On a measure that response style cannot move, all five models lean the other
-way. Polarity separation is negative throughout, from $-0.006$ to $-0.188$,
-so each agrees more readily with the six anti-sexist items than with the
-sixteen keyed towards sexism. Only the two larger Qwen models separate the two
-kinds of item by more than the exact permutation test can attribute to chance,
-at $p=0.010$ and $p=0.026$, and with twenty two items that failure to reach
-significance is not evidence that the other three do not separate them.
-
-The ungendered probe of Phase~1A reaches its limit there, and Phase~1B passes
-it. With photographs supplying the gender, the benevolent items are attributed
-more readily to women in four models and to men in the smallest model.
-The positive gap reaches $+0.0540$ at
-$p<0.001$ on Qwen-72B, and four of the five gaps survive correction for
-testing five models. The combined ASI score conceals this entirely: on
-Llama-90B it reports $+0.0053$ at $p=0.622$ while the benevolent half gives
-$+0.0340$ at $p=0.003$.
-
-The most robust intrinsic result, though, is behavioural rather than
-attitudinal. Both Llama models move most of their probability off the response
-set whenever an image is present, including a grey rectangle carrying no
-content, while all three Qwen models are unaffected at every size from 2B to
-72B. That contrast needs no scoring formula, it holds across a forty five fold
-range of parameter count, and it sets the condition under which every
-attitudinal number above for the Llama models must be read.

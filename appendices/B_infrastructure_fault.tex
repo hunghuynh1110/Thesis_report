@@ -33,3 +33,43 @@ something that is not degenerate.}
 % for the 90B (captured mass 0.0000 $\to$ 0.5823; distinct values 4 $\to$ 330;
 % rows at exactly 0.5: 247 $\to$ 0; NaN: 59 $\to$ 0).
 % \end{plan}
+
+\section{Replication and execution comparisons}\label{sec:s1-replication}
+
+The corrected Llama-90B Phase~1A run was compared with an independent rerun
+and a quantised run confined to one GPU (\cref{tab:s1-replication}).
+The independent rerun reproduces the reference closely, with $r=0.9996$,
+a mean absolute difference in $\pyes$ of $0.0024$ and 220 of 330 rows
+bit-identical. This supports repeatability across the two evaluated nodes
+without establishing identical arithmetic under every possible configuration.
+
+The single-GPU 4-bit run avoids transfers between devices, but also changes
+numerical precision relative to the bf16 reference. Its correlation is
+$r=0.767$, with a mean absolute difference of $0.148$, and its aggregate
+score is $+0.1100$ compared with the reference $+0.1530$.
+The comparison therefore changes precision and execution configuration
+together, and cannot isolate a remaining transfer fault or attribute the
+whole difference to either factor. The controlled three-arm experiment
+in \cref{tab:app-fault} provides the more direct test of the workaround.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
+\toprule
+Compared with the bf16 3-GPU run & Pearson $r$ & Spearman $\rho$ & \makecell{Mean\\$|\Delta\pyes|$} & $\ASIint$ \\
+\midrule
+Independent rerun, different node (220/330 rows bit-identical) & 0.9996 & 0.9996 & 0.0024 & $+0.1527$ \\
+4-bit, single GPU (no cross-GPU copies)                  & 0.767  & 0.747  & 0.148  & $+0.1100$ \\
+\bottomrule
+\end{tabularx}
+\caption{Llama-90B Phase~1 replication (reference $\ASIint=+0.1530$).}
+\label{tab:s1-replication}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{s1-replication.pdf}
+\caption{Llama-90B per-prompt $\pyes$ against two comparison runs. The independent rerun
+reproduces the reference almost exactly. The 4-bit single-GPU run, which makes
+no cross-GPU copy by construction and so cannot be affected by the fault of
+\cref{app:fault}, agrees less closely, so quantisation and execution configuration cannot be
+separated by this comparison.}
+\label{fig:s1-replication}
+\end{figure}
