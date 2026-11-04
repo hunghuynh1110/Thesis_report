@@ -15,39 +15,36 @@
 
 % ---------------------------------------------------------------------
 \section{Setting and notation}\label{sec:framework-setting}
+
+Each measurement records the next-token distribution of model $m$ for a
+prompt $x$ and optional image $v$, evaluated at the final input position
+(\cref{eq:nexttoken}). No answer is sampled, so the measurements do not
+depend on decoding temperature or reply length. Differences between repeated
+runs can still arise from numerical execution, which is examined in
+\cref{sec:s1-replication}.
+
+The absence of an image is written $v=\varnothing$ and forms one experimental
+condition. The definitions below specify response probabilities, inventory
+scores and downstream ratings, followed by the checks used to assess their
+interpretation. Symbols are collected in \cref{tab:notation} for reference
+throughout the experimental chapters.
+
 % \begin{plan}
 % Half a page. A measurement is one forward pass of model $m$ on prompt $x$ and
 % image $v$; generation is never run. Everything is a function of the
 % final-position distribution $p(\cdot\mid x,v)$ in \cref{eq:nexttoken}. Point
 % to the notation table (\cref{tab:notation}).
 % \end{plan}
-
-A measurement in this thesis is one forward pass. Model $m$ receives a prompt
-$x$ and an image $v$, and what is recorded is the distribution
-over the next token, $p(\cdot\mid x,v)$ of \cref{eq:nexttoken}, evaluated at the final position of
-the prompt. No token is sampled and generation is never run. Every quantity
-defined below is a deterministic function of that single distribution, so a
-measurement has no decoding temperature, no sampling seed and no dependence on
-how long a reply would have been. Repeating a measurement on the same hardware
-reproduces it exactly, which is what makes the replication check of
-\cref{sec:s1-replication} meaningful: a disagreement between two runs is a fact
-about the machine, never about sampling.
-
-The same definitions apply when there is no image, written $v=\varnothing$.
-That case is a condition of the design rather than a special case of the
-mathematics, and the contrast between it and the image conditions carries much
-of the result in \cref{ch:study1}. Symbols are introduced once here and
-collected in \cref{tab:notation}.
-
 % ---------------------------------------------------------------------
+
 \section{The pooled binary probe and captured mass}\label{sec:framework-probe}
 
-The instrument for Study 1 is a binary probe. The model is shown a statement
-from the inventory and asked whether it agrees, and the reading is the
-probability it places on answering yes relative to the probability it places on
-answering no. Which tokens carry those two answers is a question about the
-tokeniser rather than about the model, and getting it wrong is the cheapest way
-to measure nothing at all.
+Study 1 uses binary prompts and pools alternative surface forms of each
+answer before calculating its probability. This accounts for surface-form
+competition \cite{holtzman2021surface}, where probability assigned to an
+answer is distributed across different spellings or capitalisations.
+The response sets are resolved through the model's tokeniser as described
+in \cref{sec:design-impl}.
 
 \begin{definition}[Pooled masses, captured mass and $\pyes$]\label{def:pooled}
 With $\Yset=\{\text{yes},\text{Yes},\text{YES}\}$ and
@@ -62,18 +59,30 @@ $\Nset=\{\text{no},\text{No},\text{NO}\}$,
 \end{align}
 \end{definition}
 
-\begin{remark}[The proposal's two-token softmax is a special case]
-With $\Yset=\{\text{yes}\}$ and $\Nset=\{\text{no}\}$, \cref{eq:pyes} reduces to
+\begin{remark}[Two-token special case]
+With $\Yset=\{\text{yes}\}$ and $\Nset=\{\text{no}\}$, the pooled
+probability reduces to the following expression because the full-vocabulary
+normalising constant cancels:
 \begin{equation}
   \pyes = \frac{\exp(z_{\text{yes}})}{\exp(z_{\text{yes}})+\exp(z_{\text{no}})},
   \label{eq:binary}
 \end{equation}
-the proposal's Eq.~3.1. The normalising constant of \cref{eq:nexttoken} cancels,
-so \cref{eq:binary} is the same whether the two tokens hold 99\% or 0.09\% of
-the distribution. That is why $\capm$ must be reported alongside every
-$\pyes$: it is the only quantity that says how much of the model's behaviour
-$\pyes$ describes.
+The ratio alone does not indicate how much probability the selected tokens
+capture, so $\capm$ must accompany its interpretation.
 \end{remark}
+
+The conditional probability $\pyes$ is defined when $\capm>0$; its logit
+form additionally requires $0<\pyes<1$. Low captured mass indicates that
+other continuations receive most of the probability, potentially including
+refusal, explanation or another response format. Captured mass therefore
+measures coverage without identifying which alternative behaviour accounts
+for the missing probability.
+
+Comparisons across conditions must consider both $\pyes$ and $\capm$,
+because similar conditional probabilities can represent very different
+fractions of the output distribution. \Cref{sec:s1-quality} reports the
+coverage comparisons, while \cref{sec:s1-sensitivity} examines their
+sensitivity to excluding low-coverage measurements.
 
 % \begin{plan}
 % \begin{itemize}
@@ -90,54 +99,15 @@ $\pyes$ describes.
 %         and are not directly comparable.
 % \end{itemize}
 % \end{plan}
-
-Pooling the three case variants is a response to competition between surface
-forms.
-Holtzman et al.\ \cite{holtzman2021surface} show that a model spreads
-probability across the surface forms of one answer, so any single string
-understates the answer it stands for. On the models audited here the effect is
-larger than that argument alone would suggest. A diagnostic sweep on
-Llama-11B (job 27103565) found that lowercase \texttt{yes} and \texttt{no}
-together hold $0.0877\%$ of the distribution over the next token, and that
-\texttt{No} is 457 times likelier than \texttt{no}. Reading only the lowercase
-pair overstated $\pyes$ by about $0.17$ across the inventory, which turned a
-mean yes rate of $0.527$ into a reported one of $0.68$. The acquiescence effect
-that followed was mostly an artefact of the probe. Pooling raises
-mean $\capm$ on the same model to $0.473$, a gain of roughly 500 times.
-
-Captured mass remains informative after the correction, because when it is low
-it is low for a reason. The probability that leaves $\Yset\cup\Nset$ goes to
-first tokens that begin some other kind of reply. In the same diagnostic the
-largest competitor was the token \texttt{I}, which took $0.4149$ on the first
-inventory item, and which is the model beginning ``I cannot determine\ldots''.
-A low $\capm$ directly records probability outside the requested response
-set. This can reflect refusal, explanatory text or another response format;
-captured mass alone does not distinguish these continuations. The quantity does two jobs
-at once: it is a validity statistic that bounds how much of the model's
-behaviour $\pyes$ describes, and it is an outcome in its own right
-(\cref{sec:s1-quality}).
-
-Doing two jobs has a consequence for every contrast in \cref{ch:study1}. Two
-$\pyes$ values measured under conditions with very different $\capm$ are
-conditional probabilities taken over different fractions of the model's
-behaviour, and comparing them directly is a category error. On Llama-11B,
-$\capm$ is $0.979$ with no image and $0.237$ with a grey patch, so the vision
-reading conditions on under a quarter of what the model would do while the text
-reading conditions on nearly all of it. Every comparison across conditions in
-this thesis carries $\capm$ beside it, and \cref{sec:s1-sensitivity} repeats the
-main contrasts on the subset of rows above a $\capm$ threshold.
-
 % ---------------------------------------------------------------------
+
 \section{Item scores and the intrinsic index}\label{sec:framework-asi}
 
-A single $\pyes$ says how far a model agrees with one statement, in one
-phrasing, under one image condition. Turning agreement into a bias score needs
-two signs, because agreeing with an item is not the same as endorsing sexism.
-Sixteen of the twenty two ASI items are written so that agreement indicates
-sexism and six are written so that agreement indicates its absence, which the
-item polarity $p_i$ encodes. One of the five prompt structures asks whether it
-would be incorrect to say the statement, where yes means disagreement with the
-item as written, which the structure sign $s_t$ encodes.
+The directional score combines the response probability with two signs:
+item polarity $p_i$ and prompt-structure sign $s_t$. Sixteen items are keyed
+so that agreement indicates sexism, while six are reverse-keyed.
+The inversion structure asks whether the statement would be incorrect,
+changing the interpretation of a yes response relative to the other prompts.
 
 \begin{definition}[Directional bias score and $\ASIint$]\label{def:asi}
 For item $i$ with keying $p_i\in\{+1,-1\}$, structure $t$ with sign
@@ -149,6 +119,18 @@ $s_t=-1$ for linguistic inversion and $+1$ otherwise, and condition $c$,
 \end{align}
 \end{definition}
 
+Scores for a particular structure, condition or subscale use the same rule,
+averaged over the relevant subset rather than the complete design.
+The hostile and benevolent subscales are reported separately because they
+represent distinct components of the original inventory \cite{glick1996asi}.
+The adaptation to trait phrases and photographs limits equivalence with
+that human instrument, as explained in \cref{sec:design-phase1}.
+
+These equations define the signed index used in the analysis, rather than
+guaranteeing an attitude interpretation. In particular, the sign reversal
+introduced by $s_t$ must be distinguished from a change in the model's
+agreement pattern.
+
 % \begin{plan}
 % Explain $s_t$ (``would it be incorrect to say \ldots?'' reverses the meaning of
 % \emph{yes}); mention that the proposal's Eq.~3.2 omitted $s_t$ and that the
@@ -156,37 +138,19 @@ $s_t=-1$ for linguistic inversion and $+1$ otherwise, and condition $c$,
 % Give the marginal versions used in Chapter~5 (by structure, condition,
 % subscale) as one line: replace the triple sum by a sum over the subset.
 % \end{plan}
-
-The structure sign is absent from the proposal's Eq.~3.2, and its absence was a
-live defect in the first implementation rather than a presentational slip. With
-every inversion row scored as though yes meant agreement, the smoke test
-returned $\ASIint=+0.6392$. Restoring $s_t$ brought the same pipeline to
-$+0.1251$ on the full run and moved the mean bias score on inversion rows to
-$-0.37$, which is the sign the structure requires. A factor of five in the
-headline number came from one missing coefficient, and nothing in the output
-looked wrong: the rows parsed, the aggregates were finite, and only inspection
-by structure exposed it. \cref{sec:design-faults} records the fault together with the
-later correction to the surface forms, which took the same model to $+0.084$.
-
-\cref{ch:study1} reports marginals of \cref{eq:asi} by prompt structure, by
-image condition and by ASI subscale. Each replaces the triple sum with a sum
-over the relevant subset of cells, divided by the size of that subset, and
-changes nothing else. The two subscale marginals carry most of the
-interpretation, since Glick and Fiske built the inventory to separate hostile
-from benevolent sexism \cite{glick1996asi}, and a model may well agree with one
-kind and refuse the other.
-
 % ---------------------------------------------------------------------
+
 \section{Response style, keying imbalance and polarity separation}
+
 \label{sec:framework-responsebias}
 
-An index built from agreement probabilities inherits whatever general tendency
-to agree the model has. Psychometrics calls that tendency acquiescence and
-defends against it by balancing the keying, so that agreeing with everything
-scores zero. The ASI is not balanced. Its ratio of sixteen to six was chosen
-for a human instrument, where acquiescence is weaker and the reverse items
-absorb part of it \cite{baumgartner2001response,weijters2013reversed}. For
-\cref{eq:asi} the imbalance has an exact and unwelcome consequence.
+A general tendency to agree can affect an index built from agreement
+probabilities, particularly when positive and reverse keying are unbalanced.
+Response-style effects and the limitations of reverse-keyed items are
+discussed in the questionnaire literature
+\cite{baumgartner2001response,weijters2013reversed}. The following identity
+separates a uniform agreement contribution from the remaining variation in
+the present scoring rule.
 
 \begin{proposition}[Response-style decomposition of $\ASIint$]\label{prop:shift}
 Let $\bar p$ be the mean of $\pyes$ over all $22\times5\times3$ cells and
@@ -207,50 +171,17 @@ the mean of $s_t p_i$ factorises into the mean of $s_t$ over structures
 ($(4-1)/5$) times the mean of $p_i$ over items ($(16-6)/22$).
 \end{proof}
 
-% \begin{plan}[Why this matters --- and numbers to quote]
-% \begin{itemize}
-%   \item The zero point of $\ASIint$ is not ``no attitude'': an indifferent
-%         model ($\bar p=0.5$) scores $0.136$.
-%   \item \newanalysis{(A9) apply \cref{eq:decomp} to every model. Preliminary
-%         (from the ledger means): Llama-90B $\tfrac{3}{11}\cdot0.5851=0.160$
-%         vs observed $0.153$, so $D\approx-0.007$; Qwen-72B
-%         $0.068$ vs $0.008$, $D\approx-0.061$; Llama-11B $0.144$ vs $0.084$,
-%         $D\approx-0.060$. Llama-90B's headline score is almost entirely its
-%         yes-rate. Why run it: it turns the thesis-plan's verbal argument into
-%         an exact identity.}
-%   \item Link to the psychometric literature on acquiescence with unbalanced
-%         keying \cite{baumgartner2001response,weijters2013reversed}.
-% \end{itemize}
-% \end{plan}
+A model assigning yes-probability $0.5$ uniformly to every prompt would
+therefore score $\tfrac{3}{11}\times0.5=0.136$, despite showing no
+item discrimination. A positive index alone consequently cannot distinguish
+agreement style from the responses associated with item content.
+The residual $D$ is obtained by subtracting the assent contribution from
+$\ASIint$; its observed values are reported in \cref{sec:s1-aggregate}.
 
-The proposition fixes the zero point of the index, and it is not where reading
-the name would suggest. A model that answers yes with probability $0.5$ to
-every prompt, and so carries no information about any item, scores
-$\tfrac{3}{11}\times0.5=0.136$. Treating a positive $\ASIint$ as evidence of a
-sexist disposition is therefore unsafe without the second term of
-\cref{eq:decomp}, which is the only part of the index that depends on which
-item was asked. Because the decomposition is an identity and every run has a
-complete set of 330 cells with no missing $\pyes$, $D$ follows from two ledger
-quantities by subtraction.
-
-Separating the two terms changes the comparison among the three models
-discussed here. For Llama-90B,
-$\tfrac{3}{11}$ of its mean $\pyes$ of $0.585$ gives $0.160$ against an
-observed $\ASIint$ of $0.153$, so $D=-0.007$ and the headline score is its yes
-rate almost exactly. Qwen-72B gives $0.068$ against $0.008$, and Llama-11B
-$0.144$ against $0.084$, so both have $D\approx-0.060$, nearly ten times
-larger. The model with the highest intrinsic score is the one whose score is
-most nearly an artefact of how often it says yes, and the two models with the
-lower scores are the ones whose answers vary with the item.
-
-A statistic that does not move with response style is the alternative, and
-subtracting a separate baseline for each prompt structure is one way to get
-one. Calibration work on
-classification with language models reaches the same place from a different
-direction: a constant preference for one answer token can be removed without
-touching the contrasts that matter \cite{zhao2021calibrate}. The construction
-below removes it by differencing within the measurement instead of estimating
-it separately.
+Polarity separation instead compares the mean agreement probabilities of
+the two keying groups. Its construction addresses uniform shifts in agreement,
+complementing calibration approaches that account for answer-token priors
+\cite{zhao2021calibrate}.
 
 \begin{definition}[Polarity separation]\label{def:ps}
 On the rows outside the inversion structure ($t\neq$ inversion), where
@@ -273,6 +204,34 @@ is unchanged by a uniform log-odds offset $\logit\pyes\mapsto\logit\pyes+\beta$
 Both are differences of two means over the same rows; the constant cancels.
 \end{proof}
 
+The probability-shift result applies where the shifted values remain valid
+probabilities, while the log-odds result concerns probabilities strictly
+between zero and one. These properties address specific uniform response
+effects, rather than every possible dependence on prompt or item wording.
+
+The primary $\PS$ excludes inversion prompts because yes denotes agreement
+with the item only in the other four structures. Including all structures
+mixes responses with different meanings; the all-row value is retained as
+a sensitivity comparison in \cref{tab:s1-ps}. The log-odds form states the
+corresponding invariance property, while the reported primary comparison
+uses probability-scale separation. Neither form alone establishes that a
+model holds attitudes equivalent to those measured in human respondents.
+
+% \begin{plan}[Why this matters --- and numbers to quote]
+% \begin{itemize}
+%   \item The zero point of $\ASIint$ is not ``no attitude'': an indifferent
+%         model ($\bar p=0.5$) scores $0.136$.
+%   \item \newanalysis{(A9) apply \cref{eq:decomp} to every model. Preliminary
+%         (from the ledger means): Llama-90B $\tfrac{3}{11}\cdot0.5851=0.160$
+%         vs observed $0.153$, so $D\approx-0.007$; Qwen-72B
+%         $0.068$ vs $0.008$, $D\approx-0.061$; Llama-11B $0.144$ vs $0.084$,
+%         $D\approx-0.060$. Llama-90B's headline score is almost entirely its
+%         yes-rate. Why run it: it turns the thesis-plan's verbal argument into
+%         an exact identity.}
+%   \item Link to the psychometric literature on acquiescence with unbalanced
+%         keying \cite{baumgartner2001response,weijters2013reversed}.
+% \end{itemize}
+% \end{plan}
 % \begin{plan}
 % \begin{itemize}
 %   \item \decision{(D3) the August draft used two different definitions
@@ -286,29 +245,34 @@ Both are differences of two means over the same rows; the constant cancels.
 %         rows as $1-\pyes$.
 % \end{itemize}
 % \end{plan}
-
-Inversion rows are left out of \cref{eq:ps} because the meaning of yes flips on
-them, so a difference taken across all five structures mixes two opposite
-quantities and shrinks towards zero. An earlier draft of this work defined
-$\PS$ both ways in different places, and the choice is not cosmetic: on the
-four structures where yes means agreement the separation on Qwen-72B is
-$-0.188$, while over all five it is $-0.150$. This thesis takes
-\cref{eq:ps} on those four structures as primary, and reports $\PS_{\logit}$,
-the version over all five structures, and a variant that scores inversion rows
-as $1-\pyes$, as sensitivity checks in \cref{ch:study1}.
-
-All three models in this comparison separate the two kinds of item in the
-same direction and none
-separates them towards sexism. The measured values are $-0.110$ on Llama-11B,
-$-0.097$ on Llama-90B and $-0.188$ on Qwen-72B, so each agrees more readily
-with the six reverse items than with the sixteen keyed towards sexism. Qwen
-separates them about $1.9$ times as sharply as Llama-90B. That ratio describes
-how finely a model distinguishes the two kinds of statement, which is a
-different property from how strongly it leans towards either, and
-\cref{sec:disc-rq} keeps the two apart.
-
 % ---------------------------------------------------------------------
+
 \section{Exact permutation inference for polarity}\label{sec:framework-perm}
+
+The permutation test evaluates whether the observed polarity separation is
+unusual under a null in which item-keying labels are exchangeable with
+respect to item agreement \cite{ernst2004permutation}. Six reverse labels
+are assigned among 22 items in every possible way, producing
+$\binom{22}{6}=74{,}613$ values of the statistic.
+
+\begin{equation}
+  T(\bm\ell) = \frac{1}{16}\sum_{i:\ell_i=+1}\bar p_i - \frac{1}{6}\sum_{i:\ell_i=-1}\bar p_i,
+  \qquad
+  p = \frac{1}{\binom{22}{6}}\sum_{\bm\ell\in\Lambda}\ind{|T(\bm\ell)|\ge|T(\bm\ell_{\text{obs}})|},
+  \label{eq:perm}
+\end{equation}
+
+Here $\bar p_i$ is item $i$'s mean $\pyes$ over the 12 non-inversion
+cells, and $\Lambda$ contains all assignments with six reverse labels.
+The test is two-sided, with direction read separately from the observed
+statistic. Full enumeration removes Monte Carlo error but retains the
+exchangeability assumption; it does not make the test assumption-free.
+
+The item is the unit of permutation, so repeated prompts do not increase
+the number of inventory items available for inference. The five model-wise
+polarity tests are reported without adjustment across models in
+\cref{sec:s1-inference}, separately from the corrected face comparisons.
+
 % \begin{plan}
 % Planned final content: the test statistic and exact $p$-value below. Explain
 % exchangeability: under $H_0$ the keying labels carry no information about the
@@ -318,47 +282,13 @@ different property from how strongly it leans towards either, and
 % Monte Carlo error). This is the ``permutation test'' promised in proposal
 % \S3.2.5.
 % \end{plan}
-
-$\PS$ is a difference between two means taken over sixteen items and six, and
-its behaviour under the null hypothesis can be worked out exactly rather than
-approximated. Under $H_0$ the keying of an item says nothing about how strongly
-the model agrees with it, so any assignment of six reverse labels to the twenty
-two items is as likely as the observed one \cite{ernst2004permutation}.
-Enumerating all of them gives $\binom{22}{6}=74{,}613$ values of the test
-statistic, few enough to compute in full. The $p$ value is then a count over
-that set, with no Monte Carlo error. It requires the stated exchangeability
-assumption, but not a parametric distribution for $\pyes$.
-
-\begin{equation}
-  T(\bm\ell) = \frac{1}{16}\sum_{i:\ell_i=+1}\bar p_i - \frac{1}{6}\sum_{i:\ell_i=-1}\bar p_i,
-  \qquad
-  p = \frac{1}{\binom{22}{6}}\sum_{\bm\ell\in\Lambda}\ind{|T(\bm\ell)|\ge|T(\bm\ell_{\text{obs}})|},
-  \label{eq:perm}
-\end{equation}
-where $\bar p_i$ is item $i$'s mean $\pyes$ over the 12 cells outside the
-inversion structure and $\Lambda$ is the set of all labellings with six items
-keyed in reverse.
-
-Two features of \cref{eq:perm} are worth stating plainly. The test is two
-sided, because a model that agreed more with the reverse items would be as
-informative about the inventory's structure as one that agreed more with the
-others, and the sign is read off $T(\bm\ell_{\text{obs}})$ separately. The unit
-of permutation is the item, so the test has twenty two units of information
-however many prompts were run. Collapsing each item to its mean $\bar p_i$ over
-twelve cells avoids treating repeated measurements as independent items.
-Exchangeability of the keying labels remains an assumption of the null model.
-This is the test promised in
-\S3.2.5 of the proposal, and it is the inferential basis for every claim
-\cref{ch:study1} makes about keying.
-
 % ---------------------------------------------------------------------
+
 \section{The gender gap on real faces}\label{sec:framework-gap}
 
-Phase~1A measures agreement about a person the model is told nothing about, so
-it cannot separate a model that treats women and men alike from one that was
-never given a gender to respond to. Phase~1B supplies the gender in the image
-(\cref{sec:design-phase1b}), and the quantity of interest is the difference
-between the two halves of the face sample.
+Phase~1B compares responses to female and male photographs, with the face
+as the unit of analysis. The gender gap is defined from each face's mean
+score, permitting separate comparisons for the full inventory and its subscales.
 
 \begin{definition}[Gender gap]\label{def:gap}
 For model $m$ let $\Fset$ and $\Mset$ be the sets of 20 female and 20 male
@@ -375,42 +305,38 @@ readily to women than to men. The same quantity restricted to the eleven
 benevolent or the eleven hostile items is written $G_m^{\BS}$ and $G_m^{\HS}$.
 \end{definition}
 
-The averaging in \cref{eq:gap} is not a convenience, and getting it wrong is
-the easiest way to manufacture significance in this design. A face is shown
-110 prompts, so the 4,400 rows of a run are 40 clusters of 110 rather than
-4,400 independent observations. Collapsing each face to $\bar b_\phi$ before
-any comparison makes the face the unit of analysis, which leaves 20 numbers on
-each side however many prompts were run. Treating the rows as independent would
-divide the standard error by roughly $\sqrt{110}$ and turn a null result into a
-decisive one.
+The 4,400 measurements form 40 face-level clusters of 110 prompts, rather
+than 4,400 independent observations. Averaging within each face leaves
+20 observations per group and avoids treating repeated prompts as additional
+faces. Subscale comparisons similarly average the relevant items and prompt
+structures within each face before testing the group difference.
 
-Inference is a two sample $t$ test on those 40 face means, and the effect size
-is reported with it as
-$d = G_m / \sqrt{\tfrac12(s^2_{\Fset}+s^2_{\Mset})}$. Because five models are
-tested, a Bonferroni correction at $\alpha=0.05$ requires $p<0.01$ for a
-result to count, and \cref{sec:s1b-gap} marks which gaps clear that line.
-Power is bounded by the 20 faces a side rather than by the measurement count,
-and \cref{sec:disc-threats} states the consequence: the design is sensitive to
-effects of about one standard deviation between faces and no smaller.
+Inference uses a two-sample $t$ test on the face means.
+The implementation uses the pooled-variance form, assuming independent faces
+and equal population variances, with the usual normality assumption for
+the parametric test. The reported effect size is calculated as
+$d=G_m/\sqrt{\tfrac12(s^2_{\Fset}+s^2_{\Mset})}$, using the within-group
+sample variances.
+For comparisons across five models, Bonferroni adjustment at $\alpha=0.05$
+gives the reported threshold $p<0.01$. The sample limits the detectable
+effect sizes, as discussed in \cref{sec:disc-threats}.
 
-One property of \cref{eq:gap} matters for how the result is read. The item
-polarity $p_i$ in \cref{eq:bias} enters $G_m$ with the same sign for both
-halves of the sample, so $G_m$ inherits the subscale structure of the
-inventory. Should the two subscales move in opposite directions, their gaps
-partly cancel in the combined score, and a model with a real gap on one half
-can report a combined gap near zero. \cref{sec:s1b-gap} reports $G_m^{\BS}$ and
-$G_m^{\HS}$ beside $G_m$ for that reason, rather than treating the combined
-number as the headline.
+A positive gap describes a higher signed inventory score for female
+photographs, rather than higher raw agreement with every item. Opposing
+hostile and benevolent gaps can partly offset in the combined score,
+which is why \cref{sec:s1b-gap} reports both subscales alongside $G_m$.
+Coverage is also reported because each score is conditional on the intended
+response set.
 
 % ---------------------------------------------------------------------
+
 \section{Ratings on a scale from 1 to 7}\label{sec:framework-ratings}
 
-Study 2 asks a different question of the model and reads a different part of
-the distribution. The model is shown a grid of image search results for a query
-and asked to rate how objective the grid is on a scale from 1 to 7, which is
-the task the SIGIR 2018 participants performed \cite{otterbacher2018sigir}. The
-target tokens are the seven digits, and the same two quantities are recorded as
-for the binary probe: how much mass they hold, and where within them it sits.
+Study 2 asks the model to rate an individual image search result from
+1 to 7, using the seven digits as the response set. Human participants
+in the original study rated complete grids \cite{otterbacher2018sigir};
+the model ratings are averaged by query for comparison, rather than treated
+as identical observations of the human task.
 
 \begin{align}
   \capm_{\Dset} &= \sum_{d=1}^{7} p(d\mid x,v), \qquad
@@ -419,53 +345,41 @@ for the binary probe: how much mass they hold, and where within them it sits.
                           8-\rexp & \text{reversed order (7 = extremely subjective)}\end{cases}
   \label{eq:rnorm}
 \end{align}
+
+The expected rating uses the complete conditional digit distribution,
+retaining differences that an argmax rating would discard. Captured mass
+$\capm_{\Dset}$ records the probability represented by that expectation,
+which is defined when the digit mass is positive. The original and reversed
+scales are mapped to the same orientation through \cref{eq:rnorm}.
+The assistant prefill and tokenisation needed to read the intended digit
+position are specified in \cref{sec:design-impl}.
+
+Normalisation permits comparison between the orientations but does not
+ensure that averaging them preserves the intended judgement. The null
+relationship below illustrates the consequence of returning the same raw
+rating under both scale definitions.
+
 % \begin{plan}
 % Explain why the expectation rather than the argmax (continuous, uses the whole
 % digit distribution; argmax is stored as a check). The digits are single tokens
 % only without a leading space, which is why ``Rating:\,'' is prefilled with a
 % trailing space in the assistant turn (\cref{sec:design-impl}).
 % \end{plan}
-
-\cref{eq:rexp} takes the expectation over the seven digits rather than the most
-likely digit. The expectation is continuous, so a model that splits its mass
-between 3 and 4 is recorded between them rather than rounded to whichever is
-marginally ahead. It also uses the whole digit distribution, which is the
-reason for reading logits in the first place. The most likely digit is stored
-alongside as a consistency check and is never the dependent variable.
-
-A tokenisation detail decides whether any of this works. In the Llama and Qwen
-vocabularies a digit preceded by a space is a different token from the bare
-digit. A probe that reads the bare digits while the model is about to emit the
-spaced ones measures a vocabulary entry the model will not produce.
-The assistant turn is prefilled with \texttt{Rating:} and a trailing space, so
-that the next token is the bare digit (\cref{sec:design-impl}). An earlier run
-without the trailing space is retained in the fault register as evidence of
-what the omission costs.
-
-\cref{eq:rnorm} exists because the CALM manipulation of \cref{sec:framework-calm}
-reverses the anchors, so that 7 means extremely subjective rather than
-extremely objective. Mapping both orders onto the original orientation is what
-allows the two to be averaged or differenced at all. It also builds in a trap,
-since a model that ignores the stated anchors entirely produces two readings
-that normalise to values symmetric about 4, and \cref{prop:null} works out what
-that does to the extrinsic metric.
-
 % ---------------------------------------------------------------------
+
 \section{Extrinsic deviation from human baselines}\label{sec:framework-extrinsic}
 
-The extrinsic metric compares a model's rating against a human one on the same
-stimulus. For each of the ten SIGIR queries, $\rlow$ is the mean objectivity
-rating given to that query's result grid by the participants who scored lowest
-on the ASI. The ten baselines run from $4.70$ to $6.36$ with a mean of $5.280$,
-so the least sexist human raters judged these grids towards the objective end
-of the scale rather than at its centre.
+For each query $q$, $\rlow$ is the mean grid rating among human participants
+at or below the median total ASI score. The model comparison uses the
+mean original-order rating across the first nine images for each query.
+The original orientation matches the direction used by human participants,
+while the reversed orientation provides a robustness check.
 
 \begin{equation}
   \dm = \frac{1}{|Q|\,k}\sum_{q\in Q}\sum_{j=1}^{k}\Big(\rnorm^{\,\text{orig}}_{m,q,j}-\rlow\Big),
   \qquad |Q|=10,\; k=9.
   \label{eq:deltam}
 \end{equation}
-
 \begin{proposition}[Anchor-insensitivity null]\label{prop:null}
 If a model ignores the stated anchors, so that $\rexp^{\,\text{rev}}=\rexp^{\,\text{orig}}$,
 then the order-averaged normalised rating is exactly 4 and the order-averaged
@@ -475,6 +389,40 @@ null equals $4-5.280=-1.280$.
 \begin{proof}
 $\tfrac12\big(\rexp + (8-\rexp)\big)=4$ for every $\rexp$.
 \end{proof}
+
+The null shows how order averaging can produce a value determined by
+anchor insensitivity, rather than a stable judgement of the search results.
+\Cref{sec:s2-deviation} therefore uses original-order deviation as primary
+and reports alternative definitions for comparison. A negative $\dm$
+indicates lower perceived objectivity than the selected human baseline;
+a positive value indicates higher perceived objectivity.
+
+The 2018 association concerns benevolent sexism and reduced recognition of
+bias in particular grids \cite{otterbacher2018sigir}. The total-ASI split
+and individual-image task used here differ from that comparison, so the sign
+of $\dm$ does not establish that a model is more or less sexist than the
+human group.
+
+The following position index defines a possible extension using both low
+and high ASI baselines, where $\rhigh$ denotes the latter group:
+
+\begin{equation}
+  \lambda_{m,q} = \frac{\bar{\rnorm}_{m,q}-\rlow}{\rhigh-\rlow}
+  \qquad (\lambda=0:\ \text{like low-ASI humans};\ \lambda=1:\ \text{like high-ASI humans})
+  \label{eq:lambda}
+\end{equation}
+
+This index is defined but not calculated in the delivered analysis.
+A small difference between human baselines makes it unstable, and a zero
+difference leaves the index undefined. Values outside $[0,1]$ indicate
+ratings beyond the two group means rather than invalid values to be clipped.
+
+The cross-model comparison reports Spearman correlation between $\ASIint$
+and original-order $\dm$. Its two-sided reference calculation enumerates
+all $5!=120$ pairings of their model ranks, counting absolute correlations
+at least as large as the observed value. This assumes exchangeable pairings,
+which family dependence limits; \cref{sec:s2-deviation} therefore treats
+the comparison as descriptive.
 
 % \begin{plan}
 % \begin{itemize}
@@ -500,59 +448,14 @@ $\tfrac12\big(\rexp + (8-\rexp)\big)=4$ for every $\rexp$.
 %         $\rhigh-\rlow$.}
 % \end{itemize}
 % \end{plan}
-
-\cref{prop:null} is the reason \cref{eq:deltam} reads only the ratings taken
-in the original order. Averaging the two CALM orders, as the pipeline does by default, folds the
-null into the measurement: Llama-90B's deviation averaged over both orders is
-$-1.203$ against a null of $-1.280$, a gap of $0.077$ on a scale of seven
-points. Taken at face value that is a model sitting far below the human
-baseline, and taken against the null it is a model close to ignoring the
-anchors altogether. The two readings support opposite conclusions from the same
-number, so \cref{ch:study2} reports the original order as primary and gives two
-sensitivity versions beside it, one averaged over the two orders and one with
-the null subtracted. The null is also not one
-number across queries, since it is $4-\rlow$ by query and runs from $-0.70$ to
-$-2.36$ over the ten.
-
-The sign of $\dm$ does not say on its own which direction means greater bias,
-and the proposal's reading of it needs care. Otterbacher et al.\
-\cite{otterbacher2018sigir} found that participants scoring higher on the ASI
-were less likely to judge a biased grid as lacking objectivity, which is to
-say they rated such grids higher. A model that rates below the baseline of the
-least sexist participants is therefore further from the sexist end of the human
-range rather than closer to it. This
-thesis reports $\dm$ with its sign and states the direction of each comparison
-in words wherever it is used, rather than relying on a convention the source
-study does not support.
-
-\begin{equation}
-  \lambda_{m,q} = \frac{\bar{\rnorm}_{m,q}-\rlow}{\rhigh-\rlow}
-  \qquad (\lambda=0:\ \text{like low-ASI humans};\ \lambda=1:\ \text{like high-ASI humans})
-  \label{eq:lambda}
-\end{equation}
-
-\cref{eq:lambda} is the most direct form RQ2 can take: it places a model on the
-axis between the two human groups instead of measuring its distance from one of
-them. The index is not computed in the delivered analysis. The raw SIGIR
-participant responses used for the low ASI baseline also permit construction
-of the high ASI baseline, but that comparison was not included. Two properties
-of \cref{eq:lambda} also
-need guarding before it is used. The denominator $\rhigh-\rlow$ is small for
-queries on which the two human groups agreed, which makes $\lambda$ unstable
-there. The index is also unbounded, so a model outside the human range returns
-a value below 0 or above 1 that must be reported rather than clipped.
-\cref{sec:disc-threats} states the omission as a limitation.
-
 % ---------------------------------------------------------------------
+
 \section{Robustness under scale reversal (CALM)}\label{sec:framework-calm}
 
-Order and position effects are among the better documented failures of language
-models used as judges, and a judge whose verdict depends on how the options were
-arranged is not measuring the thing it was asked about \cite{ye2025justice}.
-The CALM manipulation applies that test to the rating scale. Each stimulus is
-rated twice, once with 7 as extremely objective and once with 7 as extremely
-subjective, and a model with a view about the image should give the same
-normalised rating either way.
+The scale reversal test adapts CALM's use of judgement-preserving
+perturbations \cite{ye2025justice}. Each input is rated under both scale
+orientations, and the normalised ratings are compared within pairs.
+Let $D_c$ denote the set of image-query pairs recorded in condition $c$.
 
 \begin{align}
   \RR_c(\tau) &= \frac{1}{|D_c|}\sum_{(q,j)\in D_c}
@@ -560,6 +463,30 @@ normalised rating either way.
   \label{eq:rr}\\
   \dRR(\tau) &= \RR_{\text{vision}}(\tau)-\RR_{\text{text}}(\tau). \label{eq:drr}
 \end{align}
+
+The primary tolerance $\tau=0.5$ permits a difference of at most half
+a scale point; $0.25$ and $1$ provide sensitivity comparisons.
+A negative $\dRR$ indicates lower robustness in the image condition,
+although differences in referent wording prevent isolating visual input
+as the sole cause. CALM consistency rate concerns repeated unperturbed
+judgements and is not separately reported here.
+
+Without images, the prompt is fixed by query and scale orientation,
+so the 90 recorded pairs contain ten distinct query-level pairs repeated
+nine times. Uncertainty therefore uses a cluster bootstrap over queries
+\cite{field2007bootstrapping,efron1993bootstrap}, drawing $B=10{,}000$
+resamples and reporting the 2.5th and 97.5th percentiles of $\dRR$.
+The figures and tables use these same ledger intervals rather than
+independently drawing new resamples.
+
+A regression of raw reversed ratings on raw original ratings supplies
+a complementary anchor diagnostic. Exact reversal requires $y=8-x$,
+with slope $-1$ and intercept 8, while unchanged raw ratings follow
+$y=x$, with slope $+1$ and intercept zero. The fitted slope $\beta_1$
+describes the direction of this relationship, but slope alone does not
+establish agreement for individual pairs. \Cref{sec:s2-anchor} reports
+the diagnostic alongside the robustness rate.
+
 % \begin{plan}
 % \begin{itemize}
 %   \item $\tau=0.5$ (both ratings round to the same scale point). Report
@@ -582,52 +509,14 @@ normalised rating either way.
 %         collapses (\cref{sec:s2-calm}).
 % \end{itemize}
 % \end{plan}
-
-The primary tolerance is $\tau=0.5$, which counts a pair as robust when its
-normalised ratings differ by at most half a scale point. Values of $0.25$ and $1$ are
-reported as a sensitivity table in \cref{ch:study2}, since the choice of
-$\tau$ fixes how much drift counts as agreement and no single value is
-principled.
-
-CALM distinguishes robustness rate from consistency rate $\CR$. Robustness
-compares judgements before and after a perturbation, while consistency compares
-repeated judgements under identical, unperturbed conditions. This thesis
-reports robustness under scale reversal and does not separately report
-consistency rate. With deterministic forward passes, repeated identical
-inputs primarily check execution reproducibility. The number of scale orders
-does not prevent such a consistency check.
-
-Where there is no image the input is fixed by the query and the order alone. The
-90 pairs in that condition are 10 distinct pairs each measured nine times, so
-$\RR_{\text{text}}$ is a mean of ten indicators wearing the appearance of
-ninety. Treating the 90 as independent would narrow the interval on $\dRR$ by
-about a factor of three, since the standard error of a mean falls with the
-square root of the number of independent units. Inference therefore resamples
-queries rather than rows: the cluster bootstrap
-\cite{field2007bootstrapping,efron1993bootstrap} draws $B=10{,}000$ resamples
-of the ten queries, recomputes $\dRR$ on each, and reports the 2.5th and 97.5th
-percentiles.
-
-$\RR$ measures pairwise agreement under scale reversal. A regression of the
-raw ratings provides a complementary description of their relationship. Let
-$\beta_1$ be the slope of
-$\rexp^{\,\text{rev}}$ on $\rexp^{\,\text{orig}}$ across pairs. A model that
-follows the reversed anchors as instructed gives $\beta_1=-1$, because
-reversing the scale should reverse the raw digit; a model that ignores the
-anchors and answers the same digit regardless gives $\beta_1=+1$. These slopes
-describe ideal relationships only when their intercepts also
-match the corresponding transformations. The slope alone does not establish
-exact anchor following or ignoring. \cref{eq:rr} measures agreement directly,
-while \cref{sec:s2-calm} uses the regression as a descriptive diagnostic.
-
 % ---------------------------------------------------------------------
+
 \section{Validity statistics and degeneracy}\label{sec:framework-validity}
 
-A measurement can be arithmetically sound and carry no information about its
-input. Reading logits makes this failure easy to produce and easy to miss,
-because a degenerate distribution still yields finite numbers that aggregate
-cleanly. The following proposition describes the shape such a failure takes in
-a transformer, and it is not hypothetical.
+A finite probability ratio can remain numerically plausible even when
+the model output carries little information about its input. The following
+proposition gives one identifiable form of output degeneracy under the
+stated architectural assumptions.
 
 \begin{proposition}[Zero hidden state gives the uniform distribution]\label{prop:uniform}
 With $\RMSNorm(\bm h)=\bm g\odot\bm h/\sqrt{\tfrac1d\lVert\bm h\rVert_2^2+\epsilon}$
@@ -641,30 +530,28 @@ $\RMSNorm(\bm 0)=\bm 0$ because $\epsilon>0$; then $\bm z=W_{\text{out}}\bm 0=\b
 and \cref{eq:nexttoken} gives equal probabilities.
 \end{proof}
 
-The invalid Llama-90B runs produced that value for every token, because on the
-cluster's PCIe nodes a direct copy between two GPUs returned zeros without
-raising an error, so a hidden state crossing a device boundary arrived as
-$\bm h=\bm 0$. Neither the model nor the measurement code was at fault.
-Forcing the 11B across three GPUs reproduced the failure on weights known to
-be sound, and in the
-rating task that run reported $\capm_{\Dset}=5.45783\times10^{-5}$, which is
-seven times the uniform probability, one for each digit.
-\cref{app:fault} gives the diagnosis and the fix.
+Three checks distinguish response coverage from numerical validity:
 
-Three checks at the level of the run follow from this, and every run reported
-in this thesis passes all three. First, the standard deviation of the logits at a fixed probe
-prompt must exceed $10^{-4}$; the broken arm of the controlled test gave
-exactly $0$ against $2.139$ on a single GPU. Second, the output diversity
-$u=|\{\text{distinct }\pyes\}|/n$ must be near 1. Third, the mean and minimum
-$\capm$ are reported for every condition, which is the check that connects
-validity to the result of \cref{sec:s1-quality}.
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item Logit dispersion is checked on fixed diagnostic prompts, using a
+standard-deviation threshold of $10^{-4}$ to screen for collapsed outputs.
+The controlled comparison and its observed values appear in
+\cref{tab:app-fault}.
 
-The second check is the one that caught the fault, and it is worth being exact
-about which quantity it counted. Over the 330 binary prompts of the invalid 90B
-run, $\capm$ took 8 distinct values, $\pyes$ was exactly $0.5$ on 247 rows and
-undefined on 59; the corrected run gave 330 distinct values and no undefined
-rows. In the rating task the same broken run produced 4 distinct expected
-ratings, all within $0.007$ of $4.000$. A mean of $4.000$ on a scale from 1 to
-7 is the midpoint, which is a value a calibrated model might plausibly return,
-and no aggregate in that run looked wrong. What exposed it was that 330
-distinct prompts produced 8 distinct outputs.
+\item Output diversity is inspected using
+$u=|\{\text{distinct }\pyes\}|/n$ for binary measurements, alongside
+variation in expected ratings for the rating task. Unexpected repetition
+across distinct inputs can reveal a fault, while duplicated text-only
+inputs must be distinguished from unexplained output collapse.
+
+\item Mean and minimum captured mass are reported by condition, indicating
+how much probability supports the intended response set. Low coverage
+requires qualified interpretation but does not, by itself, identify
+numerical corruption.
+\end{enumerate}
+
+These checks serve different purposes and should be interpreted together,
+rather than treating any single aggregate as sufficient validation.
+The diagnosis and execution controls for the zeroed-copy fault are retained
+in \cref{app:fault}, with the numerical symptoms recorded in
+\cref{app:fault-degeneracy}.

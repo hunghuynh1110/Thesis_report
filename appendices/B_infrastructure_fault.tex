@@ -73,3 +73,22 @@ no cross-GPU copy by construction and so cannot be affected by the fault of
 separated by this comparison.}
 \label{fig:s1-replication}
 \end{figure}
+
+\section{Numerical symptoms of output degeneracy}\label{app:fault-degeneracy}
+
+The invalid Llama-90B run produced uniform token probabilities consistent
+with the zero-hidden-state result in \cref{prop:uniform}.
+Direct copies between GPUs on the affected nodes returned zeros without
+an execution error, and sharding Llama-11B reproduced the failure.
+In the rating task, captured digit mass was $5.45783\times10^{-5}$,
+corresponding to seven tokens under the uniform vocabulary distribution.
+
+Across 330 binary prompts in the invalid Llama-90B run, captured mass took
+eight distinct values, conditional yes-probability was exactly $0.5$ on
+247 rows and undefined on 59 rows. The corrected run produced 330 distinct
+captured-mass values and no undefined conditional probabilities.
+The rating task produced four distinct expected ratings, all within
+$0.007$ of $4.000$, showing why a plausible midpoint did not validate
+the measurements. In the controlled diagnostic, zero logit standard
+deviation contrasted with approximately $2.139$ in the single-GPU reference
+(\cref{tab:app-fault}).
