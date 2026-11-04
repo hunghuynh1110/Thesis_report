@@ -13,40 +13,34 @@
 % ---------------------------------------------------------------------
 \section{Answering the research questions}\label{sec:disc-rq}
 
-RQ1 asked for the intrinsic baseline attitude of a model evaluated in a
-vacuum, and the measurement does not support the question. The failure is
-due to the fact that a single signed number is not what the five models
-produce. Instead, three quantities are produced, which move independently of
-one another: assent, item separation and coverage. Llama-90B is particularly
-clear on this point, as it scores highest on the first, lowest on the second
-and worst on the third. A high assent rate, combined with a keying ratio of
-sixteen to six, produces the index of $+0.153$ reported in
-\cref{sec:s1-aggregate}.
+The results address two questions: how the models respond to the inventory,
+and whether those responses correspond with their downstream judgements.
+The answers require distinguishing the measured response patterns from claims
+about underlying attitudes.
 
-Read as that triple and not as an index, the answer to RQ1 holds across all
-five models. None of them leans towards the attitudes the inventory measures
-at the level of individual items. Polarity separation is negative
-throughout, and only the two larger Qwen models reach significance. The
-direction of the item-level pattern is therefore constant, and what differs
-is the response style sitting on top of it. Separation, combined with
-coverage, determines how much of that pattern the probe can see.
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item For RQ1, the aggregate inventory score cannot be interpreted independently
+of the model's general tendency to agree. Llama-90B scored $+0.153$, close
+to the $0.160$ predicted by its mean agreement rate alone
+(\cref{sec:s1-aggregate}). All five models agreed more readily with the
+reverse-keyed items, although only Qwen-7B and Qwen-72B reached the
+unadjusted significance threshold. The face experiments provided a separate
+comparison: benevolent traits were attributed more readily to female
+photographs in four models, with the opposite direction in Qwen-2B.
+Four of the five gaps reached the corrected threshold, while Llama-11B
+remained inconclusive (\cref{sec:s1b-gap}). These findings support reporting
+item discrimination and the two subscales separately, alongside agreement
+rates and response coverage.
 
-RQ2 asked whether that intrinsic skew is descriptively consistent with
-downstream behaviour, and the two do not line up. Ranked by intrinsic score
-the order runs Llama-90B, Llama-11B, Qwen-2B, Qwen-7B and Qwen-72B. Ranked
-by signed deviation from the human baseline it runs the other way, at
-$\rho=-0.70$ with $p=0.188$. The correlation is particularly weak here, as
-five points that are not independent carry no inferential weight. The
-direction is suggestive, and the evidence assembled here will not carry it
-further.
-
-What holds between the two phases is a shared mechanism and not a
-correlation. The Llama pair are the models whose Phase~1 captured mass
-collapses under an image. The two largest, Llama-90B among them, are the
-models whose Phase~2 robustness collapses under one. The overlap is due to
-the fact that an image changes how the model engages with the prompt.
-Engagement, combined with the answer itself, is a stronger and more specific
-claim than RQ2 was framed to test.
+\item For RQ2, the comparison did not establish that the human association
+repeated across models. The correlation between intrinsic scores and signed
+downstream deviations was $\rho=-0.70$, with $p=0.188$, across five models
+from two families (\cref{sec:s2-summary}). Three models showed their most
+negative deviation on ``smart person'', but ``warm person'' showed a less
+consistent pattern (\cref{sec:s2-sigir}). This provides partial correspondence
+on particular queries, without establishing that models with higher inventory
+scores are less likely to recognise bias in search results.
+\end{enumerate}
 
 % \begin{plan}
 % \begin{itemize}
@@ -62,46 +56,35 @@ claim than RQ2 was framed to test.
 %         Consistent, not a relationship.
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
+
 \section{Findings from logit-level auditing}\label{sec:disc-logit}
 
-In this thesis, the distribution over the next token is read in place of the
-text decoded from it. The gain in coverage is due to the fact that sampling
-and parsing are not required for measurement. Instead, reduced response coverage becomes a
-measurement, recorded as captured mass falling from $0.979$ to $0.237$. The
-reading is particularly useful here, as Arditi et al.
-\cite{arditi2024refusal} localised refusal to a single direction in the
-residual stream. This establishes an internal representation of refusal, but does not make
-captured mass a universal refusal detector. \cref{sec:s1-quality} separates
-the observed coverage reduction from its interpretation.
+Reading probabilities allows the audit to distinguish limited response
+coverage from an evenly divided preference between the permitted answers.
+Both can produce similar aggregate scores, but they represent different
+outcomes: one assigns probability to other continuations, while the other
+balances the intended responses. Captured mass makes this distinction visible
+in the Llama results (\cref{tab:capm}), although it cannot determine whether
+the alternative continuation would be refusal, explanation or another format.
 
-The reading distinguishes probability outside the response set from
-probability divided evenly between the permitted responses. These are
-different measurement outcomes even when an aggregate bias score is similar.
-The first can reflect refusal, explanation or another response format; the
-second describes a balanced conditional response. This distinction supports
-the coverage comparison in \cref{tab:capm}, without treating every low
-coverage measurement as a demonstrated refusal.
+The robustness results reveal a different limitation concerning the stability
+of ratings under equivalent scale definitions. The two largest models were
+less robust in the image condition, but image presence and referent wording
+changed together (\cref{sec:s2-anchor}). Identifying the contribution of each
+requires a controlled comparison before attributing the difference to model
+components. Arditi et al.\ \cite{arditi2024refusal} and Weng et al.\
+\cite{weng2024images} provide examples of interventions and mediation analyses
+that could inform such investigations, without establishing the mechanism in
+these models.
 
-Phase~2 shows a second thing a text-level audit would miss, which is how the
-model uses the prompt. \cref{sec:s2-anchor} found lower scale robustness in the two largest
-models when images were supplied. The scale anchors are retained, but the
-referent also changes from ``a typical result'' to ``this image result''.
-The contrast therefore combines visual input with a wording change and does
-not isolate a component of the model. It is consistent with visual influence
-on judgement, which Weng et al. \cite{weng2024images} examine through causal
-mediation in a different architecture. Component attribution in the present
-models would require additional interventions.
-
-The limits of the method deserve the same prominence in this chapter as its
-benefits. Wang et al. \cite{wang2024myanswer} found first token
-probabilities disagreeing with generated answers on more than 60\% of
-multiple choice items. The disagreement is worst in models heavily tuned on
-conversational and safety data, which is the class audited here. Every claim
-in this thesis is therefore a claim about the next token distribution and
-not about printed output. Hu and Levy \cite{hu2023prompting} argue that
-probabilities are the more faithful readout, and both things hold at once.
+The measured probabilities also need to be distinguished from generated
+answers when considering implications for deployment. Wang et al.\
+\cite{wang2024myanswer} reported disagreements between these outputs on
+multiple-choice tasks, while Hu and Levy \cite{hu2023prompting} found
+advantages for probability measurements in metalinguistic evaluation.
+The present results describe responses at the measured token position;
+evaluating unrestricted generated answers would require an additional study.
 
 % \begin{plan}
 % \begin{itemize}
@@ -120,39 +103,35 @@ probabilities are the more faithful readout, and both things hold at once.
 %         \cite{hu2023prompting}.
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
+
 \section{Methodological lessons}\label{sec:disc-lessons}
 
-A logit-level audit must report its own coverage, and this is the first
-lesson of three. Six measurement faults were found during the work, and not
-one of them raised an error (\cref{tab:faults}). A probe reading only
-lowercase tokens returned a plausible mean $\pyes$ while capturing $0.09\%$
-of the distribution. A zeroed hidden state is particularly deceptive, as it
-returned a mean expected rating of exactly $4.000$. Captured mass, combined
-with output diversity, exposed both faults where no standard reporting
-practice would have.
+The experience of implementing the audit suggests three practical requirements
+for interpreting results from similar model evaluations.
 
-A psychometric scale built for people assumes a respondent whose tendency to
-agree perturbs the score only modestly. The assumption fails here due to the
-fact that a model treats assent as a free parameter. Mean $\pyes$ runs from
-$0.199$ to $0.599$ on the positively keyed rows alone, which the sixteen to
-six keying converts into an ordering. Tjuatja et al.
-\cite{tjuatja2024response} and Dominguez-Olmedo et al.
-\cite{dominguez2024questioning} report the same divergence on other
-instruments. Style-invariant scores, combined with inference that permutes
-the keying, are requirements of administering such a scale and not
-refinements of it.
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item Measurement checks should precede comparisons between models or
+experimental conditions. The six silent faults recorded in \cref{tab:faults}
+produced plausible outputs, making successful execution and reasonable means
+insufficient evidence of validity. Captured mass, output diversity and scoring
+checks address different possible failures and should be recorded together.
 
-Infrastructure supplied the third lesson, and it cost this project the most
-time. The small models used single GPU execution, while the large models used
-multiple GPUs. Model size was therefore associated with exposure to
-transfers between devices. When the 90B produced
-degenerate output, the same code working on the 11B appeared to exonerate
-the code. The inference was wrong due to the fact that forcing the 11B
-across three GPUs reproduced the failure exactly. Deliberate variation of
-the execution path, combined with the checks in \cref{sec:s1-replication},
-is what an audit on shared hardware requires.
+\item Questionnaire scores should be examined for sensitivity to response
+style before being interpreted as attitudes. The effects reported by Tjuatja
+et al.\ \cite{tjuatja2024response} and Dominguez-Olmedo et al.\
+\cite{dominguez2024questioning} reinforce this concern beyond the present
+inventory. Here, the decomposition and polarity separation address uniform
+shifts in agreement, while the permutation test retains its stated
+exchangeability assumption.
+
+\item Numerical checks should reflect the hardware configuration used for
+inference, particularly when larger models require transfers between devices.
+A successful run on one GPU does not validate execution across several GPUs.
+The replication checks in \cref{sec:s1-replication} and the investigation in
+\cref{app:fault} demonstrate the need to test numerical integrity under the
+conditions used to obtain the reported measurements.
+\end{enumerate}
 
 % \begin{plan}
 % \begin{itemize}
@@ -168,63 +147,28 @@ is what an audit on shared hardware requires.
 %         HPC.
 % \end{itemize}
 % \end{plan}
-
 % ---------------------------------------------------------------------
+
 \section{Threats to validity}\label{sec:disc-threats}
 
-Validity belongs to the inferences drawn from a score and not to the
-instrument that produced it \cite{messick1995validity}. The threats below
-are therefore organised by the kind of inference each one undermines.
-\cref{tab:threats} lists them with their status, and the paragraphs that
-follow take the four groups in turn.
+Validity concerns the interpretation supported by a measurement, rather than
+an inherent property of the instrument \cite{messick1995validity}.
+\Cref{tab:threats} records the main limitations and the controls used to
+address them.
 
-The construct threats are the ones an examiner is most likely to press
-first. The first is due to the fact that the ASI measures attitudes towards
-women as a group. Phase~1A instead asks about a person whose gender is never
-stated, and nine of the twenty two trait phrases carry no gender reference.
-Phase~1B is particularly relevant here, as supplying the gender in a
-photograph restores the comparison the wording removed. The gender gap,
-combined with the coverage reported beside it, is the result this thesis
-rests on and not $\ASIint$.
+Two differences are central to the interpretation of the human comparison.
+Participants evaluated complete grids, whereas models rated individual images;
+the baseline groups also use total ASI, while the original association
+concerns benevolent sexism. A model rating below the baseline therefore
+assigns lower objectivity, but is not necessarily less sexist than the
+human group.
 
-The second construct threat is not remedied, and it concerns the unit of
-judgement. Participants judged a grid of nine images as a set, where gender
-skew actually lives. The models judge each image alone, so the two
-quantities compared in \cref{ch:study2} are not the same quantity. Naming
-the harm matters as much as naming the construct
-\cite{blodgett2020language}, and the harm is not that a model holds an
-attitude. A disposition that varies with the gender of a depicted person,
-combined with a system that ranks images, propagates into what users are
-shown.
-
-The internal threats are largely handled, and the chapters say where each
-one is. An exact identity separates response style from attitude
-(\cref{prop:shift}), and low coverage is reported with every affected number
-(\cref{tab:s1-capmfilter}). Comparison against an explicit null bounds
-anchor insensitivity (\cref{prop:null}), and quantisation is excluded from
-every headline run. One threat is particularly resistant, as the sign
-convention for $\dm$ is a decision about interpretation and not about
-measurement. \cref{sec:s2-deviation} states the reading adopted, combined
-with the basis on which it was adopted.
-
-The statistical threats in this thesis come down to small samples in three
-separate places. Twenty two items support a fully enumerated permutation test under the
-stated exchangeability assumption. Its $p$ values require no parametric
-distribution for item means. Ten queries support a cluster
-bootstrap over queries, and twenty faces a side support a $t$ test with
-reported power. None of this is particularly reassuring, as the design
-responds to each sample without making any of them larger. Five models on
-one gap, combined with a Bonferroni threshold of $p<0.01$, is why
-Llama-11B's $p=0.039$ is called underpowered.
-
-The external threats bound what any of this generalises to, and the bound is
-tight. Five models from two families, forty posed photographs from one
-database and ten queries from one 2018 dataset. The size trend in
-\cref{sec:s1b-gap} is particularly exposed, as no model exists between 11B
-and 72B in either family. The trend is therefore fitted across a gap of more
-than six times that contains no observation. Nothing here licenses a
-statement about vision language models in general, and the thesis makes
-none.
+The adapted inventory and sampled photographs similarly bound the face
+results, which measure trait attribution under the tested conditions.
+Connecting these measurements to harms in deployment requires a separate
+argument and evaluation \cite{blodgett2020language}. The statistical controls
+do not remove these construct differences, enlarge the samples or establish
+a general relationship between model size and bias.
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lXX@{}}
@@ -234,18 +178,18 @@ Type & Threat & Mitigation / status \\
 Construct & The ASI is about attitudes towards women; the Phase~1A probe asks
 about an ungendered ``person''. 9 of 22 trait phrases have no gender
 reference; items 20--21 implicitly refer to a man. & Stated in
-\cref{sec:design-phase1}; Phase~1B supplies the gender visually and is the
-intended remedy. \\
+\cref{sec:design-phase1}; Phase~1B supplies visual gender information, but does not restore the
+original questionnaire construct. \\
 Construct & Humans rated a 3$\times$3 \emph{grid}; the model rates single
 images. Gender skew is a property of the set, not of one image. & Stated;
 future work: present the grid as one composite image. \\
-Construct & Sign of $\dm$ relative to the SIGIR finding (D2). & Reading
-adopted in \cref{sec:framework-extrinsic}; awaiting confirmation; add
-high-ASI baseline (A10). \\
+Construct & Interpretation of $\dm$ relative to the human association. & Lower
+objectivity ratings do not establish less sexist attitudes; the baseline uses
+total ASI while the original association concerns benevolent sexism. \\
 Construct & Phase~1B measures response to a photograph, not to a person. CFD
 faces are posed, cropped and uniformly lit. & Stated; no claim beyond these
 40 images. \\
-Internal & Acquiescence drives $\ASIint$. & \cref{prop:shift}; $\PS$ with an
+Internal & General assent contributes to $\ASIint$. & \cref{prop:shift}; $\PS$ with an
 exact test. \\
 Internal & Vision-condition $\pyes$ rests on low $\capm$ for both Llama
 models. & $\capm$ reported everywhere; filtered sensitivity in
@@ -257,8 +201,8 @@ headline run. \\
 Statistical & 22 items; 10 queries; the text-only arm has 10 independent
 pairs. & Exact permutation test; query-level cluster bootstrap. \\
 Statistical & 20 faces per gender detects about one standard deviation
-between faces and no smaller. & Power reported per model; Llama-11B
-identified as the underpowered case. \\
+between faces and no smaller. & Power reported per model; Llama-11B does not reach the corrected
+significance threshold. \\
 Statistical & Five models tested on the Phase~1B gap. & Bonferroni threshold
 of $p<0.01$ applied and stated. \\
 Statistical & Five faces per race cell. & Race reported descriptively and
@@ -266,13 +210,14 @@ untested (\cref{sec:s1b-race}). \\
 External & Five open weight models from two families, one face database, one
 image search dataset, English only, 2018 images, raters from three countries.
 & Stated; no claims beyond this sample. \\
-External & No model between 11B and 72B, a span of more than six times. &
-Stated wherever a size trend is claimed; neither family ships one. \\
+External & No evaluated model between 11B and 72B, a span of more than six times. &
+Size comparisons are descriptive and do not establish a general scaling law. \\
 \bottomrule
 \end{tabularx}
 \caption{Threats to validity, organised following \cite{messick1995validity}.}
 \label{tab:threats}
 \end{table}
+
 % \begin{plan}
 % Write one paragraph per row group (construct, internal, statistical,
 % external). The two construct threats in the first rows are the ones an
@@ -280,41 +225,22 @@ Stated wherever a size trend is claimed; neither family ships one. \\
 % \cite{blodgett2020language} to frame what harm the measured construct relates
 % to.
 % \end{plan}
-
 % ---------------------------------------------------------------------
+
 \section{Ethics and responsible disclosure}\label{sec:disc-ethics}
 
-This study used no new human participants, and the ratings it compares
-against were released by Otterbacher et al. \cite{otterbacher2018sigir}.
-Their secondary use requires no further ethics approval, as the project
-proposal recorded. The Phase~1A stimuli are generated programmatically and
-not drawn from any person. The choice is due to the fact that a generated
-image of a neutral person carries its generator's own associations.
-Programmatic generation, combined with the controls in
-\cref{sec:design-stimuli}, keeps those associations out of the measurement.
+The study used anonymised responses released by Otterbacher et al.\
+\cite{otterbacher2018sigir}, without recruiting new human participants.
+The Phase~1A controls were generated programmatically, while face images
+were obtained from the Chicago Face Database \cite{ma2015cfd}.
+The photographs remain outside the repository and are not reproduced in the
+thesis, consistent with the database's restrictions on redistribution and
+publication. The historical search stimuli are likewise presented through
+measurements without reproducing photographs of their subjects.
 
-Two bodies of third-party material are used under terms that restrict what
-may be reproduced. The Chicago Face Database permits non commercial academic
-use and prohibits redistribution; publication requires permission
-\cite{ma2015cfd}. No face appears
-anywhere in this thesis, and the files were held outside the repository
-throughout. The 2018 image search results are particularly restricted, as
-their subjects did not consent to appear in this work. \cref{ch:study2}
-therefore reports those images as measurements throughout and never as
-pictures.
-
-A hardware fault found during the work was reported and not merely worked
-around. Direct copies between GPUs on the cluster's PCIe nodes returned
-zeros silently. The fault is particularly dangerous due to the fact that it
-produced plausible aggregates from models computing nothing
-(\cref{app:fault}). The report to UQ Research Computing was made with a
-minimal reproduction. Silent corruption, combined with shared hardware,
-would have affected any other user sharding a model across those nodes.
-
-One ethical point concerns the result and not the procedure of this thesis.
-Reporting that a model attributes protective descriptions more readily to
-photographs of women names a disposition in a deployed system. The
-appropriate response is to measure that disposition and never to leave it
-unstated. The gaps are therefore reported with their uncertainty, their
-coverage and their sample limits. Measurement, combined with its stated
-limits, stops short of the claim that any of these models is sexist.
+The hardware fault documented in \cref{app:fault} was reported to UQ Research
+Computing with a minimal reproduction, supporting investigation beyond the
+affected audit runs. The findings are also reported with their uncertainty,
+response coverage and sample limitations, so that measured differences remain
+distinguishable from claims about underlying attitudes or behaviour in
+systems that were not evaluated.

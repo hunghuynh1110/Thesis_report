@@ -6,85 +6,57 @@
 % \pages{2--3 pages.} No new results, no new citations except in future work.
 % \end{plan}
 
-\section{Conclusion}\label{sec:conc-summary}
+\section{Project summary and conclusions}\label{sec:conc-summary}
 
-This thesis developed and evaluated a protocol for auditing gender-related
-responses in vision language models through their next-token probability
-distributions. The evaluation covered five models from two families, ranging
-from 2B to 90B parameters, across three experimental phases and 25,450
-measurements. The experiments examined responses to inventory statements,
-changes associated with face images and downstream judgements of image search
-results. Human ratings provided a comparison for the downstream task,
-although differences in presentation limit the interpretation of that comparison.
+This project developed a protocol for examining gender-related responses in
+vision language models through their next-token probabilities. Five models
+from the Qwen2-VL and Llama-3.2-Vision families were evaluated across 25,450
+measurements, covering inventory responses, trait attribution to face
+photographs and judgements of image search results.
 
-The protocol obtains each measurement from a single forward pass, pooling the
-probability assigned to alternative surface forms of the intended responses.
-Its implementation specifies the chat template, assistant prefill and position
-at which the distribution is read. These choices proved necessary for
-obtaining measurements of the intended response. Moving the rating cue into
-the assistant turn increased captured mass over the seven digits from
-$0.0043$ to $0.994$, demonstrating how strongly the measurement can depend on
-input construction.
+The protocol reports captured mass alongside each measurement, showing how
+much probability falls within the intended response set. Together with output
+diversity checks, this helped identify faults that produced plausible results
+without raising execution errors.
 
-Captured mass provided a practical check on whether the selected response set
-adequately represented the model's output distribution. Six measurement faults
-were identified during the project, none of which produced an execution error.
-In one case, reading only lowercase response tokens captured $0.09\%$ of the
-distribution while still producing a plausible aggregate score. In another,
-a hardware fault that zeroed hidden states produced an expected rating of
-exactly $4.000$. These cases show why apparently reasonable numerical outputs
-require checks of both probability coverage and output diversity.
+The experiments led to the following conclusions:
 
-The downstream experiments identified a substantial difference in scale
-reversal robustness between the visual and text-only conditions for the two
-largest models. Without an image, Llama-90B and Qwen-72B each reproduced their
-normalised judgement at a robustness rate of $0.900$. With an image, these
-rates fell to $0.044$ and $0.156$, giving $\dRR=-0.856$ and $-0.744$,
-respectively, with bootstrap intervals excluding zero. The smaller models had
-low robustness in both conditions, so their smaller differences did not
-indicate more reliable judgements. The shared pattern in the two largest
-models warrants further investigation, although the evaluated conditions do
-not isolate its internal cause.
+\begin{enumerate}[leftmargin=*,itemsep=0.5em]
+\item The aggregate inventory score is sensitive to a model's general tendency
+to agree. Llama-90B scored $0.153$, close to the $0.160$ predicted by its
+average agreement rate alone. Polarity separation provides a complementary
+comparison that distinguishes item discrimination from uniform shifts in
+agreement.
 
-The binary inventory probes also showed that the effect of visual input
-differed between the evaluated model families. Both Llama models assigned
-substantially less probability to the yes and no response set when an image
-was present, including a featureless grey patch. The Qwen models maintained
-high coverage across the corresponding conditions, with the contrast extending
-to the face image experiments. For example, captured mass was $0.140$ for
-Llama-11B and $0.998$ for Qwen-7B when real faces were shown. This behaviour
-is consistent with model-dependent defensiveness, but probability outside the
-intended response set does not establish refusal without examining the
-alternative outputs.
+\item Combining the inventory subscales can obscure differences in responses
+to female and male photographs. The benevolent subscale showed greater
+attribution to female photographs in four models, with the opposite direction
+in Qwen-2B. Four of the five differences reached the corrected significance
+threshold, compared with only one combined score.
 
-The analysis further demonstrated that the conventional aggregate inventory
-score is sensitive to a model's general tendency to agree. Because the
-inventory contains sixteen positively keyed items and six reverse-keyed items,
-uniform assent contributes positively to the aggregate even without meaningful
-discrimination between items. The decomposition showed that Llama-90B's score
-of $+0.153$ was close to the $+0.160$ predicted by its mean assent rate alone.
-Polarity separation addresses this limitation by measuring the difference in
-mean assent between the two item groups, remaining invariant to uniform shifts
-in agreement. The resulting comparison describes item discrimination and
-should not be interpreted directly as a ranking of models by sexism.
+\item Response coverage differed between the evaluated model families when
+images were introduced. Both Llama models assigned substantially less
+probability to binary responses, even with a featureless grey patch, while
+Qwen maintained comparatively high coverage. This establishes a difference
+in response behaviour, although reduced coverage alone does not demonstrate
+refusal.
 
-The face image experiments provided a separate finding concerning the
-attribution of benevolent traits. Four models attributed these traits more
-readily to photographs of women, while the smallest model showed the opposite
-direction. For Qwen-72B, the positive gap between female and male faces reached
-$+0.054$, with $p<0.001$.
-These differences demonstrate the importance of examining the subscales
-separately, since aggregation can obscure patterns that differ across item groups.
+\item Scale reversal robustness was substantially lower in the image condition
+for the two largest models. Robustness fell from $0.900$ without images to
+$0.044$ for Llama-90B and $0.156$ for Qwen-72B. Because prompt wording also
+changed, the comparison does not isolate the effect of visual input.
 
-Taken together, the findings support three practical requirements for
-probability-based model audits. Captured mass should accompany the reported
-measurements so that their coverage remains visible. Aggregate scores should
-distinguish item-level discrimination from a general tendency to agree.
-Rating protocols should also be tested for robustness to equivalent scale
-definitions before their outputs are interpreted as stable judgements.
-These checks strengthen the interpretation of the measurements while
-preserving the distinction between observed model responses and claims about
-underlying attitudes.
+\item The comparison did not establish that the relationship observed in the
+2018 human study repeated across models. Some query-level patterns
+corresponded with the human findings, but the intrinsic--downstream comparison
+remained inconclusive. Interpretation is further limited because humans
+evaluated image grids while models evaluated individual images.
+\end{enumerate}
+
+These findings support checking response coverage, scoring assumptions and
+rating consistency before interpreting model scores as evidence of
+gender-related attitudes. The conclusions remain specific to the evaluated
+models and experimental conditions.
 
 % \begin{plan}
 % One paragraph per contribution of \cref{sec:intro-contrib}, each with its
@@ -95,56 +67,19 @@ underlying attitudes.
 
 \section{Future work}\label{sec:conc-future}
 
-A useful extension would separate responses to gendered referents from
-responses to the inventory statements themselves. The present design could
-be expanded by asking matched items about a woman, a man and a person,
-introducing the referent as an additional experimental factor. This comparison
-would help determine whether a response concerns women specifically or
-reflects a broader attribution to people, without requiring a photograph to
-establish the referent (\cref{sec:disc-threats}).
+Further work should first bring the model task into closer correspondence
+with the human study. Presenting complete image grids and comparing ratings
+with human groups defined by benevolent sexism would address two limitations
+of the current comparison.
 
-The downstream task could also be brought into closer correspondence with
-the human evaluation. Presenting all nine search results as a single composite
-would allow the model to judge the same grid that the human participants
-evaluated. This would reduce the difference between individual-image model
-ratings and grid-level human judgements, making deviations from the human
-baseline easier to interpret. Additional non-person queries with comparable
-human baseline ratings would also strengthen the control comparison beyond
-the single balloon query used here.
+A controlled experiment should also vary image presence and prompt wording
+independently. This would help distinguish their contributions to the
+robustness difference before investigating the model components involved.
 
-The human comparison could be extended by calculating the position index
-$\lambda$ from the released participant responses (\cref{eq:lambda}). This
-index would locate each model relative to both the low and high ASI groups,
-providing information that distance from the low ASI baseline alone cannot
-supply. Such an analysis would still require caution where model ratings
-remain sensitive to scale orientation, since the comparison assumes that the
-reported judgements are sufficiently stable.
-
-Further work could investigate which model components contribute to the
-redistribution of probability when visual input is introduced. Activation
-analysis and controlled interventions could examine whether the observed
-changes arise during visual processing, multimodal integration or subsequent
-language processing. The approach used by Arditi et al.\ \cite{arditi2024refusal}
-to identify a direction associated with refusal provides one possible
-methodological starting point. However, the present observations do not
-establish that the probability shifts share the same mechanism.
-
-A contemporary collection of results for the same ten queries would permit an
-evaluation of changes since the original 2018 dataset. Comparing historical
-and current results under a consistent protocol would help distinguish changes
-in search content from differences in model judgement. The comparison would
-require recording the collection conditions carefully, since search results
-can vary with location, personalisation and collection time.
-
-Finally, a forced-choice version of the inventory could test whether the
-observed item patterns persist under a different response format. Asking models
-to choose between matched alternatives would reduce reliance on direct assent
-and provide a complementary test of the response style effects identified here.
-The alternatives and their ordering would require careful control, since
-changing the format can introduce preferences of its own. Agreement across
-these formats would provide stronger evidence that a finding reflects
-discrimination between item meanings rather than sensitivity to a particular
-prompt construction.
+Finally, additional models, photographs and response formats would test whether
+the findings persist beyond the current design. Forced-choice prompts would
+provide a complementary assessment of the agreement effects identified in
+the inventory scores.
 
 % \begin{plan}
 % \begin{itemize}
