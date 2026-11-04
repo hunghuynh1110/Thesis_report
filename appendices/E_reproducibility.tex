@@ -28,11 +28,13 @@
 The audit code and thesis source are maintained in separate repositories:
 \url{https://github.com/hunghuynh1110/VLM_Audit} and
 \url{https://github.com/hunghuynh1110/Thesis_report}, respectively. The audit
-code uses the branch \path{fix/multi-gpu-zero-copy}, although a branch name
-alone does not identify the exact version used for the reported analysis.
-The final analysis commit remains \datagap{commit hash to be recorded on
-submission}, which must be resolved to identify the corresponding code state
-unambiguously.
+checkout inspected for this revision uses the branch
+\path{fix/multi-gpu-zero-copy}, based on commit
+\path{bde79603349a231318213517de38e86776af5a88}. It also contains local
+modifications and untracked code, including the Phase~1B implementation.
+This hash therefore identifies the base revision, not the complete code
+state used for the study. A committed or archived copy of those additions
+is needed for full reproduction of the inference implementation.
 \end{sloppypar}
 
 The study uses human ratings, face images and generated stimuli, each with

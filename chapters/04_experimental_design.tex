@@ -25,8 +25,11 @@ the fusion architecture, prompts and stimuli remain fixed as parameter count
 changes. This allows patterns across sizes to be distinguished from behaviour
 observed in a single model.
 
-The minor models were incorporated subsequent to the two larger ones, following the supervisor's recommendation, to transform two disparate points into a coherent trend. They are inexpensive, as a 2B or 7B model operates on a single GPU in less than an hour. They also modified the project's claims, as a result that is valid at both 2B and 72B pertains to a family rather than a specific checkpoint. A single void in the ladder remains unsealed. Qwen2-VL does not release any models between 7B and 72B, while Llama-3.2-Vision has no offerings between 11B and 90B, resulting in a gap of over six times between 11B and 72B.
-\cref{sec:disc-threats} states what that costs.
+The three smaller models were added after the two larger ones, at the
+supervisor's suggestion, so that each family is evaluated at more than one
+size. Neither family provides a model between 11B and 72B, leaving a gap of
+more than six times in parameter count. Comparisons across the available
+sizes therefore remain descriptive (\cref{sec:disc-threats}).
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}llll@{}}
@@ -69,25 +72,15 @@ image.}
 \label{tab:phases}
 \end{table}
 
-Phase~1B was added during the project to examine whether models respond
-differently to photographs of women and men. Phase~1A contains no depicted
-person because the humanoid silhouette proposed as its visual anchor failed
-the neutrality gate (\cref{sec:design-stimuli}). This Phase~1A design isolates
-the effect of supplying visual input, but it cannot establish whether
-responses vary with the gender of a depicted person. The real face comparison
-described in \cref{sec:design-phase1b} addresses that limitation.
+Phase~1A measures responses without a depicted person, using the controls
+specified in \cref{sec:design-stimuli}. Phase~1B adds photographs to examine
+whether trait attribution differs between women and men. The phases and
+measurement counts are summarised in \cref{tab:phases}.
 
-The instruments were tested on smaller models before the larger runs were
-submitted. A 90B job occupies three H100 cards for hours and also incurs queue
-time, so a prompt defect discovered after execution can delay the work by a
-day. Each instrument was therefore tested on the 11B first. Phase~1B was also
-smoke tested on two faces using one small model from each family before the
-full runs were queued.
-
-The 11B additionally provided a reference for diagnosing the fault described
-in \cref{sec:design-faults}. Every 11B job ran on a single L40, so no 11B
-measurement required a transfer across devices. Its output provided a
-comparison when the sharded runs produced unreliable measurements.
+Each instrument was tested on Llama-11B before the larger runs, and Phase~1B
+was smoke tested on two faces using one small model from each family. The
+single-GPU 11B runs also provided a reference for diagnosing unreliable
+measurements under sharded execution (\cref{sec:design-faults}).
 
 % ---------------------------------------------------------------------
 \section{The inventory as administered}\label{sec:design-phase1}
@@ -190,23 +183,22 @@ the two validation metrics appear in \cref{fig:gate1}.
 gate at $0.853$ against a threshold of $0.20$, while the grey patch passes at
 $0.062$. Both are flagged on the race metric, but the grey patch scores
 \emph{higher} than the silhouette ($0.710$ against $0.547$) despite containing
-no shape at all, which identifies that signal as the model's linguistic prior
-rather than anything read out of the image.}
+no depicted person. This is consistent with a response prior, but the
+comparison does not identify its source.}
 \label{fig:gate1}
 \end{figure}
 
 Both images failed the second validation gate, which tested race associations.
 The grey patch returned $P(\texttt{white})=0.710$, compared with $0.547$ for
-the silhouette. The stronger response to an image without visual structure was
-interpreted as a linguistic prior associated with a question about an unseen
-person. On this interpretation, the signal was not evidence of a racial
-attribute depicted in the image, and the prior remained at the same value
-across conditions.
+the silhouette. A response to a patch containing no person cannot establish
+a racial attribute of a depicted subject. It is consistent with a prior
+elicited by the question, although this comparison cannot separate linguistic
+and visual contributions to that response.
 
-The grey patch was accepted on that basis. This decision did not remove the
-prior from the measurement. It identified a reason to compare Phase~1A
-conditions with one another instead of interpreting their scores against an
-absolute zero.
+The grey patch was accepted because it contains no person and passes the
+gender gate. This decision does not establish neutrality on every measured
+dimension. Phase~1A therefore compares responses across conditions, without
+treating the patch as an unbiased reference or assuming a constant prior.
 
 % ---------------------------------------------------------------------
 \section{Phase 1B: real faces}\label{sec:design-phase1b}
@@ -386,9 +378,10 @@ support inspection of unexpected continuations.
 \caption{How a Phase~2 input is assembled. The rating cue is the prefill of the
 assistant turn, so the next token the model produces is the bare digit whose
 distribution is read. Placing the same cue at the end of the user turn leaves
-captured mass at $0.0043$ against $0.994$, because a model does not continue a
-string it did not begin. The trailing space matters as well, since a digit
-preceded by a space is a different token from the bare digit.}
+captured mass at $0.0043$ against $0.994$, because the chat template opens
+a separate assistant turn after that cue. The trailing space establishes the
+read position after the delimiter, and the digit tokens are checked against
+each model's tokeniser.}
 \label{fig:prefill}
 \end{figure}
 
@@ -435,19 +428,11 @@ the workaround for transfers across devices described in
 % ---------------------------------------------------------------------
 \section{Compute environment and precision}\label{sec:design-compute}
 
-All runs were executed on UQ Bunya under SLURM. Storage performance and queue
-delays influenced how the jobs were prepared and tested. Model weights are
-loaded through \texttt{safetensors}, which uses memory mapping by default. On
-the shared parallel file system, page faults require network access. A cold
-load of the 23\,GB 11B checkpoint took approximately 100 minutes. The weights
-were therefore copied to storage local to the compute node before each run.
-
-The Llama-90B snapshot required additional preparation. Its published
-repository contains both \texttt{safetensors} and consolidated checkpoint
-files, occupying 331\,GB. A flat directory containing only the required
-tensors and configuration files occupies 166\,GB. Queue delays were also
-recorded directly. The smallest job in the project, a smoke test using one
-L40, was scheduled to start 4 hours and 46 minutes after submission.
+All runs were executed on UQ Bunya under SLURM, using the allocations in
+\cref{tab:models}. Model weights were staged on storage local to the compute
+node before loading, reducing dependence on the shared file system. For
+Llama-90B, only the required tensors and configuration files were staged,
+occupying 166\,GB.
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X c c >{\raggedright\arraybackslash}p{0.27\linewidth}@{}}
@@ -467,31 +452,20 @@ Values are on the lowercase pair used at the time; $n=8$, directional only.}
 \label{tab:quant}
 \end{table}
 
-Quantisation was evaluated as a way to reduce the computing requirements of
-the larger models. However, the comparison in \cref{tab:quant} showed changes
-in response probabilities comparable with the effects under investigation.
-Across eight fixed prompts, 8 bit weights changed $\pyes$ by $0.065$ on
-average. For 4 bit NF4, the mean change ranged from $0.084$ to $0.107$,
-depending on which modules retained full precision.
+All headline runs use bf16 because the diagnostic sweep in \cref{tab:quant}
+found probability shifts comparable with the effects under investigation.
+Across eight prompts, 8-bit weights changed $\pyes$ by $0.065$ on average;
+4-bit NF4 changed it by $0.084$ to $0.107$, depending on the modules retained
+at full precision. The 8-bit implementation also failed when the vision tower
+was quantised because its int8 kernel rejected four-dimensional tensors.
+These results are directional checks on the lowercase response pair, without
+providing a general estimate of quantisation effects.
 
-These shifts are relevant because \cref{eq:asi} aggregates signed item scores
-of a similar magnitude. Changes introduced by quantisation would therefore be
-difficult to distinguish from the effects measured by the audit. All headline
-runs consequently use bf16. The sweep also identified a limitation of the 8
-bit implementation: the int8 kernel rejects the four dimensional tensors
-produced by the vision tower. The 8 bit configuration therefore runs only when
-that tower is excluded from quantisation. The comparison in \cref{tab:quant}
-is a directional check on eight prompts, without providing a general estimate
-of the quantisation shift.
-
-Quantisation is retained for one execution control. The invalid 90B runs
-described below were affected by copies between GPUs. A run confined to a
-single GPU avoids that transfer path. A 4 bit single GPU Phase~1A run of the
-90B therefore provides an independent comparison with the corrected multi GPU
-run. The results agree at Pearson $r=0.767$, with a mean
-$|\Delta\pyes|=0.148$. This difference is consistent with the sensitivity to a
-4 bit configuration documented in \cref{tab:quant}. Further implementation
-details are provided in \cref{app:repro}.
+A single-GPU 4-bit run was retained as an execution control for Llama-90B.
+It avoids copies between GPUs, but changes precision and execution
+configuration together. Its comparison with the bf16 reference therefore
+cannot isolate either factor. The controlled validation and replication
+results appear in \cref{app:fault,sec:s1-replication}.
 
 % ---------------------------------------------------------------------
 \section{Validity controls and the fault register}\label{sec:design-faults}
@@ -540,12 +514,12 @@ them rather than bars from a zero the axis does not have.}
 \label{fig:capm-fixes}
 \end{figure}
 
-Captured mass exposed three of the six faults. The changes following
-correction are shown in \cref{fig:capm-fixes}. Each correction increased
-$\capm$ by two or three orders of magnitude, moving the probe from a small
-fraction of the distribution to nearly complete coverage. These changes
-demonstrate why captured mass is reported alongside the response
-probabilities.
+\Cref{fig:capm-fixes} shows coverage before and after three corrections.
+Pooling the binary response forms increased mean captured mass to approximately
+$47\%$, while correcting the rating prefill raised digit coverage to $0.994$. Correcting the cross-GPU copies also increased coverage,
+although output diversity supplied the decisive diagnostic for that fault.
+The comparisons demonstrate why coverage must be checked alongside other
+measures of numerical validity.
 
 The remaining faults required other diagnostics. The inversion sign was
 identified by inspecting the five prompt structures separately instead of
@@ -587,56 +561,35 @@ Consistency rate & planned & not separately reported (\cref{sec:framework-calm})
 Spearman $\rho$ across models & descriptive, $n=3$ & descriptive, $n=5$ \\
 \bottomrule
 \end{tabularx}
-\caption{Scope: proposal versus delivered. The audit is larger than proposed
-on every axis except the second image stream.}
+\caption{Proposed and delivered scope. The audit adds models and real-face
+measurements, while the contemporary image stream, attention heatmaps and
+separate consistency-rate reporting were not delivered.}
 \label{tab:scope}
 \end{table}
 
-The differences between the proposal and the delivered audit are collected in
-\cref{tab:scope}. Most concern additions to the experimental coverage. The
-proposal specified three production models evaluated in one phase against
-synthetic stimuli. The delivered audit covers five models across three phases
-and contains eight times as many measurements.
+\Cref{tab:scope} summarises the additions and omissions relative to the
+proposal. Five models and the real-face phase increase the total to 25,450
+measurements, approximately eight times the proposed count. The additional
+sizes permit within-family comparisons, while Phase~1B supplies the depicted
+gender comparison absent from Phase~1A.
 
-Phase~1B and the parameter size comparison account for most of the additional
-work. It was introduced following the supervisor's request to evaluate real
-faces. It addresses the gender comparison that Phase~1A cannot provide
-(\cref{sec:design-phase1b}). The parameter size comparison addresses a
-separate limitation of evaluating one model from each family. With that
-selection, a difference between Llama and Qwen is also a difference between
-90B and 72B. Evaluating three Qwen sizes and two Llama sizes provides
-comparisons within each family as well as between families.
+The contemporary crawl was omitted to prioritise real-face measurements and
+smaller models within the available computing budget. The search evaluation
+therefore uses the 2018 archive alone, without a temporal comparison. A fresh
+crawl would also require new human ratings for a corresponding baseline.
 
-Two changes concern stimulus validation and metric reporting. The humanoid
-silhouette was replaced after failing the gender gate at $0.853$ (\cref{sec:design-stimuli}). Consistency rate
-was not separately reported; it concerns repeated judgements under identical
-conditions, independently of the two scale orders
-(\cref{sec:framework-calm}).
+Cross-attention heatmaps were not produced because the attention hook did not
+return populated tensors on the sharded 90B. Further diagnosis was deferred
+following the transfer fault described in \cref{sec:design-faults}, so the
+reported comparisons remain behavioural rather than attributing changes to
+model components. CALM consistency rate was not separately reported; its
+definition is distinguished from scale reversal in \cref{sec:framework-calm}.
 
-The contemporary image search stream was omitted to prioritise other
-measurements within the available budget. The proposal specified a fresh crawl
-of the same ten queries alongside the 2018 archive, which would have supported
-a comparison over eight years. Only the archive was evaluated. A fresh crawl
-would not provide corresponding human ratings, leaving the extrinsic
-comparison in \cref{sec:framework-extrinsic} without a baseline for that
-stream. The available queue time was instead allocated to Phase~1B and the
-smaller models. The temporal comparison remains outside the delivered scope
+The cross-model correlation covers five models rather than the proposed
+three, but remains descriptive because variants share model families and the
+sample is small. These limitations, together with the replacement of the
+silhouette after validation, bound the interpretation of the delivered audit
 (\cref{sec:disc-threats}).
-
-The treatment of the proposed attention and correlation analyses also changed.
-Cross attention heatmaps were intended to identify the image regions attended
-to while a rating was produced. However, the attention hook did not return
-populated tensors on the sharded 90B. Further diagnosis was deferred after the
-fault affecting transfers between devices established that readings across
-device boundaries on those nodes were unreliable. The planned attention
-attribution is therefore absent. The assessment of how visual input affects
-the models rests on behavioural comparisons between conditions.
-
-The Spearman correlation was proposed for three models and is reported for
-five. It remains descriptive because the sample does not support an
-inferential claim. The models are also not independent: three share a model
-family and training recipe. These constraints govern the interpretation of the
-comparison in \cref{sec:s2-deviation}.
 
 % \begin{plan}[Outstanding for this chapter]
 % \textbf{Job identifiers.} The text and \cref{tab:models} rest on jobs 27103565

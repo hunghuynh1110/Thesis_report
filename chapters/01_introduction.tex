@@ -31,51 +31,44 @@
 % \end{itemize}
 % \end{plan}
 
-Vision language models (VLMs) have moved from being the objects of evaluation
-to being its instruments. Collecting human relevance and quality judgements is
-slow and expensive, so multimodal models are now asked to score, rank and
-filter image content for retrieval and moderation systems, a practice that has
-come to be called MLLM as a judge \cite{chen2024mllmjudge,zheng2023judging}.
-The appeal is clear, since a model produces judgements at a scale and cost no
-annotator pool can match. The consequence is less clear. When a model is
-promoted from candidate to referee, whatever dispositions it carries stop being
-a curiosity of its output distribution and become part of the infrastructure
-that decides which images people see.
+Vision language models (VLMs) are increasingly used to evaluate images in
+retrieval and moderation systems. These models can produce quality and
+relevance judgements at a scale that is difficult to achieve through human
+annotation, motivating their use as multimodal judges
+\cite{chen2024mllmjudge,zheng2023judging}. Their suitability for this role
+depends on whether the judgements are reliable and whether they reproduce
+social biases present in the training data.
 
-For gender, that infrastructure has a documented effect. Image search results
-underrepresent women in occupations where women are in fact well represented,
-and exposure to those results shifts users' beliefs about who does which job
-\cite{kay2015unequal}. The distortion has persisted across platforms and across
-years of later auditing \cite{metaxa2021image}. It is not confined to counts.
-Retrieved images of women are also associated with warmth rather than
-competence, so the ranked list reproduces the trait structure of human
-stereotyping \cite{otterbacher2017competent}.
+Gender bias in image search provides a practical setting for examining these
+questions. Search results can underrepresent women in occupations, and exposure
+to those results can shift users' beliefs about occupational gender distributions
+\cite{kay2015unequal}. Later audits document representational inequalities
+across platforms and time \cite{metaxa2021image}. The associations also extend
+to personal traits, with images of women linked more closely to warmth than
+competence \cite{otterbacher2017competent}.
 
-VLMs inherit this structure from the distributions they are trained on, and
-they inherit it most strongly through the visual pathway. Multimodal models
-show stereotyped associations that are attributable more to image features than
-to the accompanying text \cite{jiang2024modscan,weng2024images}, and they
-resolve gendered references in occupational images along lines consistent with
-stereotypes \cite{hall2023visogender}. Bias measured inside a vision encoder
-also propagates to the ranking behaviour of retrieval systems built on that
-encoder without further training \cite{ghate2025biases}. A judge assembled from
-such a model is therefore not a neutral replacement for the annotators it
-displaces.
+Related concerns arise when learned visual representations are used to judge
+such content. Studies report stereotyped associations in multimodal models and
+identify contributions from visual features under the evaluated conditions
+\cite{jiang2024modscan,weng2024images}. Models can also resolve gendered
+references in occupational images along stereotyped lines
+\cite{hall2023visogender}, while associations measured in vision encoders can
+carry into retrieval rankings \cite{ghate2025biases}. These findings motivate
+evaluating automated judges instead of assuming that replacing human raters
+removes bias from the evaluation.
 
-What makes this more than a restatement of the bias literature is that the
-human side of the comparison has already been measured on the same task.
-Otterbacher et al.\ \cite{otterbacher2018sigir} asked crowd workers to rate the
-objectivity of image search result grids and also administered the Ambivalent
-Sexism Inventory (ASI) \cite{glick1996asi}. Raters who scored higher on the
-inventory were less likely to perceive gender bias in the same results. In that
-study, sexism predicted what people could see in a search engine rather than
-what they said about women. This supplies the anchor that an audit of an
-automated judge otherwise lacks, and it makes the question comparative: when a
-VLM judges image search results, does it see bias as a human who scores high on
-the inventory sees it, or as one who scores low does?
+A human study provides a reference for this comparison. Otterbacher et al.\
+\cite{otterbacher2018sigir} administered the Ambivalent Sexism Inventory
+(ASI) \cite{glick1996asi} and asked participants to evaluate the objectivity
+of image search result grids. Participants higher in benevolent sexism were
+less likely to identify particular gender-skewed grids as non-objective.
+This thesis examines whether inventory responses and search judgements show
+a corresponding relationship across VLMs. The comparison uses the historical
+images and human ratings, although the models rate individual images rather
+than complete grids, and the available baseline groups use total ASI.
 
 % ---------------------------------------------------------------------
-\section{Problem statement: auditing a defensive judge}\label{sec:intro-problem}
+\section{Problem statement and measurement reliability}\label{sec:intro-problem}
 % \begin{plan}
 % \begin{itemize}
 %   \item Alignment training changes what models say
@@ -115,19 +108,19 @@ showed that measured gender bias in large language models is brittle with
 respect to framing: measured bias scores differ depending on whether the
 prompt reads as a test. Work on persona framing
 reports the same sensitivity in social reasoning tasks \cite{yang2026persona}.
-Taken together, these results mean that an audit which reads generated text
-cannot separate a model that has been debiased from one that has learnt to
-recognise an audit.
+These findings motivate checking whether audit framing changes the responses
+being measured before interpreting those responses as evidence of attitudes.
 
-This thesis calls that failure mode algorithmic defensiveness: a sanitised
-response triggered by cues that the model is being evaluated rather than by the
-content of the question. In the evaluated Llama models, reduced response coverage
-also occurs when an image is supplied,
-including a featureless grey patch that carries no social content
-(\cref{sec:s1-quality}).
+This thesis uses algorithmic defensiveness to describe the hypothesis that
+evaluative cues can alter a model's response behaviour and obscure
+gender-related associations. The experiments examine response changes across
+prompt and image conditions, including the featureless grey patch
+(\cref{sec:s1-quality}). These comparisons assess measurement sensitivity;
+reduced response coverage alone does not identify refusal or deliberate
+concealment.
 
-The obvious remedy, having a second model conduct the audit, substitutes one
-problem for another. Judges built on large language models carry their own
+Using a second model to evaluate responses introduces additional measurement
+concerns. Judges built on large language models carry their own
 position and verbosity biases together with a preference for their own outputs
 \cite{zheng2023judging}, their scores are sensitive to the order and
 presentation of the options they are given \cite{wang2024fair}, and these
@@ -144,6 +137,7 @@ alignment training from the model weights or their output distribution.
 where in the pipeline each kind of audit takes its reading.
 
 \begin{figure}[htbp]\centering
+\resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=7mm and 9mm,
   box/.style={draw,rounded corners,align=center,font=\small,minimum height=9mm,inner sep=4pt},
   arr/.style={-{Stealth[length=2.5mm]},thick}]
@@ -160,10 +154,11 @@ where in the pipeline each kind of audit takes its reading.
   (usual) {self-report audits\\read here};
 \draw[-{Stealth},blue!60!black] (this) -- (dist);
 \draw[-{Stealth},red!60!black] (usual) -- (txt);
-\end{tikzpicture}
-\caption{Where the measurement is taken. Reading the distribution before
-decoding observes the model's disposition, including probability mass that an
-audit of generated text sees only as a refusal string.%
+\end{tikzpicture}}
+\caption{Where the measurement is taken. The audit records next-token
+probabilities before decoding and reports how much mass falls within the
+intended response set. Other tokens may begin explanations, refusals or
+alternative response formats, which captured mass alone cannot distinguish.%
 \ifshowplan\ (Draft TikZ, restyle as needed.)\fi}
 \label{fig:where-measured}
 \end{figure}
@@ -185,62 +180,47 @@ audit of generated text sees only as a refusal string.%
 % stated descriptively because two models cannot support a correlation.
 % \end{plan}
 
-This report addresses two research questions, stated here as they were posed
-in the project proposal.
+The proposal framed the study in terms of an intrinsic psychological baseline
+and its relationship with downstream behaviour. The delivered experiments
+operationalise these aims as two questions about measured responses:
 
 \begin{description}
-  \item[RQ1] What is the intrinsic psychological baseline attitude of the model
-        when evaluated in a vacuum?
-  \item[RQ2] Is that intrinsic distributional skew descriptively consistent
-        with the model's extrinsic, downstream behaviour when evaluating
-        real-world search queries?
+  \item[RQ1] How do gender-related inventory responses vary across models,
+        prompt structures and image conditions, and how do response coverage
+        and general agreement affect their interpretation?
+  \item[RQ2] How robust are models' image search judgements under scale
+        reversal, and do their inventory scores correspond with those judgements
+        relative to the historical human baseline?
 \end{description}
 
-RQ2 asks about descriptive consistency by design. The proposal asked whether
-the intrinsic attitude predicts downstream behaviour, but the five evaluated
-models share two families and do not support a general predictive claim,
-and \cref{ch:discussion} reports the comparison as a description rather than as
-a test.
+RQ1 concerns responses to the adapted instrument, without assuming that they
+establish an underlying psychological attitude. RQ2 examines descriptive
+correspondence across five models from two families; this sample does not
+support a general predictive relationship between inventory scores and search
+judgements. The human comparison also retains the task and baseline differences
+outlined above.
 
-The proposal set four aims. Each was pursued, and each was met to a different
-extent.
+The four proposal aims were addressed to the following extent:
 
 \begin{enumerate}
-  \item The first aim was to measure the intrinsic psychological baseline by
-        administering the ASI through implicit prompt structures adapted from
-        Gao and Kreiss \cite{gao2025measuring} and extracting raw logit
-        distributions before decoding. This was implemented for the production
-        models Llama-3.2-Vision-90B and Qwen2-VL-72B, the development model
-        Llama-11B and two smaller Qwen variants. All five models are reported (\cref{ch:study1}).
-
-  \item The second aim was to evaluate downstream visual judgement on queries
-        from the SIGIR 2018 image search dataset, mapping the models'
-        judgements against the published human baselines for high and low
-        scorers on the inventory. This was met on the historical stream only.
-        The planned 2026 recrawl was not collected, so the temporal comparison
-        is absent, and $\dm$ is reported against the low scoring baseline
-        alone because the high scoring comparison was not included in the
-        delivered analysis (\cref{ch:study2}).
-
-  \item The third aim was to characterise the consistency between each model's
-        $\ASIint$ score and its extrinsic deviation from the human baseline.
-        This is descriptive only. The proposal already treated it as a case
-        study at $n=3$ and reported Spearman's $\rho$ as a descriptive
-        statistic. The delivered comparison uses $n=5$, with dependence
-        between variants from the same family. \cref{sec:s2-deviation}
-        therefore reports the correlation descriptively alongside the
-        individual model comparisons.
-
-  \item The fourth aim was to confirm that the measured signal comes from the
-        visual pathway rather than from linguistic artefacts, using the CALM
-        positional perturbation framework \cite{ye2025justice}. This was
-        addressed through $\dRR$, which compares scale robustness between
-        image conditions. CALM consistency rate instead concerns repeated
-        judgements under identical conditions and is not separately reported
-        (\cref{sec:framework-calm}). The behavioural comparison does not
-        isolate the vision encoder. With an image present, robustness falls
-        substantially in the two largest models
-        (\cref{sec:s2-calm}).
+  \item The inventory audit was implemented for all five models, using prompt
+        structures adapted from Gao and Kreiss \cite{gao2025measuring} and
+        reading next-token probabilities before decoding. A face-photograph
+        experiment extends the comparison to depicted gender
+        (\cref{ch:study1}).
+  \item The search evaluation uses the 2018 archive and the low-ASI human
+        baseline. The contemporary recrawl and comparison with the high-ASI
+        group were not included in the delivered analysis (\cref{ch:study2}).
+  \item The relationship between inventory scores and downstream deviations
+        is reported descriptively across five models, accounting for the
+        small sample and dependence between family variants
+        (\cref{sec:s2-deviation}).
+  \item Scale reversal, adapted from CALM \cite{ye2025justice}, tests rating
+        robustness with and without images. Image presence and referent
+        wording change together, so the comparison does not isolate the
+        visual pathway. CALM consistency rate, which concerns repeated
+        judgements under identical conditions, is not separately reported
+        (\cref{sec:framework-calm,sec:s2-calm}).
 \end{enumerate}
 
 % ---------------------------------------------------------------------
@@ -267,78 +247,54 @@ extent.
 % \end{enumerate}
 % \end{plan}
 
-This work makes five contributions.
+This thesis develops a logit-level audit protocol that reads next-token
+probabilities in a single forward pass, without generating text. The protocol
+specifies response-token pooling, chat templates and assistant prefills, and
+reports captured mass alongside the resulting measurements
+(\cref{ch:framework,ch:design}). Its application produces five main findings:
 
 \begin{enumerate}
-  \item It develops a protocol for auditing VLMs directly from their logits,
-        without relying on generated text. The model's disposition is inferred
-        from the next token probability distribution in a single forward pass.
-        The protocol accounts for different surface forms of each response
-        option and specifies the chat template and assistant prefill needed to
-        establish the correct read position (\cref{ch:framework}).
+  \item Responses to face photographs differ by gender on the benevolent
+        subscale. Signed scores are higher for female photographs in four
+        models, with the opposite direction in Qwen-2B. Four of the five
+        differences reach the corrected significance threshold, compared
+        with only one combined-inventory difference. For Qwen-72B, conditional
+        yes-probability on positively keyed benevolent items is $0.265$ for
+        female photographs and $0.185$ for male photographs, excluding
+        inversion prompts (\cref{sec:s1b-gap}).
 
-  \item It introduces captured mass $\capm$ as a measure of whether the
-        resulting measurements can be interpreted reliably. Captured mass
-        represents the proportion of next token probability assigned to the
-        intended response set and is reported alongside every measurement.
-        Any aggregate calculated from that set is only meaningful to the
-        extent that the set captures the model's probability mass. Together
-        with a check of output diversity, $\capm$ helped identify several
-        silent measurement faults during this project. Although none
-        triggered an error, each produced plausible aggregate results that
-        could otherwise have gone unnoticed (\cref{tab:faults}).
+  \item The signed aggregate inventory score is sensitive to general
+        agreement. An exact decomposition shows that Llama-90B's score of
+        $0.153$ is close to the $0.160$ predicted by its mean assent rate
+        alone. Polarity separation complements this score by comparing
+        positively and reverse-keyed items, remaining invariant to uniform
+        shifts in agreement. All five models have negative separation, but
+        none of the exact permutation tests survives Bonferroni correction
+        across models (\cref{sec:framework-responsebias,sec:s1-inference}).
 
-  \item The experiments show that visual input substantially reduces
-        robustness to scale reversal in both production models. Without an
-        image, judgements are reproduced at a robustness rate of $0.900$ when
-        the rating scale is reversed. With an image, this rate falls to
+  \item Response coverage differs between the evaluated families when images
+        are supplied. Llama-90B's captured mass falls from $0.951$ without
+        an image to $0.467$ with a grey patch and $0.329$ with noise, while
+        Qwen-72B remains near $0.95$. A featureless image is therefore
+        sufficient to change Llama's coverage, without establishing refusal
+        or algorithmic defensiveness. Coverage and output-diversity checks
+        also helped expose silent measurement faults
+        (\cref{sec:s1-quality,tab:faults}).
+
+  \item The two largest models are less robust to scale reversal in the
+        image condition. Robustness falls from $0.900$ without images to
         $0.044$ for Llama-90B and $0.156$ for Qwen-72B, giving
-        $\dRR = -0.856$ and $-0.744$, respectively (\cref{sec:s2-calm}).
-        The same pattern occurs in two independently trained architectures,
-        which identifies a limitation shared by both evaluated models in
-        using visual information when making judgements.
+        $\dRR=-0.856$ and $-0.744$. The accompanying wording change prevents
+        attributing the difference solely to visual input
+        (\cref{sec:s2-calm}).
 
-  \item The results also show that the response coverage associated with
-        algorithmic defensiveness differs between the evaluated model families.
-        When an image is present, the Llama models lose much of their yes and
-        no probability mass. For the 90B, $\capm$ drops from $0.951$ without
-        an image to $0.467$ with a grey patch and $0.329$ with visual noise.
-        Qwen-72B maintains a $\capm$ of approximately $0.95$ across all three
-        conditions (\cref{sec:s1-quality}). Even a featureless grey patch is
-        sufficient to produce the collapse. This associates the change with
-        the presence of visual input itself, independently of any depicted
-        social content.
-
-  \item Finally, the work revisits the calculation of the aggregate sexism
-        score and proposes an alternative measure that is unaffected by
-        uniform shifts in assent. The conventional calculation of $\ASIint$
-        is confounded by response style because the contribution of each item
-        to the score scales with $\pyes$. Consequently, a model that agrees
-        indiscriminately is scored largely according to the balance of
-        positively and reverse keyed items in the inventory. A model that
-        disagrees indiscriminately scores close to zero, regardless of its
-        underlying attitudes. The inventory's imbalance of 16 positively
-        keyed items to 6 reverse keyed items makes this problem more
-        pronounced. An exact decomposition (\cref{sec:framework-responsebias})
-        separates the contribution of assent from that of item level
-        discrimination. Applied to Llama-90B, it shows that its $\ASIint$ of
-        $0.153$ is slightly below the $0.160$ predicted by its mean assent
-        rate of $0.585$ alone.
-
-        To address this limitation, polarity separation measures the
-        difference in mean $\pyes$ between positively keyed and reverse keyed
-        items. Because it is invariant to uniform shifts in assent, it
-        provides a way to compare how models distinguish between the two
-        types of items without conflating this behaviour with their general
-        tendency to agree. On this measure, Qwen-72B discriminates
-        approximately $1.9$ times more strongly than Llama-90B. The analysis
-        also uses an exact permutation test over all
-        $\binom{22}{6} = 74{,}613$ possible keying assignments in place of an
-        asymptotic approximation. This result does not establish that Qwen
-        is less biased than Llama. It shows that Qwen responds more
-        discriminatingly to the inventory, whereas Llama has a stronger
-        tendency to assent. These are distinct behaviours that the
-        conventional aggregate score cannot capture (\cref{sec:s1-inference}).
+  \item The human comparison does not establish that the relationship
+        between benevolent sexism and bias perception repeats across models.
+        Three models rate ``smart person'' furthest below the low-ASI
+        baseline, but the cross-model relationship remains inconclusive.
+        The analysis distinguishes this query-level observation from
+        replication of the human association and from a ranking of model
+        attitudes (\cref{sec:s2-deviation,sec:s2-sigir}).
 \end{enumerate}
 
 % ---------------------------------------------------------------------
@@ -350,7 +306,8 @@ This work makes five contributions.
 % \cref{tab:scope}. Then one sentence per chapter.
 % \end{plan}
 
-The delivered study differs from the proposed scope in three respects.
+The principal scope changes concern the historical image stream, attribution
+analysis and Phase~1 visual anchor.
 
 The contemporary 2026 image search stream was not collected. Phase~2 therefore
 uses the 2018 archive alone, and the planned temporal comparison is absent.
@@ -360,14 +317,15 @@ between conditions, without attribution to components within the model.
 Finally, a uniform grey patch replaced the humanoid silhouette intended as
 the Phase~1 visual anchor. The silhouette failed stimulus validation because
 the 11B model returned a gender gap of $0.853$, above the threshold of $0.20$.
-\cref{tab:scope} records each change, its rationale and the delivered
-measurement counts. The consequences for interpretation and generalisation
+\cref{tab:scope} records the proposal and delivered scope, including
+measurement counts and analyses not separately reported. The consequences for interpretation and generalisation
 are discussed in \cref{sec:disc-threats}.
 
 The remaining chapters develop the background, measurement framework and
 experimental evaluation. \cref{ch:background} reviews bias in vision
-encoders, the limitations of automated judges, evidence for defensiveness
-induced by alignment, and the human baselines used in this thesis. It then
+encoders, the limitations of automated judges, response sensitivity following
+alignment, and the human baselines motivating this thesis. It treats
+algorithmic defensiveness as a hypothesis requiring investigation. It then
 identifies the research gap. \cref{ch:framework} defines logit extraction,
 captured mass, and the intrinsic and extrinsic metrics, together with the
 propositions that establish their invariance properties.
