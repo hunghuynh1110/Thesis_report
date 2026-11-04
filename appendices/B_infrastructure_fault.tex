@@ -10,6 +10,19 @@
 % fix (host-staged copies), validation (table below), and what it invalidated.
 % \end{plan}
 
+\begin{proposition}[Zero hidden state gives the uniform distribution]\label{prop:uniform}
+\leavevmode\par
+With $\RMSNorm(\bm h)=\bm g\odot\bm h/\sqrt{\tfrac1d\lVert\bm h\rVert_2^2+\epsilon}$
+\cite{zhang2019rmsnorm} and a bias-free output projection, $\bm h_L=\bm 0$
+implies $\bm z=\bm 0$ and $p(t\mid x,v)=1/|\vocab|$ for every token. For
+Llama-3.2, $1/128{,}256=7.7969\times10^{-6}$ --- exactly the value observed in
+the invalid 90B runs.
+\end{proposition}
+\begin{proof}
+$\RMSNorm(\bm 0)=\bm 0$ because $\epsilon>0$; then $\bm z=W_{\text{out}}\bm 0=\bm 0$
+and \cref{eq:nexttoken} gives equal probabilities.
+\end{proof}
+
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}
 \toprule
