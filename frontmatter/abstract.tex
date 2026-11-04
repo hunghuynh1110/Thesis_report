@@ -83,26 +83,26 @@
 % \end{plan}
 
 Vision language models are increasingly used to judge images, raising concerns
-about gender bias and evaluation reliability. This thesis examines
-gender-related responses in five Qwen2-VL and Llama-3.2-Vision models through
-25,450 measurements across inventory probes, face photographs and image search
-judgements. The audit reads next-token probabilities without generating text
-and reports captured mass, the probability assigned to the intended responses.
+about gender bias and evaluation reliability. This thesis examines five
+Qwen2-VL and Llama-3.2-Vision models through 25,450 measurements across
+adapted Ambivalent Sexism Inventory probes, face photographs and image search
+judgements. The audit reads next-token probabilities and reports captured
+mass, the probability assigned to the intended responses.
 
-The conventional inventory score is sensitive to a model's general tendency
-to agree. Polarity separation distinguishes item discrimination from uniform
-shifts in assent, providing a complementary measure. Face experiments revealed
-gender differences in benevolent trait attribution, with four of five gaps
-reaching the corrected significance threshold. Both Llama models showed
-reduced response coverage with images, while the two largest models showed
-substantially lower scale reversal robustness in the image condition.
-Wording differences prevent attributing the latter contrast solely to visual
-input.
+Benevolent-subscale scores are higher for female photographs in four models,
+with the opposite direction in Qwen-2B. Four of the five differences reach
+the corrected significance threshold, compared with only one combined score.
+The signed aggregate inventory score is sensitive to general agreement;
+polarity separation provides a complementary measure invariant to uniform
+assent shifts. Both Llama models show reduced binary response coverage with
+images, including a featureless grey patch. Scale reversal robustness falls
+from $0.900$ without images to $0.044$ for Llama-90B and $0.156$ for
+Qwen-72B, although a concurrent wording change prevents isolating visual input.
 
-The 2018 human study associated higher benevolent sexism with reduced
-recognition of bias in particular search results. The model evaluation found
-partial query-level correspondence without establishing that this relationship
-repeated across models. The contribution is a reproducible audit that checks
-coverage, response style and robustness, with interpretation limited by the
-model sample and differences between human and model tasks.
+The 2018 human study associated higher benevolent sexism with reduced bias
+recognition on particular queries. The model comparison does not establish
+that this relationship repeats across models. The findings support checking
+coverage, scoring assumptions and rating robustness before interpreting
+responses as evidence of attitudes, with conclusions bounded by the model
+sample and differences between human and model tasks.
 \clearpage

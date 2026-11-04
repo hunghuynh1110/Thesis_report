@@ -11,8 +11,8 @@
 This project developed a protocol for examining gender-related responses in
 vision language models through their next-token probabilities. Five models
 from the Qwen2-VL and Llama-3.2-Vision families were evaluated across 25,450
-measurements, covering inventory responses, trait attribution to face
-photographs and judgements of image search results.
+measurements, covering responses to the Ambivalent Sexism Inventory (ASI),
+trait attribution to face photographs and judgements of image search results.
 
 The protocol reports captured mass alongside each measurement, showing how
 much probability falls within the intended response set. Together with output
@@ -22,24 +22,28 @@ without raising execution errors.
 The experiments led to the following conclusions:
 
 \begin{enumerate}[leftmargin=*,itemsep=0.5em]
-\item The aggregate inventory score is sensitive to a model's general tendency
-to agree. Llama-90B scored $0.153$, close to the $0.160$ predicted by its
-average agreement rate alone. Polarity separation provides a complementary
-comparison that distinguishes item discrimination from uniform shifts in
-agreement.
-
 \item Combining the inventory subscales can obscure differences in responses
 to female and male photographs. The benevolent subscale showed greater
 attribution to female photographs in four models, with the opposite direction
 in Qwen-2B. Four of the five differences reached the corrected significance
-threshold, compared with only one combined score.
+threshold, compared with only one combined score. Qwen-72B's conditional
+yes-probability on positively keyed benevolent items is $0.265$ for female
+photographs and $0.185$ for male photographs, excluding inversion prompts.
+
+\item The aggregate inventory score is sensitive to a model's general tendency
+to agree. Llama-90B scored $0.153$, close to the $0.160$ predicted by its
+average agreement rate alone. Polarity separation provides a complementary
+comparison that distinguishes item discrimination from uniform shifts in
+agreement. All five models have negative separation, although none of the
+tests survives Bonferroni correction across models.
 
 \item Response coverage differed between the evaluated model families when
 images were introduced. Both Llama models assigned substantially less
-probability to binary responses, even with a featureless grey patch, while
-Qwen maintained comparatively high coverage. This establishes a difference
-in response behaviour, although reduced coverage alone does not demonstrate
-refusal.
+probability to binary responses, even with a featureless grey patch:
+Llama-11B falls from $0.979$ without an image to $0.237$ with the patch.
+Across the grey-patch and noise conditions, Qwen changes by at most $0.034$
+from its no-image coverage. This establishes a difference in response
+behaviour, although reduced coverage alone does not demonstrate refusal.
 
 \item Scale reversal robustness was substantially lower in the image condition
 for the two largest models. Robustness fell from $0.900$ without images to

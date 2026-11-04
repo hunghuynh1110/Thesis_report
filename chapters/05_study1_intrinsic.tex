@@ -89,7 +89,7 @@ $\capm<0.1$ in brackets). Phase~1A: $n=110$ per condition and model; Phase~1B: $
 \caption{Captured mass by image condition, one point per prompt over the box, 110 points
 per condition. Adding any image to Llama's input, including a featureless grey
 patch, moves most of the probability mass off the yes and no tokens, while
-Qwen-72B is unaffected. Conditions are no image, uniform grey patch and
+Qwen-72B changes little. Conditions are no image, uniform grey patch and
 Gaussian noise; means are printed above each box.}
 \label{fig:capm-dist}
 \end{figure}
@@ -267,9 +267,12 @@ the null distributions in the supplementary material.
 
 Qwen-72B ($p=0.010$) and Qwen-7B ($p=0.026$) reach the unadjusted
 significance threshold, whereas Llama-90B ($p=0.196$), Llama-11B ($p=0.341$)
-and Qwen-2B ($p=0.862$) do not. These tests are unadjusted across models
-and should be distinguished from the corrected face comparisons.
-The unit of permutation is the item, so repeated prompts do not increase
+and Qwen-2B ($p=0.862$) do not. The table retains these unadjusted values as an item-discrimination
+diagnostic. None survives Bonferroni correction across five models: the
+smallest unadjusted value is approximately $0.01037$ for Qwen-72B, giving
+an adjusted value of approximately $0.052$. The evidence for a scoring
+confound instead follows from the exact decomposition, independently of
+these tests. The unit of permutation is the item, so repeated prompts do not increase
 the number of inventory items available for inference. Non-significance
 does not establish absent discrimination, and the within-subscale separation
 values are retained as descriptive comparisons without additional tests.
@@ -287,7 +290,9 @@ Within BS (8 vs 3 items) & $+0.026$ & $-0.246$ & $-0.300$ & $-0.275$ & $-0.081$ 
 \bottomrule
 \end{tabularx}
 \caption{Exact permutation test over all $\binom{22}{6}=74{,}613$ keying
-assignments, enumerated in full rather than sampled. Within-subscale values are
+assignments, enumerated in full rather than sampled. The displayed $p$-values
+are unadjusted; none survives Bonferroni correction across five models.
+Within-subscale values are
 descriptive only, since each subscale holds just three reverse-keyed items.}
 \label{tab:s1-perm}
 \end{table}
@@ -367,9 +372,9 @@ composition of the sample and is reported as a sensitivity analysis.}
 
 \section{Summary for RQ1}\label{sec:s1-summary}
 
-RQ1 cannot be answered with a single, unambiguous attitude score under the
-adapted inventory protocol. The results instead distinguish gender-related
-attribution, item discrimination and response coverage.
+For RQ1, the adapted inventory reveals gender-related attribution differences,
+variation in item discrimination and sensitivity to response coverage. These
+properties cannot be represented by a single, unambiguous attitude score.
 
 \begin{enumerate}[leftmargin=*,itemsep=0.5em]
 \item The signed benevolent-subscale score is higher for female photographs
@@ -378,9 +383,9 @@ differences reach the corrected threshold, while combining the subscales
 obscures several of these differences.
 
 \item Aggregate scores depend on general agreement as well as item content.
-Polarity separation is negative throughout, with two models reaching the
-unadjusted threshold, and should be interpreted alongside the aggregate
-rather than as a direct ranking of sexism.
+Polarity separation is negative throughout, but none of the five tests
+survives correction across models. It complements the scoring decomposition
+without establishing a direct ranking of model sexism.
 
 \item Images reduce binary response coverage in the evaluated Llama models,
 including when they contain no person. This limits the probability represented

@@ -19,21 +19,24 @@ The answers require distinguishing the measured response patterns from claims
 about underlying attitudes.
 
 \begin{enumerate}[leftmargin=*,itemsep=0.5em]
-\item For RQ1, the aggregate inventory score cannot be interpreted independently
-of the model's general tendency to agree. Llama-90B scored $+0.153$, close
-to the $0.160$ predicted by its mean agreement rate alone
-(\cref{sec:s1-aggregate}). All five models agreed more readily with the
-reverse-keyed items, although only Qwen-7B and Qwen-72B reached the
-unadjusted significance threshold. The face experiments provided a separate
-comparison: benevolent traits were attributed more readily to female
-photographs in four models, with the opposite direction in Qwen-2B.
-Four of the five gaps reached the corrected threshold, while Llama-11B
-remained inconclusive (\cref{sec:s1b-gap}). These findings support reporting
-item discrimination and the two subscales separately, alongside agreement
-rates and response coverage.
+\item For RQ1, responses to the face photographs show gender differences on
+the benevolent subscale. Signed scores are higher for female photographs in
+four models, with the opposite direction in Qwen-2B. Four of the five gaps
+reach the corrected threshold, while Llama-11B remains inconclusive
+(\cref{sec:s1b-gap}). The aggregate inventory score requires a separate
+interpretation: Llama-90B scores $+0.153$, close to the $0.160$ predicted
+by its mean agreement rate alone (\cref{sec:s1-aggregate}). All five models
+have negative polarity separation, but none of the five tests survives
+Bonferroni correction. Reduced response coverage with images further limits
+the Llama measurements (\cref{sec:s1-quality}). Together, these findings
+support reporting gender differences, item discrimination and coverage
+separately instead of treating the aggregate as an attitude ranking.
 
-\item For RQ2, the comparison did not establish that the human association
-repeated across models. The correlation between intrinsic scores and signed
+\item For RQ2, the two largest models are substantially less robust to
+scale reversal in the image condition, although the concurrent wording
+change prevents isolating the effect of visual input (\cref{sec:s2-calm}).
+The human comparison does not establish that the original association
+repeats across models. The correlation between intrinsic scores and signed
 downstream deviations was $\rho=-0.70$, with exact permutation $p=0.233$, across five models
 from two families (\cref{sec:s2-deviation}). Three models showed their most
 negative deviation on ``smart person'', but ``warm person'' showed a less
@@ -163,6 +166,13 @@ concerns benevolent sexism. A model rating below the baseline therefore
 assigns lower objectivity, but is not necessarily less sexist than the
 human group.
 
+The reverse-keyed items also differ in wording and content from the positively
+keyed items. Polarity separation may reflect those differences as well as
+endorsement direction, and exhaustive permutation enumeration does not
+establish exchangeability. Face-test correction is applied separately within
+each outcome across five models, without controlling error jointly across
+all three outcomes.
+
 The adapted inventory and sampled photographs similarly bound the face
 results, which measure trait attribution under the tested conditions.
 Connecting these measurements to harms in deployment requires a separate
@@ -203,8 +213,8 @@ pairs. & Exact permutation test; query-level cluster bootstrap. \\
 Statistical & 20 faces per gender detects about one standard deviation
 between faces and no smaller. & Power reported per model; Llama-11B does not reach the corrected
 significance threshold. \\
-Statistical & Five models tested on the Phase~1B gap. & Bonferroni threshold
-of $p<0.01$ applied and stated. \\
+Statistical & Five models tested on each Phase~1B outcome. & Bonferroni
+threshold of $p<0.01$ within each outcome; no joint correction across outcomes. \\
 Statistical & Five faces per race cell. & Race reported descriptively and
 untested (\cref{sec:s1b-race}). \\
 External & Five open weight models from two families, one face database, one
