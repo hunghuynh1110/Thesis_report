@@ -49,10 +49,10 @@ Both Llama models show substantially lower coverage with images, including
 the featureless grey patch. Llama-11B falls from $0.979$ without an image
 to $0.237$ with the patch and $0.204$ with noise; Llama-90B falls from
 $0.951$ to $0.467$ and $0.329$. The Qwen models remain comparatively stable,
-with a maximum change of $0.034$ from the text-only condition. The contrast
-is present at both evaluated Llama sizes and absent across the three Qwen
-sizes, although this sample cannot separate all differences between the
-families.
+with a maximum change of $0.034$ from the text-only condition. The expectation that an uninformative image would leave responses unchanged
+is therefore unsupported for Llama, while Qwen remains comparatively stable.
+This sample does not determine whether architecture, training or other
+differences between the families account for the contrast.
 
 Real faces do not remove the coverage difference: Phase~1B means are $0.140$
 for Llama-11B and $0.479$ for Llama-90B, compared with $0.998$ for Qwen-7B
@@ -94,7 +94,7 @@ Gaussian noise; means are printed above each box.}
 \label{fig:capm-dist}
 \end{figure}
 
-\section{Gender differences in face attribution}\label{sec:s1b-gap}
+\section{Gender differences in responses to photographs}\label{sec:s1b-gap}
 
 Phase~1B compares responses to 20 female and 20 male photographs, using the
 face as the unit of analysis. \Cref{tab:s1b-gap} and \cref{fig:gap} report
@@ -102,11 +102,11 @@ the signed difference for the combined inventory and each subscale.
 The principal findings are as follows:
 
 \begin{enumerate}[leftmargin=*,itemsep=0.5em]
-\item The benevolent gap is positive in four models and negative in Qwen-2B.
-It ranges from $-0.0071$ for Qwen-2B to $+0.0540$ for Qwen-72B, with four
-of the five gaps reaching the Bonferroni threshold of $p<0.01$.
-Llama-11B does not reach that threshold ($p=0.039$), which does not establish
-either an absent effect or equivalence with the other models.
+\item The signed benevolent-subscale score is higher for female photographs
+in four models and higher for male photographs in Qwen-2B. The
+female-minus-male gap ranges from $-0.0071$ for Qwen-2B to $+0.0540$ for
+Qwen-72B, with four of the five differences reaching the Bonferroni threshold
+of $p<0.01$. Llama-11B remains inconclusive at $p=0.039$.
 
 \item Combining the subscales reduces the visibility of these differences,
 because their estimated gaps generally point in opposite directions.
@@ -114,13 +114,13 @@ Llama-90B has a benevolent gap of $+0.0340$ at $p=0.003$, but a combined
 gap of $+0.0053$ at $p=0.622$. Only Qwen-72B reaches the corrected threshold
 for the combined gap, while none of the hostile gaps reaches it.
 
-\item Mean conditional yes-probabilities provide a complementary illustration
-on positively keyed benevolent items, excluding the inversion prompts.
-Llama-90B assigns $0.627$ to female photographs and $0.573$ to male
-photographs, while Qwen-72B assigns $0.265$ and $0.185$, respectively.
-These are averages across that item subset, not probabilities for an
-individual statement such as ``someone who should be cherished and
-protected''. They also differ from the signed subscale gap, which includes
+\item On positively keyed benevolent items, excluding inversion prompts,
+mean conditional yes-probability is approximately five percentage points
+higher for female photographs in Llama-90B and eight points higher in
+Qwen-72B. The corresponding probabilities are $0.627$ versus $0.573$ and
+$0.265$ versus $0.185$. This subset includes descriptions such as ``someone
+who should be cherished and protected'', although the reported probabilities
+are averages across the subset. The signed subscale gap additionally includes
 reverse-keyed items and all five prompt structures.
 \end{enumerate}
 
@@ -161,10 +161,10 @@ parameter count. Each point is the difference between 20 female and 20 male
 face means (\cref{eq:gap}); bars are 95\% confidence intervals from the
 two sample $t$ test on those 40 face means. The benevolent gap is positive in
 four models and negative in Qwen-2B.
-Four benevolent gaps reach the corrected threshold; Llama-11B does not.
-The estimated benevolent gap is larger at each successive evaluated size
-within each family; these comparisons do not establish a general size effect,
-while no hostile gap reaches the corrected threshold.}
+Four benevolent gaps reach the corrected threshold, while Llama-11B remains
+inconclusive and no hostile gap reaches that threshold. Benevolent gaps
+increase across the evaluated sizes within each family, but the sparse
+observations do not establish a general relationship with parameter count.}
 \label{fig:gap}
 \end{figure}
 
@@ -179,17 +179,20 @@ with variation between items.
 
 Llama-90B has the highest aggregate score, $+0.153$, but a model assigning
 its mean yes-probability of $0.585$ uniformly to every prompt would already
-score $0.160$. The residual is therefore $D=-0.007$, as defined by
-\cref{eq:decomp}. Qwen-72B has a much smaller aggregate score of $+0.008$,
-but a residual of $-0.061$. The aggregate ordering consequently cannot be
-read directly as an ordering of attitudes, since it includes a substantial
-contribution from how readily each model agrees.
+score $0.160$. Its residual is therefore $D=-0.007$, as defined by
+\cref{eq:decomp}. Qwen-72B has a smaller aggregate score of $+0.008$ but
+a more negative residual of $-0.061$. Its item-dependent contribution
+therefore offsets the positive assent contribution more strongly, whereas
+Llama-90B's aggregate lies close to the value predicted by general agreement
+alone. The aggregate ordering consequently should not be interpreted directly
+as an ordering of attitudes.
 
-The score also changes with prompt structure, including a sign reversal on
-the inversion prompts. That reversal partly follows from the scoring rule
-and does not independently establish a change in attitude.
-\Cref{sec:s1-structure-detail} provides the structure-specific results and
-the descriptive comparison between hostile and benevolent aggregate scores.
+The aggregate score also changes with prompt structure, including a sign
+reversal on inversion prompts, so the expected stability is not observed.
+Because inversion changes the scoring sign, that reversal alone does not
+demonstrate a change in attitude. \Cref{sec:s1-structure-detail} retains the
+structure-specific results and the descriptive comparison between hostile
+and benevolent aggregate scores.
 
 \begin{table}[htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xccccc@{}}
@@ -212,12 +215,12 @@ BS subscale & $+0.059$ & $-0.016$ & $+0.008$ & $-0.015$ & $+0.147$ \\
 \subsection{Polarity separation}\label{sec:s1-responsebias}
 
 All five models agree more readily with reverse-keyed items on the
-non-inversion prompts, producing negative polarity separation
-(\cref{tab:s1-ps}). The values range from $-0.006$ for Qwen-2B to $-0.188$
-for Qwen-72B, despite every model having a positive aggregate index.
-This is consistent with the decomposition: the inventory's keying imbalance
-allows general agreement to contribute positively even when the two item
-groups are distinguished in the opposite direction.
+non-inversion prompts, producing negative polarity separation from $-0.006$
+for Qwen-2B to $-0.188$ for Qwen-72B (\cref{tab:s1-ps}). The observed
+direction is therefore opposite to the positive separation expected under
+endorsement of the inventory's sexist statements. Nevertheless, every model
+has a positive aggregate index, illustrating how the keying imbalance allows
+general agreement to obscure the direction of item discrimination.
 
 Qwen-72B's separation is $1.94$ times the magnitude of Llama-90B's,
 indicating stronger discrimination between the item groups on this measure.
@@ -311,9 +314,12 @@ threshold.
 
 \item Filtering changes which items and conditions contribute to the means,
 so the retained scores are sensitivity results rather than automatically
-corrected estimates. Higher coverage improves representation of the intended
-response set but does not, by itself, establish semantic validity or remove
-response-style effects.
+corrected estimates. Llama-11B illustrates this distinction: its aggregate
+falls to $+0.016$ at $\capm\ge0.3$, then rises to $+0.054$ at
+$\capm\ge0.5$, when only 113 rows remain. The non-monotonic change shows
+that increasing the threshold does not necessarily reduce the aggregate
+score; attributing the rebound to particular items or conditions would
+require further analysis.
 \end{enumerate}
 
 An independent Llama-90B rerun on a different node agrees closely with the
@@ -361,13 +367,15 @@ composition of the sample and is reported as a sensitivity analysis.}
 
 \section{Summary for RQ1}\label{sec:s1-summary}
 
-The intrinsic results support three conclusions about the measured responses,
-while limiting their interpretation as evidence of underlying attitudes.
+RQ1 cannot be answered with a single, unambiguous attitude score under the
+adapted inventory protocol. The results instead distinguish gender-related
+attribution, item discrimination and response coverage.
 
 \begin{enumerate}[leftmargin=*,itemsep=0.5em]
-\item Face photographs reveal benevolent-subscale gender differences that
-combining the inventory can obscure. Four of the five differences reach
-the corrected threshold, but their direction is not uniform across models.
+\item The signed benevolent-subscale score is higher for female photographs
+in four models and higher for male photographs in Qwen-2B. Four of the five
+differences reach the corrected threshold, while combining the subscales
+obscures several of these differences.
 
 \item Aggregate scores depend on general agreement as well as item content.
 Polarity separation is negative throughout, with two models reaching the

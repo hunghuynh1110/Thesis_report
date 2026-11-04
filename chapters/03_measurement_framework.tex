@@ -30,7 +30,7 @@ defined below is a deterministic function of that single distribution, so a
 measurement has no decoding temperature, no sampling seed and no dependence on
 how long a reply would have been. Repeating a measurement on the same hardware
 reproduces it exactly, which is what makes the replication check of
-\cref{sec:s1-quality} meaningful: a disagreement between two runs is a fact
+\cref{sec:s1-replication} meaningful: a disagreement between two runs is a fact
 about the machine, never about sampling.
 
 The same definitions apply when there is no image, written $v=\varnothing$.
@@ -124,7 +124,7 @@ behaviour, and comparing them directly is a category error. On Llama-11B,
 $\capm$ is $0.979$ with no image and $0.237$ with a grey patch, so the vision
 reading conditions on under a quarter of what the model would do while the text
 reading conditions on nearly all of it. Every comparison across conditions in
-this thesis carries $\capm$ beside it, and \cref{sec:s1-quality} repeats the
+this thesis carries $\capm$ beside it, and \cref{sec:s1-sensitivity} repeats the
 main contrasts on the subset of rows above a $\capm$ threshold.
 
 % ---------------------------------------------------------------------

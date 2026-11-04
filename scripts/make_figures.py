@@ -727,7 +727,7 @@ def fig_gap(d: Data, out: Path) -> None:
     axR.set_xlabel("parameters")
     axR.set_ylabel("benevolent gap")
     axR.yaxis.set_major_formatter(mpl.ticker.FormatStrFormatter("%.2f"))
-    axR.set_title("and how it scales", fontsize=9, loc="left", color=INK2)
+    axR.set_title("by evaluated model size", fontsize=9, loc="left", color=INK2)
     axR.legend(frameon=False, fontsize=7.5, loc="lower right",
                borderaxespad=0.2, handletextpad=0.4)
     axR.spines[["top", "right"]].set_visible(False)
