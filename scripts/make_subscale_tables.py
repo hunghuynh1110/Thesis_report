@@ -15,11 +15,12 @@ Run from the thesis root with the audit repository's interpreter:
 """
 
 from itertools import permutations
-from math import erfc, factorial, sqrt
+from math import factorial
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 AUDIT = Path.home() / "Code" / "VLM_Audit"
 CSV = AUDIT / "data" / "sigir2018" / "final_anonymised.csv"
@@ -63,7 +64,7 @@ def per_query_mean(sub: pd.DataFrame) -> dict[str, float]:
 
 
 def ols(y, cols):
-    """OLS with intercept. Returns (beta, se, p, r2); p is two sided normal."""
+    """OLS with intercept and conventional two-sided Student t inference."""
     cols = [np.asarray(c, float) for c in cols]
     X = np.column_stack([np.ones(len(cols[0]))] + cols)
     y = np.asarray(y, float)
@@ -71,7 +72,7 @@ def ols(y, cols):
     resid = y - X @ beta
     s2 = resid @ resid / (len(y) - X.shape[1])
     se = np.sqrt(np.diag(s2 * np.linalg.inv(X.T @ X)))
-    p = [erfc(abs(b / s) / sqrt(2)) for b, s in zip(beta, se)]
+    p = 2 * stats.t.sf(np.abs(beta / se), df=len(y) - X.shape[1])
     r2 = 1 - (resid @ resid) / ((y - y.mean()) @ (y - y.mean()))
     return beta, se, p, r2
 

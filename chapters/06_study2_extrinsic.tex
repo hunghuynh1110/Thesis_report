@@ -190,50 +190,52 @@ candidate definitions (vision rows, 90 per order).}
 
 \subsection{Subscale splits of the human baseline}\label{sec:s2-subscale}
 
-The deviation above splits the participants at the median total ASI score,
-while the association reported by Otterbacher et al.\
-\cite{otterbacher2018sigir} concerned the benevolent subscale. The released
-data stores a benevolent and a hostile score for each participant, so the
-split can be repeated on each subscale without rescoring the items.
-\Cref{tab:s2-human-splits} reports the three splits.
+The human comparison was repeated using benevolent and hostile sexism
+separately because the association reported by Otterbacher et al.\
+\cite{otterbacher2018sigir} concerned benevolent sexism, while the primary
+baseline uses total ASI. The released data already contain both subscale
+scores. For each split, participants at or below the median form the low
+group, with those above it forming the high group
+(\cref{tab:s2-human-splits}).
 
-Both subscale splits separate the groups more widely than the total score.
-The high minus low contrast is $+0.352$ on the benevolent subscale and
-$+0.333$ on the hostile subscale, against $+0.179$ on the total score. These
-two contrasts are close to each other and the two scores correlate at
-$r=0.587$, so neither contrast on its own identifies which subscale carries
-the association. Entering both as standardised predictors of each
-participant's mean objectivity rating separates them: the benevolent
-coefficient is $+0.168$ ($p=0.039$) while the hostile coefficient falls to
-$+0.004$ ($p=0.957$), and $R^{2}$ stays at $0.024$, the value reached by the
-benevolent predictor alone. Among these participants the association is
-therefore specific to the benevolent subscale, which agrees with the original
-finding. The effect is small, and median splits with unadjusted coefficients
-are coarser than the adjusted analysis in the source study.
+On average, the high scoring group assigns greater objectivity under each split.
+The average high-minus-low difference is $+0.352$ for benevolent sexism and
+$+0.333$ for hostile sexism, compared with $+0.179$ for total ASI. Separating
+the subscales therefore produces larger group contrasts, but their similarity
+does not show whether either association remains after accounting for the
+other subscale. The two scores are correlated at $r=0.587$.
 
-Substituting a subscale baseline into $\dm$ shifts every model by the same
-amount. Averaged over the ten queries the low-BS baseline lies $0.073$ below
-the low-ASI baseline, so each deviation in \cref{tab:s2-deltam} rises by
-$0.073$ and the ordering cannot change, because $\dm$ averages a model minus
-baseline difference over a fixed query set. That shift is small beside the
-spread from $-1.920$ to $+0.216$, so no model moves position materially;
-Qwen-7B crosses zero at $+0.008$, a value within the instability already
-reported under scale reversal. The subscale baselines therefore test
-sensitivity to the choice of reference group and do not constitute a
-separate result.
+To examine this overlap, both scores were standardised and entered together
+in a linear regression of each participant's mean objectivity rating across
+the ten queries. A one-standard-deviation increase in benevolent sexism is
+associated with an increase of $0.168$ points in mean objectivity, after
+accounting for hostile sexism ($p=0.040$). The corresponding hostile-sexism estimate is $0.004$
+($p=0.957$). The model explains approximately $2.4\%$ of the variation in
+mean ratings ($R^{2}=0.024$). The positive benevolent-sexism estimate is
+consistent with the direction reported in the original study, but these
+results do not establish that the two subscale coefficients differ. This
+exploratory analysis also averages across queries and does not include the
+demographic adjustments used in the source study.
 
-Splitting the model scores admits the same comparison.
-\Cref{tab:s2-model-subscale} lists the Phase~1A intrinsic score by subscale
-beside the original-order deviations. The rank correlation with the hostile
-score is $\rho=-0.90$ ($p=0.083$, 10 of 120 permutations), against
-$\rho=-0.50$ ($p=0.450$) for the benevolent score and $\rho=-0.70$ for the
-aggregate. Ordering among these models therefore tracks the hostile subscale
-more closely than the benevolent one, which is the opposite specificity to
-the participants. No correlation reaches significance at five models, the
-variants within each family are related, and the subscale scores remain
-adapted first token probability measures whose level responds to agreement
-tendencies, so the contrast is descriptive and does not establish that a
-model holds predominantly hostile attitudes.
+Using the low-BS group as the reference changes the model deviations only
+slightly. Its mean rating is $0.073$ below the low-ASI baseline, so every
+model's $\dm$ increases by the same amount. The ordering is necessarily
+unchanged because all models are compared with the same reference over the
+same ten queries. Qwen-7B moves just above zero, from $-0.066$ to $+0.008$,
+without resolving the rating instability identified earlier. These
+alternative baselines assess sensitivity to the reference group; their
+unchanged ordering supplies no additional evidence of model agreement.
+
+The model comparison also considers the two inventory subscales separately
+(\cref{tab:s2-model-subscale}). Across the five models, the correlation with
+downstream deviation is $\rho=-0.90$ for the hostile score ($p=0.083$,
+10 of 120 permutations) and $\rho=-0.50$ for the benevolent score
+($p=0.450$), compared with $\rho=-0.70$ for the aggregate. The observed
+association is more negative for the hostile score, but neither correlation
+reaches the conventional significance threshold. The small sample, related
+model variants and sensitivity of the adapted scores to general agreement
+limit interpretation. These descriptive results do not establish a difference
+between the subscale relationships or a distinct human--model pattern.
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{@{}lcccccc@{}}
@@ -245,10 +247,10 @@ Benevolent & $2.909$ & 155 & 126 & $5.206$ & $5.559$ & $+0.352$ \\
 Hostile & $2.727$ & 149 & 132 & $5.208$ & $5.541$ & $+0.333$ \\
 \bottomrule
 \end{tabular}
-\caption{SIGIR 2018 participants ($N=281$) split at the median of the total
-ASI score and at the median of each subscale. Group means are objectivity
-ratings averaged over the ten queries on the 1 to 7 scale, on which a higher
-rating marks results perceived as more objective.}
+\caption{Human objectivity ratings under total-ASI, benevolent and hostile
+score splits ($N=281$). The low group includes scores at or below the median.
+Means give equal weight to the ten queries; higher values on the 1 to 7
+scale indicate greater perceived objectivity.}
 \label{tab:s2-human-splits}
 \end{table}
 
@@ -264,8 +266,9 @@ Qwen-72B & $-0.015$ & $+0.030$ & $+0.216$ \\
 Llama-90B & $+0.147$ & $+0.159$ & $-0.491$ \\
 \bottomrule
 \end{tabular}
-\caption{Phase~1A intrinsic score by ASI subscale beside the original-order
-deviation from the low-ASI baseline.}
+\caption{Adapted Phase~1A subscale scores and original-order deviations from
+the low-ASI human baseline. The subscale scores are signed probability
+measures, rather than human questionnaire scores.}
 \label{tab:s2-model-subscale}
 \end{table}
 
@@ -337,10 +340,11 @@ the low-ASI baseline, assigning it lower perceived objectivity; the original
 human finding concerned higher benevolent sexism and reduced recognition
 of bias. The cross-model comparison remains inconclusive, with additional
 differences arising from the total-ASI baseline split and the use of individual
-images instead of complete grids. \Cref{sec:s2-subscale} takes up the first of
-these: the subscale split sharpens the human association onto the benevolent
-items while the model ordering tracks the hostile items, so the difference in
-direction holds at the level of the subscales.
+images instead of complete grids. The subscale analysis in
+\cref{sec:s2-subscale} finds a positive human benevolent-sexism coefficient
+and negative descriptive model correlations. However, the different measures
+and limited model sample prevent treating these observations as an
+established difference between humans and models.
 
 \section{Summary for RQ2}\label{sec:s2-summary}
 
